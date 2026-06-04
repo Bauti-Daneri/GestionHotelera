@@ -47,7 +47,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun GestionHoteleraTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false, // Desactivado por defecto para usar nuestros colores personalizados
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {

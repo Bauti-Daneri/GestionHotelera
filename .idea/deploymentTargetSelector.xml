@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-06-04T18:35:59.421237500Z">
+        <DropdownSelection timestamp="2026-06-04T20:09:47.663639500Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=R5CR70XSC3P" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\bauti\.android\avd\Carlitos.avd" />
             </handle>
           </Target>
         </DropdownSelection>

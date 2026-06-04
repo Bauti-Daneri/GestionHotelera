@@ -1,0 +1,11 @@
+package com.example.gestionhotelera.domain.usecase.room
+
+import com.example.gestionhotelera.domain.model.Room
+import com.example.gestionhotelera.domain.repository.RoomRepository
+import javax.inject.Inject
+
+class UpdateRoomUseCase @Inject constructor(
+    private val repository: RoomRepository
+) {
+    suspend operator fun invoke(room: Room) = repository.saveRoom(room)
+}

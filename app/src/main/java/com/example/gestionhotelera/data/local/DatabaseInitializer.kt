@@ -10,7 +10,8 @@ class DatabaseInitializer @Inject constructor(
     private val ticketDao: MaintenanceTicketDao,
     private val orderDao: RoomServiceOrderDao,
     private val itemDao: RoomServiceItemDao,
-    private val menuDao: RoomServiceMenuItemDao
+    private val menuDao: RoomServiceMenuItemDao,
+    private val assignmentDao: RoomHousekeeperAssignmentDao
 ) {
     suspend fun seed() {
         val hotelId = "HOTEL-DEMO-001"
@@ -41,6 +42,13 @@ class DatabaseInitializer @Inject constructor(
                 roomDao.insertRoom(
                     RoomEntity(id, hotelId, num, "Standard", if (index % 2 == 0) RoomStatus.CLEAN else RoomStatus.DIRTY, now, now, now, false, SyncStatus.SYNCED)
                 )
+                
+                // Assign some rooms to the housekeeper by default
+                if (num == "101" || num == "103" || num == "203") {
+                    assignmentDao.insertAssignment(
+                        RoomHousekeeperAssignmentEntity(id, "house-01", hotelId, now)
+                    )
+                }
             }
         }
 

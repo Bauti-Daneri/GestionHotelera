@@ -15,6 +15,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.gestionhotelera.domain.model.Room
 import com.example.gestionhotelera.domain.model.RoomStatus
 import com.example.gestionhotelera.domain.model.TicketCategory
+import com.example.gestionhotelera.domain.model.UserRole
 import com.example.gestionhotelera.ui.components.*
 import com.example.gestionhotelera.ui.theme.DestructiveRed
 import com.example.gestionhotelera.ui.theme.PrimaryBlue
@@ -27,7 +28,7 @@ fun HousekeepingScreen(
     viewModel: HousekeepingViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    var selectedRoom by remember { mutableStateOf<Room?>(null) }
+    var selectedRoomWithHousekeepers by remember { mutableStateOf<RoomWithHousekeepers?>(null) }
     var showReportMaintenance by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -48,28 +49,29 @@ fun HousekeepingScreen(
         ) {
             HousekeepingContent(
                 uiState = uiState,
-                onRoomClick = { selectedRoom = it }
+                onRoomClick = { selectedRoomWithHousekeepers = it }
             )
         }
     }
 
-    selectedRoom?.let { room ->
+    selectedRoomWithHousekeepers?.let { roomWithHousekeepers ->
+        val room = roomWithHousekeepers.room
         if (showReportMaintenance) {
             ReportMaintenanceBottomSheet(
                 onDismiss = { showReportMaintenance = false },
                 onReport = { category, description ->
                     viewModel.reportMaintenance(room.id, category, description)
                     showReportMaintenance = false
-                    selectedRoom = null
+                    selectedRoomWithHousekeepers = null
                 }
             )
         } else {
             RoomDetailBottomSheet(
                 room = room,
-                onDismiss = { selectedRoom = null },
+                onDismiss = { selectedRoomWithHousekeepers = null },
                 onStatusChange = { status ->
                     viewModel.updateRoomStatus(room.id, status)
-                    selectedRoom = null
+                    selectedRoomWithHousekeepers = null
                 },
                 onReportMaintenance = { showReportMaintenance = true }
             )
@@ -80,7 +82,7 @@ fun HousekeepingScreen(
 @Composable
 fun HousekeepingContent(
     uiState: HousekeepingUiState,
-    onRoomClick: (Room) -> Unit
+    onRoomClick: (RoomWithHousekeepers) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -113,8 +115,16 @@ fun HousekeepingContent(
             }
         }
 
-        items(uiState.rooms) { room ->
-            RoomCard(room = room, onClick = { onRoomClick(room) })
+        items(uiState.rooms) { roomWithHousekeepers ->
+            RoomCard(
+                room = roomWithHousekeepers.room,
+                assignedEmployees = if (uiState.userRole == UserRole.ADMIN) {
+                    roomWithHousekeepers.housekeepers
+                } else {
+                    emptyList()
+                },
+                onClick = { onRoomClick(roomWithHousekeepers) }
+            )
         }
     }
 }
