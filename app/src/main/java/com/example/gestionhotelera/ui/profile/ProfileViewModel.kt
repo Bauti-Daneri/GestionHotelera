@@ -24,9 +24,11 @@ class ProfileViewModel @Inject constructor(
 
     private fun loadProfile() {
         viewModelScope.launch {
+            val role = CURRENT_DEMO_ROLE ?: return@launch
+            
             _uiState.update { it.copy(isLoading = true) }
             // In a real app we would get the current user ID from session
-            val demoUserId = when (CURRENT_DEMO_ROLE) {
+            val demoUserId = when (role) {
                 DemoRole.ADMIN -> "admin-01"
                 DemoRole.HOUSEKEEPING -> "house-01"
                 DemoRole.MAINTENANCE -> "maint-01"

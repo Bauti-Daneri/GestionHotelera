@@ -67,3 +67,23 @@ data class RoomServiceItem(
     val price: Double,
     val quantity: Int
 )
+
+data class RoomServiceMenuItem(
+    val id: String,
+    val hotelId: String,
+    val name: String,
+    val description: String,
+    val price: Double,
+    val category: String,
+    val isAvailable: Boolean,
+    val createdAt: Long,
+    val updatedAt: Long,
+    val syncStatus: SyncStatus = SyncStatus.SYNCED
+)
+
+data class RoomHousekeeperAssignment(
+    val roomId: String,
+    val userId: String,
+    val hotelId: String,
+    val createdAt: Long
+)

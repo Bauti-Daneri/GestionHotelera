@@ -2,12 +2,10 @@ package com.example.gestionhotelera.ui.housekeeping
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.gestionhotelera.domain.model.MaintenanceTicket
-import com.example.gestionhotelera.domain.model.RoomStatus
-import com.example.gestionhotelera.domain.model.TicketCategory
-import com.example.gestionhotelera.domain.model.TicketStatus
+import com.example.gestionhotelera.domain.model.*
 import com.example.gestionhotelera.domain.repository.MaintenanceRepository
 import com.example.gestionhotelera.domain.repository.RoomRepository
+import com.example.gestionhotelera.domain.usecase.room.GetRoomsForHousekeeperUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -17,11 +15,14 @@ import javax.inject.Inject
 @HiltViewModel
 class HousekeepingViewModel @Inject constructor(
     private val roomRepository: RoomRepository,
-    private val maintenanceRepository: MaintenanceRepository
+    private val maintenanceRepository: MaintenanceRepository,
+    private val getRoomsForHousekeeperUseCase: GetRoomsForHousekeeperUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HousekeepingUiState())
     val uiState: StateFlow<HousekeepingUiState> = _uiState.asStateFlow()
+
+    private val currentUserId = "house-01" // In a real app, this would come from Auth
 
     init {
         loadRooms()
@@ -30,7 +31,7 @@ class HousekeepingViewModel @Inject constructor(
     private fun loadRooms() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            roomRepository.getRooms().collect { rooms ->
+            getRoomsForHousekeeperUseCase(currentUserId).collect { rooms ->
                 _uiState.update { state ->
                     state.copy(
                         isLoading = false,
@@ -59,7 +60,7 @@ class HousekeepingViewModel @Inject constructor(
                 description = description,
                 category = category,
                 status = TicketStatus.OPEN,
-                reportedBy = "house-01", // Demo user
+                reportedBy = currentUserId,
                 createdAt = System.currentTimeMillis(),
                 updatedAt = System.currentTimeMillis()
             )

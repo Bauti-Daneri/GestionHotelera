@@ -39,4 +39,4 @@ enum class DemoRole {
     MAINTENANCE
 }
 
-val CURRENT_DEMO_ROLE = DemoRole.ADMIN
+var CURRENT_DEMO_ROLE: DemoRole? = null

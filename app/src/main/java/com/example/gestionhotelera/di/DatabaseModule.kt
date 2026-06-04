@@ -21,7 +21,8 @@ object DatabaseModule {
             context,
             HotelOpsDatabase::class.java,
             "hotel_ops_db"
-        ).build()
+        ).fallbackToDestructiveMigration(true)
+            .build()
     }
 
     @Provides
@@ -41,4 +42,10 @@ object DatabaseModule {
 
     @Provides
     fun provideRoomServiceItemDao(db: HotelOpsDatabase) = db.roomServiceItemDao
+
+    @Provides
+    fun provideRoomHousekeeperAssignmentDao(db: HotelOpsDatabase) = db.roomHousekeeperAssignmentDao
+
+    @Provides
+    fun provideRoomServiceMenuItemDao(db: HotelOpsDatabase) = db.roomServiceMenuItemDao
 }

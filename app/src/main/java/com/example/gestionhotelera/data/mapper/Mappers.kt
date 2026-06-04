@@ -143,3 +143,44 @@ fun RoomServiceItem.toEntity(orderId: String) = RoomServiceItemEntity(
     price = price,
     quantity = quantity
 )
+
+fun RoomServiceMenuItemEntity.toDomain() = RoomServiceMenuItem(
+    id = id,
+    hotelId = hotelId,
+    name = name,
+    description = description,
+    price = price,
+    category = category,
+    isAvailable = isAvailable,
+    createdAt = createdAt,
+    updatedAt = updatedAt,
+    syncStatus = syncStatus
+)
+
+fun RoomServiceMenuItem.toEntity(isDirty: Boolean = false) = RoomServiceMenuItemEntity(
+    id = id,
+    hotelId = hotelId,
+    name = name,
+    description = description,
+    price = price,
+    category = category,
+    isAvailable = isAvailable,
+    createdAt = createdAt,
+    updatedAt = updatedAt,
+    isDirty = isDirty,
+    syncStatus = syncStatus
+)
+
+fun RoomHousekeeperAssignmentEntity.toDomain() = RoomHousekeeperAssignment(
+    roomId = roomId,
+    userId = userId,
+    hotelId = hotelId,
+    createdAt = createdAt
+)
+
+fun RoomHousekeeperAssignment.toEntity() = RoomHousekeeperAssignmentEntity(
+    roomId = roomId,
+    userId = userId,
+    hotelId = hotelId,
+    createdAt = createdAt
+)

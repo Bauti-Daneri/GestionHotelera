@@ -11,9 +11,11 @@ import androidx.room.TypeConverters
         RoomEntity::class,
         MaintenanceTicketEntity::class,
         RoomServiceOrderEntity::class,
-        RoomServiceItemEntity::class
+        RoomServiceItemEntity::class,
+        RoomHousekeeperAssignmentEntity::class,
+        RoomServiceMenuItemEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -24,4 +26,6 @@ abstract class HotelOpsDatabase : RoomDatabase() {
     abstract val maintenanceTicketDao: MaintenanceTicketDao
     abstract val roomServiceOrderDao: RoomServiceOrderDao
     abstract val roomServiceItemDao: RoomServiceItemDao
+    abstract val roomHousekeeperAssignmentDao: RoomHousekeeperAssignmentDao
+    abstract val roomServiceMenuItemDao: RoomServiceMenuItemDao
 }

@@ -82,3 +82,26 @@ data class RoomServiceItemEntity(
     val price: Double,
     val quantity: Int
 )
+
+@Entity(tableName = "room_housekeeper_assignments", primaryKeys = ["roomId", "userId"])
+data class RoomHousekeeperAssignmentEntity(
+    val roomId: String,
+    val userId: String,
+    val hotelId: String,
+    val createdAt: Long
+)
+
+@Entity(tableName = "room_service_menu_items")
+data class RoomServiceMenuItemEntity(
+    @PrimaryKey val id: String,
+    val hotelId: String,
+    val name: String,
+    val description: String,
+    val price: Double,
+    val category: String,
+    val isAvailable: Boolean,
+    val createdAt: Long,
+    val updatedAt: Long,
+    val isDirty: Boolean,
+    val syncStatus: SyncStatus
+)
