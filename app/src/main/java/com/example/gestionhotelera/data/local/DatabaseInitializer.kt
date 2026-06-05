@@ -9,9 +9,8 @@ class DatabaseInitializer @Inject constructor(
     private val roomDao: RoomDao,
     private val ticketDao: MaintenanceTicketDao,
     private val orderDao: RoomServiceOrderDao,
-    private val itemDao: RoomServiceItemDao,
-    private val menuDao: RoomServiceMenuItemDao,
-    private val assignmentDao: RoomHousekeeperAssignmentDao
+    private val assignmentDao: RoomHousekeeperAssignmentDao,
+    private val menuDao: RoomServiceMenuItemDao
 ) {
     suspend fun seed() {
         val hotelId = "HOTEL-DEMO-001"
@@ -64,10 +63,11 @@ class DatabaseInitializer @Inject constructor(
         // Seed Menu Items
         if (menuDao.countMenuItemsByHotelId(hotelId) == 0) {
             val menuItems = listOf(
-                RoomServiceMenuItemEntity("menu-001", hotelId, "Desayuno Continental", "Café, jugo, tostadas y frutas", 12.0, "Desayuno", true, now, now, false, SyncStatus.SYNCED),
-                RoomServiceMenuItemEntity("menu-002", hotelId, "Café Espresso", "Café intenso", 3.5, "Bebidas", true, now, now, false, SyncStatus.SYNCED),
-                RoomServiceMenuItemEntity("menu-003", hotelId, "Hamburguesa Gourmet", "Carne premium con papas", 18.0, "Almuerzo/Cena", true, now, now, false, SyncStatus.SYNCED),
-                RoomServiceMenuItemEntity("menu-004", hotelId, "Vino Tinto", "Copa de la casa", 8.0, "Bebidas", true, now, now, false, SyncStatus.SYNCED)
+                RoomServiceMenuItemEntity("menu-01", hotelId, "Hamburguesa Completa", "Con papas fritas y bebida", 15.0, "Cena", null, true, now, now, false, SyncStatus.SYNCED),
+                RoomServiceMenuItemEntity("menu-02", hotelId, "Ensalada César", "Pollo, lechuga, croutons y aderezo", 12.0, "Almuerzo", null, true, now, now, false, SyncStatus.SYNCED),
+                RoomServiceMenuItemEntity("menu-03", hotelId, "Desayuno Americano", "Huevos, tocino, tostadas y café", 10.0, "Desayuno", null, true, now, now, false, SyncStatus.SYNCED),
+                RoomServiceMenuItemEntity("menu-04", hotelId, "Sándwich de Pollo", "Con lechuga, tomate y mayonesa", 9.0, "Snack", null, true, now, now, false, SyncStatus.SYNCED),
+                RoomServiceMenuItemEntity("menu-05", hotelId, "Jugo de Naranja", "Natural 500ml", 4.0, "Bebidas", null, true, now, now, false, SyncStatus.SYNCED)
             )
             menuItems.forEach { menuDao.insertMenuItem(it) }
         }
@@ -75,17 +75,36 @@ class DatabaseInitializer @Inject constructor(
         // Seed Orders - Fixed IDs
         if (orderDao.countOrdersByHotelId(hotelId) == 0) {
             val order1Id = "order-demo-001"
-            orderDao.insertOrder(RoomServiceOrderEntity(order1Id, hotelId, "room-105", OrderStatus.PENDING, 24.0, now, now, false, SyncStatus.SYNCED))
-            itemDao.insertItems(listOf(
-                RoomServiceItemEntity("item-demo-001", order1Id, "Desayuno Continental", 12.0, 2)
-            ))
+            orderDao.insertOrder(
+                RoomServiceOrderEntity(
+                    id = order1Id,
+                    hotelId = hotelId,
+                    roomId = "room-105",
+                    description = "Desayuno Americano",
+                    status = OrderStatus.PENDING,
+                    price = 24.0,
+                    createdAt = now,
+                    updatedAt = now,
+                    isDirty = false,
+                    syncStatus = SyncStatus.SYNCED
+                )
+            )
 
             val order2Id = "order-demo-002"
-            orderDao.insertOrder(RoomServiceOrderEntity(order2Id, hotelId, "room-203", OrderStatus.PENDING, 26.0, now, now, false, SyncStatus.SYNCED))
-            itemDao.insertItems(listOf(
-                RoomServiceItemEntity("item-demo-002", order2Id, "Hamburguesa Gourmet", 18.0, 1),
-                RoomServiceItemEntity("item-demo-003", order2Id, "Vino Tinto", 8.0, 1)
-            ))
+            orderDao.insertOrder(
+                RoomServiceOrderEntity(
+                    id = order2Id,
+                    hotelId = hotelId,
+                    roomId = "room-203",
+                    description = "Cena: Hamburguesa completa",
+                    status = OrderStatus.PENDING,
+                    price = 26.0,
+                    createdAt = now,
+                    updatedAt = now,
+                    isDirty = false,
+                    syncStatus = SyncStatus.SYNCED
+                )
+            )
         }
     }
 }

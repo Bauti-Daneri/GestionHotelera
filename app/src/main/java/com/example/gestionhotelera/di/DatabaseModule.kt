@@ -41,11 +41,12 @@ object DatabaseModule {
     fun provideRoomServiceOrderDao(db: HotelOpsDatabase) = db.roomServiceOrderDao
 
     @Provides
-    fun provideRoomServiceItemDao(db: HotelOpsDatabase) = db.roomServiceItemDao
-
-    @Provides
     fun provideRoomHousekeeperAssignmentDao(db: HotelOpsDatabase) = db.roomHousekeeperAssignmentDao
 
     @Provides
+    fun provideRoomServiceItemDao(db: HotelOpsDatabase) = db.roomServiceItemDao
+
+    @Provides
     fun provideRoomServiceMenuItemDao(db: HotelOpsDatabase) = db.roomServiceMenuItemDao
+
 }

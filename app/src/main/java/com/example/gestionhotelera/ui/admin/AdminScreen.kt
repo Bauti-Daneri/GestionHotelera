@@ -19,7 +19,6 @@ import com.example.gestionhotelera.domain.model.*
 import com.example.gestionhotelera.ui.components.*
 import kotlinx.coroutines.flow.Flow
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AdminScreen(
     viewModel: AdminViewModel = hiltViewModel()
@@ -41,47 +40,98 @@ fun AdminScreen(
     }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        topBar = {
-            TopAppBar(
-                title = { Text("Administración") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary
-                )
-            )
-        },
-        floatingActionButton = {
-            if (selectedTab == 0) {
-                FloatingActionButton(
-                    onClick = { showAddUserSheet = true },
-                    containerColor = MaterialTheme.colorScheme.primary
-                ) {
-                    Icon(Icons.Rounded.PersonAdd, contentDescription = "Nuevo Usuario")
-                }
-            } else {
-                FloatingActionButton(
-                    onClick = { showAddRoomSheet = true },
-                    containerColor = MaterialTheme.colorScheme.primary
-                ) {
-                    Icon(Icons.Rounded.AddHome, contentDescription = "Nueva Habitación")
-                }
-            }
-        }
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
         ) {
-            AdminContent(
-                uiState = uiState,
-                selectedTab = selectedTab,
-                tabs = tabs,
-                onTabSelected = { selectedTab = it },
-                onDeleteUser = { viewModel.deleteUser(it) },
-                onRoomClick = { selectedRoomForAssignment = it }
-            )
+            // Fixed top section
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+
+                HotelHeaderCard(name = uiState.hotel?.name ?: "Hotel Plaza Central")
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    MetricCard(
+                        title = "Tickets Abiertos",
+                        value = uiState.openTicketsCount.toString(),
+                        icon = Icons.Rounded.ConfirmationNumber,
+                        modifier = Modifier.weight(1f)
+                    )
+                    MetricCard(
+                        title = "Ocupación",
+                        value = "${uiState.occupancyRate}%",
+                        icon = Icons.Rounded.PieChart,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                TabRow(selectedTabIndex = selectedTab) {
+                    tabs.forEachIndexed { index, title ->
+                        Tab(
+                            selected = selectedTab == index,
+                            onClick = { selectedTab = index },
+                            text = { Text(title) }
+                        )
+                    }
+                }
+
+                Button(
+                    onClick = {
+                        if (selectedTab == 0) showAddUserSheet = true
+                        else showAddRoomSheet = true
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium
+                ) {
+                    Icon(
+                        if (selectedTab == 0) Icons.Rounded.PersonAdd else Icons.Rounded.AddHome,
+                        contentDescription = null
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(if (selectedTab == 0) "Nuevo Usuario" else "Nueva Habitación")
+                }
+            }
+
+            // Scrollable section
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentPadding = PaddingValues(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = 8.dp,
+                    bottom = 120.dp
+                ),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                if (selectedTab == 0) {
+                    items(uiState.users) { user ->
+                        EmployeeCard(
+                            user = user,
+                            onEdit = { /* Implement edit */ },
+                            onDelete = { viewModel.deleteUser(user) }
+                        )
+                    }
+                } else {
+                    items(uiState.rooms) { room ->
+                        RoomCard(
+                            room = room,
+                            onClick = { selectedRoomForAssignment = room }
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -114,75 +164,6 @@ fun AdminScreen(
             onAssign = { userId -> viewModel.assignHousekeeper(selectedRoomForAssignment!!.id, userId) },
             onRemove = { userId -> viewModel.removeHousekeeper(selectedRoomForAssignment!!.id, userId) }
         )
-    }
-}
-
-@Composable
-fun AdminContent(
-    uiState: AdminUiState,
-    selectedTab: Int,
-    tabs: List<String>,
-    onTabSelected: (Int) -> Unit,
-    onDeleteUser: (User) -> Unit,
-    onRoomClick: (Room) -> Unit
-) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        item {
-            HotelHeaderCard(name = uiState.hotel?.name ?: "Hotel Plaza Central")
-        }
-
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                MetricCard(
-                    title = "Tickets Abiertos",
-                    value = uiState.openTicketsCount.toString(),
-                    icon = Icons.Rounded.ConfirmationNumber,
-                    modifier = Modifier.weight(1f)
-                )
-                MetricCard(
-                    title = "Ocupación",
-                    value = "${uiState.occupancyRate}%",
-                    icon = Icons.Rounded.PieChart,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-        }
-
-        item {
-            TabRow(selectedTabIndex = selectedTab) {
-                tabs.forEachIndexed { index, title ->
-                    Tab(
-                        selected = selectedTab == index,
-                        onClick = { onTabSelected(index) },
-                        text = { Text(title) }
-                    )
-                }
-            }
-        }
-
-        if (selectedTab == 0) {
-            items(uiState.users) { user ->
-                EmployeeCard(
-                    user = user,
-                    onEdit = { /* Implement edit */ },
-                    onDelete = { onDeleteUser(user) }
-                )
-            }
-        } else {
-            items(uiState.rooms) { room ->
-                RoomCard(
-                    room = room,
-                    onClick = { onRoomClick(room) }
-                )
-            }
-        }
     }
 }
 

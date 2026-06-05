@@ -20,7 +20,6 @@ import com.example.gestionhotelera.ui.components.*
 import com.example.gestionhotelera.ui.theme.DestructiveRed
 import com.example.gestionhotelera.ui.theme.PrimaryBlue
 import com.example.gestionhotelera.ui.theme.SuccessGreen
-import com.example.gestionhotelera.ui.theme.WarningOrange
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,26 +30,69 @@ fun HousekeepingScreen(
     var selectedRoomWithHousekeepers by remember { mutableStateOf<RoomWithHousekeepers?>(null) }
     var showReportMaintenance by remember { mutableStateOf(false) }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Limpieza") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = PrimaryBlue,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary
-                )
-            )
-        }
-    ) { padding ->
+    Scaffold { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
         ) {
-            HousekeepingContent(
-                uiState = uiState,
-                onRoomClick = { selectedRoomWithHousekeepers = it }
-            )
+            // Fixed Top Header (No TopBar as requested)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    StatusMetricCard(
+                        title = "Sucias",
+                        value = uiState.dirtyCount.toString(),
+                        color = DestructiveRed,
+                        modifier = Modifier.weight(1f)
+                    )
+                    StatusMetricCard(
+                        title = "En Proceso",
+                        value = uiState.inProgressCount.toString(),
+                        color = PrimaryBlue,
+                        modifier = Modifier.weight(1f)
+                    )
+                    StatusMetricCard(
+                        title = "Limpias",
+                        value = uiState.cleanCount.toString(),
+                        color = SuccessGreen,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+
+            // Scrollable Content
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentPadding = PaddingValues(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = 8.dp,
+                    bottom = 120.dp
+                ),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(uiState.rooms) { roomWithHousekeepers ->
+                    RoomCard(
+                        room = roomWithHousekeepers.room,
+                        assignedEmployees = if (uiState.userRole == UserRole.ADMIN) {
+                            roomWithHousekeepers.housekeepers
+                        } else {
+                            emptyList()
+                        },
+                        onClick = { selectedRoomWithHousekeepers = roomWithHousekeepers }
+                    )
+                }
+            }
         }
     }
 
@@ -74,56 +116,6 @@ fun HousekeepingScreen(
                     selectedRoomWithHousekeepers = null
                 },
                 onReportMaintenance = { showReportMaintenance = true }
-            )
-        }
-    }
-}
-
-@Composable
-fun HousekeepingContent(
-    uiState: HousekeepingUiState,
-    onRoomClick: (RoomWithHousekeepers) -> Unit
-) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                StatusMetricCard(
-                    title = "Sucias",
-                    value = uiState.dirtyCount.toString(),
-                    color = DestructiveRed,
-                    modifier = Modifier.weight(1f)
-                )
-                StatusMetricCard(
-                    title = "En Proceso",
-                    value = uiState.inProgressCount.toString(),
-                    color = PrimaryBlue,
-                    modifier = Modifier.weight(1f)
-                )
-                StatusMetricCard(
-                    title = "Limpias",
-                    value = uiState.cleanCount.toString(),
-                    color = SuccessGreen,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-        }
-
-        items(uiState.rooms) { roomWithHousekeepers ->
-            RoomCard(
-                room = roomWithHousekeepers.room,
-                assignedEmployees = if (uiState.userRole == UserRole.ADMIN) {
-                    roomWithHousekeepers.housekeepers
-                } else {
-                    emptyList()
-                },
-                onClick = { onRoomClick(roomWithHousekeepers) }
             )
         }
     }
@@ -188,7 +180,7 @@ fun RoomDetailBottomSheet(
                 colors = ButtonDefaults.buttonColors(containerColor = SuccessGreen.copy(alpha = 0.1f), contentColor = SuccessGreen)
             ) { Text("Limpia / Disponible") }
             
-            Divider()
+            HorizontalDivider()
             
             TextButton(
                 onClick = onReportMaintenance,

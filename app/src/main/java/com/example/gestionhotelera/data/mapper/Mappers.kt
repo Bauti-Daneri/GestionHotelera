@@ -105,13 +105,13 @@ fun MaintenanceTicket.toEntity(isDirty: Boolean = false) = MaintenanceTicketEnti
     syncStatus = syncStatus
 )
 
-fun RoomServiceOrderEntity.toDomain(items: List<RoomServiceItem>) = RoomServiceOrder(
+fun RoomServiceOrderEntity.toDomain() = RoomServiceOrder(
     id = id,
     hotelId = hotelId,
     roomId = roomId,
-    items = items,
+    description = description,
     status = status,
-    totalPrice = totalPrice,
+    price = price,
     createdAt = createdAt,
     updatedAt = updatedAt,
     syncStatus = syncStatus
@@ -121,50 +121,9 @@ fun RoomServiceOrder.toEntity(isDirty: Boolean = false) = RoomServiceOrderEntity
     id = id,
     hotelId = hotelId,
     roomId = roomId,
+    description = description,
     status = status,
-    totalPrice = totalPrice,
-    createdAt = createdAt,
-    updatedAt = updatedAt,
-    isDirty = isDirty,
-    syncStatus = syncStatus
-)
-
-fun RoomServiceItemEntity.toDomain() = RoomServiceItem(
-    id = id,
-    name = name,
     price = price,
-    quantity = quantity
-)
-
-fun RoomServiceItem.toEntity(orderId: String) = RoomServiceItemEntity(
-    id = id,
-    orderId = orderId,
-    name = name,
-    price = price,
-    quantity = quantity
-)
-
-fun RoomServiceMenuItemEntity.toDomain() = RoomServiceMenuItem(
-    id = id,
-    hotelId = hotelId,
-    name = name,
-    description = description,
-    price = price,
-    category = category,
-    isAvailable = isAvailable,
-    createdAt = createdAt,
-    updatedAt = updatedAt,
-    syncStatus = syncStatus
-)
-
-fun RoomServiceMenuItem.toEntity(isDirty: Boolean = false) = RoomServiceMenuItemEntity(
-    id = id,
-    hotelId = hotelId,
-    name = name,
-    description = description,
-    price = price,
-    category = category,
-    isAvailable = isAvailable,
     createdAt = createdAt,
     updatedAt = updatedAt,
     isDirty = isDirty,

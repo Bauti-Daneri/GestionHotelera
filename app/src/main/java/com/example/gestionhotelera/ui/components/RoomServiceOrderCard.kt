@@ -48,21 +48,10 @@ fun RoomServiceOrderCard(
             
             Spacer(modifier = Modifier.height(8.dp))
             
-            order.items.forEach { item ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "${item.quantity}x ${item.name}",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                    Text(
-                        text = "$${String.format("%.2f", item.price * item.quantity)}",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-            }
+            Text(
+                text = order.description,
+                style = MaterialTheme.typography.bodyMedium
+            )
             
             Divider(modifier = Modifier.padding(vertical = 8.dp))
             
@@ -78,7 +67,7 @@ fun RoomServiceOrderCard(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = "$${String.format("%.2f", order.totalPrice)}",
+                        text = "$${String.format("%.2f", order.price)}",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = PrimaryBlue

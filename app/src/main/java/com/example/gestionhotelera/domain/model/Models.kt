@@ -53,29 +53,9 @@ data class RoomServiceOrder(
     val id: String,
     val hotelId: String,
     val roomId: String,
-    val items: List<RoomServiceItem>,
-    val status: OrderStatus,
-    val totalPrice: Double,
-    val createdAt: Long,
-    val updatedAt: Long,
-    val syncStatus: SyncStatus = SyncStatus.SYNCED
-)
-
-data class RoomServiceItem(
-    val id: String,
-    val name: String,
-    val price: Double,
-    val quantity: Int
-)
-
-data class RoomServiceMenuItem(
-    val id: String,
-    val hotelId: String,
-    val name: String,
     val description: String,
+    val status: OrderStatus,
     val price: Double,
-    val category: String,
-    val isAvailable: Boolean,
     val createdAt: Long,
     val updatedAt: Long,
     val syncStatus: SyncStatus = SyncStatus.SYNCED

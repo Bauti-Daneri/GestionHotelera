@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.gestionhotelera.domain.model.TicketCategory
+import com.example.gestionhotelera.domain.model.TicketStatus
 import com.example.gestionhotelera.ui.components.MaintenanceTicketCard
 import com.example.gestionhotelera.ui.theme.PrimaryBlue
 
@@ -23,35 +24,69 @@ fun MaintenanceScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showCreateTicketSheet by remember { mutableStateOf(false) }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Mantenimiento") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = PrimaryBlue,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary
-                )
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { showCreateTicketSheet = true },
-                containerColor = PrimaryBlue
-            ) {
-                Icon(Icons.Rounded.Add, contentDescription = "Nuevo Ticket")
-            }
-        }
-    ) { padding ->
+    Scaffold { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
         ) {
-            MaintenanceContent(
-                uiState = uiState,
-                onFilterChange = { viewModel.setFilter(it) },
-                onStatusChange = { id, status -> viewModel.updateTicketStatus(id, status) }
-            )
+            // Fixed Top Section
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                ScrollableTabRow(
+                    selectedTabIndex = if (uiState.filter == null) 0 else TicketCategory.values().indexOf(uiState.filter) + 1,
+                    edgePadding = 0.dp,
+                    divider = {}
+                ) {
+                    Tab(
+                        selected = uiState.filter == null,
+                        onClick = { viewModel.setFilter(null) },
+                        text = { Text("TODOS") }
+                    )
+                    TicketCategory.values().forEach { category ->
+                        Tab(
+                            selected = uiState.filter == category,
+                            onClick = { viewModel.setFilter(category) },
+                            text = { Text(category.name) }
+                        )
+                    }
+                }
+
+                Button(
+                    onClick = { showCreateTicketSheet = true },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium
+                ) {
+                    Icon(Icons.Rounded.Add, contentDescription = null)
+                    Spacer(Modifier.width(8.dp))
+                    Text("Nuevo Reporte")
+                }
+            }
+
+            // Scrollable List
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentPadding = PaddingValues(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = 8.dp,
+                    bottom = 120.dp
+                ),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(uiState.tickets) { ticket ->
+                    MaintenanceTicketCard(
+                        ticket = ticket,
+                        onStatusChange = { status -> viewModel.updateTicketStatus(ticket.id, status) }
+                    )
+                }
+            }
         }
     }
 
@@ -63,47 +98,6 @@ fun MaintenanceScreen(
                 showCreateTicketSheet = false
             }
         )
-    }
-}
-
-@Composable
-fun MaintenanceContent(
-    uiState: MaintenanceUiState,
-    onFilterChange: (TicketCategory?) -> Unit,
-    onStatusChange: (String, com.example.gestionhotelera.domain.model.TicketStatus) -> Unit
-) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        ScrollableTabRow(
-            selectedTabIndex = if (uiState.filter == null) 0 else TicketCategory.values().indexOf(uiState.filter) + 1,
-            edgePadding = 16.dp,
-            divider = {}
-        ) {
-            Tab(
-                selected = uiState.filter == null,
-                onClick = { onFilterChange(null) },
-                text = { Text("Todos") }
-            )
-            TicketCategory.values().forEach { category ->
-                Tab(
-                    selected = uiState.filter == category,
-                    onClick = { onFilterChange(category) },
-                    text = { Text(category.name) }
-                )
-            }
-        }
-
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(uiState.tickets) { ticket ->
-                MaintenanceTicketCard(
-                    ticket = ticket,
-                    onStatusChange = { status -> onStatusChange(ticket.id, status) }
-                )
-            }
-        }
     }
 }
 
