@@ -19,6 +19,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getUserById(id: String): User? = userDao.getUserById(id)?.toDomain()
 
+    override suspend fun getUserByEmail(email: String): User? = userDao.getUserByEmail(email)?.toDomain()
+
+    override suspend fun getUserByPhone(phone: String): User? = userDao.getUserByPhone(phone)?.toDomain()
+
     override suspend fun saveUser(user: User) {
         userDao.insertUser(user.toEntity(isDirty = true).copy(syncStatus = SyncStatus.PENDING))
     }

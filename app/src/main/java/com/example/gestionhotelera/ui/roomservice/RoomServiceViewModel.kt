@@ -15,14 +15,26 @@ import javax.inject.Inject
 class RoomServiceViewModel @Inject constructor(
     private val getOrdersUseCase: GetRoomServiceOrdersUseCase,
     private val createOrderUseCase: CreateRoomServiceOrderUseCase,
-    private val updateStatusUseCase: UpdateOrderStatusUseCase
+    private val updateStatusUseCase: UpdateOrderStatusUseCase,
+    private val getCurrentUserUseCase: com.example.gestionhotelera.domain.usecase.auth.GetCurrentUserUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RoomServiceUiState())
     val uiState: StateFlow<RoomServiceUiState> = _uiState.asStateFlow()
 
+    private var currentUser: User? = null
+
     init {
+        observeUser()
         loadOrders()
+    }
+
+    private fun observeUser() {
+        viewModelScope.launch {
+            getCurrentUserUseCase().collect { user ->
+                currentUser = user
+            }
+        }
     }
 
     private fun loadOrders() {
@@ -52,9 +64,10 @@ class RoomServiceViewModel @Inject constructor(
     }
 
     fun createOrder(roomId: String, description: String, price: Double) {
+        val hotelId = currentUser?.hotelId ?: "HOTEL-DEMO-001"
         viewModelScope.launch {
             createOrderUseCase(
-                hotelId = "HOTEL-DEMO-001", // ID por defecto para la demo
+                hotelId = hotelId,
                 roomId = if (roomId.startsWith("room-")) roomId else "room-$roomId",
                 description = description,
                 price = price,

@@ -2,12 +2,14 @@ package com.example.gestionhotelera.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.MeetingRoom
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.gestionhotelera.domain.model.Room
@@ -19,6 +21,7 @@ fun RoomCard(
     room: Room,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onDelete: (() -> Unit)? = null,
     assignedEmployees: List<User> = emptyList()
 ) {
     ElevatedCard(
@@ -56,7 +59,20 @@ fun RoomCard(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-                RoomStatusBadge(status = room.status)
+                
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RoomStatusBadge(status = room.status)
+                    if (onDelete != null) {
+                        Spacer(modifier = Modifier.width(8.dp))
+                        IconButton(onClick = onDelete) {
+                            Icon(
+                                imageVector = Icons.Rounded.Delete,
+                                contentDescription = "Eliminar Habitación",
+                                tint = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
+                }
             }
 
             if (assignedEmployees.isNotEmpty()) {

@@ -3,13 +3,19 @@ package com.example.gestionhotelera.ui.admin
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gestionhotelera.domain.model.*
-import com.example.gestionhotelera.domain.repository.MaintenanceRepository
-import com.example.gestionhotelera.domain.repository.RoomRepository
-import com.example.gestionhotelera.domain.repository.UserRepository
+import com.example.gestionhotelera.domain.usecase.maintenance.GetMaintenanceTicketsUseCase
+import com.example.gestionhotelera.domain.usecase.room.AssignHousekeeperToRoomUseCase
+import com.example.gestionhotelera.domain.usecase.user.GetUsersUseCase
 import com.example.gestionhotelera.domain.usecase.room.CheckRoomNumberExistsUseCase
 import com.example.gestionhotelera.domain.usecase.room.CreateRoomUseCase
 import com.example.gestionhotelera.domain.usecase.room.DeleteRoomUseCase
+import com.example.gestionhotelera.domain.usecase.room.GetAssignedHousekeepersUseCase
+import com.example.gestionhotelera.domain.usecase.room.GetRoomsUseCase
+import com.example.gestionhotelera.domain.usecase.room.RemoveHousekeeperFromRoomUseCase
 import com.example.gestionhotelera.domain.usecase.room.UpdateRoomUseCase
+import com.example.gestionhotelera.domain.usecase.user.CreateUserUseCase
+import com.example.gestionhotelera.domain.usecase.user.DeleteUserUseCase
+import com.example.gestionhotelera.domain.usecase.user.UpdateUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -18,16 +24,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AdminViewModel @Inject constructor(
-    private val userRepository: UserRepository,
-    private val roomRepository: RoomRepository,
-    private val maintenanceRepository: MaintenanceRepository,
+    private val getUsersUseCase: GetUsersUseCase,
+    private val createUserUseCase: CreateUserUseCase,
+    private val updateUserUseCase: UpdateUserUseCase,
+    private val deleteUserUseCase: DeleteUserUseCase,
     private val createRoomUseCase: CreateRoomUseCase,
+    private val getRoomsUseCase: GetRoomsUseCase,
     private val updateRoomUseCase: UpdateRoomUseCase,
     private val deleteRoomUseCase: DeleteRoomUseCase,
+    private val getMaintenanceTicketsUseCase: GetMaintenanceTicketsUseCase,
     private val checkRoomNumberExistsUseCase: CheckRoomNumberExistsUseCase,
-    private val assignHousekeeperToRoomUseCase: com.example.gestionhotelera.domain.usecase.room.AssignHousekeeperToRoomUseCase,
-    private val removeHousekeeperFromRoomUseCase: com.example.gestionhotelera.domain.usecase.room.RemoveHousekeeperFromRoomUseCase,
-    private val getAssignedHousekeepersUseCase: com.example.gestionhotelera.domain.usecase.room.GetAssignedHousekeepersUseCase
+    private val assignHousekeeperToRoomUseCase: AssignHousekeeperToRoomUseCase,
+    private val removeHousekeeperFromRoomUseCase: RemoveHousekeeperFromRoomUseCase,
+    private val getAssignedHousekeepersUseCase: GetAssignedHousekeepersUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AdminUiState())
@@ -42,9 +51,9 @@ class AdminViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true) }
             
             combine(
-                userRepository.getUsers(),
-                roomRepository.getRooms(),
-                maintenanceRepository.getTickets()
+                getUsersUseCase(),
+                getRoomsUseCase(),
+                getMaintenanceTicketsUseCase()
             ) { users, rooms, tickets ->
                 val openTickets = tickets.count { it.status == TicketStatus.OPEN }
                 val occupiedCount = rooms.count { it.status == RoomStatus.OCCUPIED }
@@ -63,7 +72,7 @@ class AdminViewModel @Inject constructor(
         }
     }
 
-    fun saveUser(name: String, email: String, role: UserRole, department: String, phone: String) {
+    fun saveUser(name: String, email: String, role: UserRole, schedule: String, phone: String, password: String = "") {
         viewModelScope.launch {
             val user = User(
                 id = UUID.randomUUID().toString(),
@@ -71,18 +80,46 @@ class AdminViewModel @Inject constructor(
                 name = name,
                 email = email,
                 role = role,
-                department = department,
+                department = "", // Opcional, se puede inferir del rol si es necesario
+                schedule = schedule,
                 phone = phone,
                 createdAt = System.currentTimeMillis(),
                 updatedAt = System.currentTimeMillis()
             )
-            userRepository.saveUser(user)
+            createUserUseCase(user)
+            _uiState.update { it.copy(successMessage = "Usuario creado correctamente") }
+        }
+    }
+
+    fun updateUser(user: User) {
+        viewModelScope.launch {
+            val result = updateUserUseCase(user)
+
+            if (result.isSuccess) {
+                _uiState.update {
+                    it.copy(successMessage = "Usuario actualizado correctamente")
+                }
+            } else {
+                _uiState.update {
+                    it.copy(
+                        error = result.exceptionOrNull()?.message ?: "Error al actualizar usuario"
+                    )
+                }
+            }
         }
     }
 
     fun deleteUser(user: User) {
         viewModelScope.launch {
-            userRepository.deleteUser(user)
+            val result = deleteUserUseCase(user)
+
+            if (result.isFailure) {
+                _uiState.update {
+                    it.copy(
+                        error = result.exceptionOrNull()?.message ?: "Error al eliminar usuario"
+                    )
+                }
+            }
         }
     }
 
@@ -97,6 +134,7 @@ class AdminViewModel @Inject constructor(
                 id = "room-$number",
                 hotelId = "HOTEL-DEMO-001",
                 number = number,
+                floor = floor,
                 type = type,
                 status = status,
                 lastCleaned = System.currentTimeMillis(),
@@ -104,7 +142,7 @@ class AdminViewModel @Inject constructor(
                 updatedAt = System.currentTimeMillis()
             )
             createRoomUseCase(room)
-            _uiState.update { it.copy(error = null) }
+            _uiState.update { it.copy(error = null, successMessage = "Habitación creada correctamente") }
         }
     }
 
@@ -116,7 +154,15 @@ class AdminViewModel @Inject constructor(
 
     fun deleteRoom(room: Room) {
         viewModelScope.launch {
-            deleteRoomUseCase(room)
+            val result = deleteRoomUseCase(room)
+
+            if (result.isFailure) {
+                _uiState.update {
+                    it.copy(
+                        error = result.exceptionOrNull()?.message ?: "Error al eliminar habitación"
+                    )
+                }
+            }
         }
     }
     
@@ -125,7 +171,7 @@ class AdminViewModel @Inject constructor(
         
     fun assignHousekeeper(roomId: String, userId: String) {
         viewModelScope.launch {
-            val result = assignHousekeeperToRoomUseCase(roomId, userId, "HOTEL-DEMO-001")
+            val result = assignHousekeeperToRoomUseCase(roomId, userId)
             if (result.isFailure) {
                 _uiState.update { it.copy(error = result.exceptionOrNull()?.message) }
             } else {
@@ -142,5 +188,9 @@ class AdminViewModel @Inject constructor(
     
     fun clearError() {
         _uiState.update { it.copy(error = null) }
+    }
+
+    fun clearSuccessMessage() {
+        _uiState.update { it.copy(successMessage = null) }
     }
 }

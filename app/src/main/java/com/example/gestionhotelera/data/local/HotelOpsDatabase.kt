@@ -15,7 +15,7 @@ import androidx.room.TypeConverters
         RoomHousekeeperAssignmentEntity::class,
         RoomServiceMenuItemEntity::class
     ],
-    version = 3,
+    version = 5,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

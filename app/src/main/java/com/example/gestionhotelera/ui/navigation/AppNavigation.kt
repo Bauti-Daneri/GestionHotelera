@@ -17,21 +17,30 @@ import com.example.gestionhotelera.ui.maintenance.MaintenanceScreen
 import com.example.gestionhotelera.ui.roomservice.RoomServiceScreen
 import com.example.gestionhotelera.ui.profile.ProfileScreen
 import com.example.gestionhotelera.ui.login.LoginScreen
+import com.example.gestionhotelera.ui.camera.CameraScreen
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(
+    mainViewModel: com.example.gestionhotelera.MainViewModel = androidx.hilt.navigation.compose.hiltViewModel()
+) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     
     // State to trigger recomposition when role changes
     var role by remember { mutableStateOf(CURRENT_DEMO_ROLE) }
+    val notificationCounts by mainViewModel.notificationCounts.collectAsStateWithLifecycle()
 
     Scaffold(
         bottomBar = {
             if (currentRoute != Screen.Login.route && role != null) {
-                RoleBasedBottomNavigation(navController = navController, role = role!!)
+                RoleBasedBottomNavigation(
+                    navController = navController, 
+                    role = role!!,
+                    notificationCounts = notificationCounts
+                )
             }
         }
     ) { padding ->
@@ -69,22 +78,57 @@ fun AppNavigation() {
                 AdminScreen()
             }
             composable(Screen.HousekeepingHome.route) {
-                HousekeepingScreen()
+                HousekeepingScreen(
+                    onNavigateToImageViewer = { url ->
+                        navController.navigate(Screen.ImageViewer.createRoute(url))
+                    }
+                )
             }
             composable(Screen.MaintenanceHome.route) {
-                MaintenanceScreen()
+                MaintenanceScreen(
+                    onNavigateToImageViewer = { url ->
+                        navController.navigate(Screen.ImageViewer.createRoute(url))
+                    }
+                )
             }
             composable(Screen.RoomService.route) {
                 RoomServiceScreen()
             }
             composable(Screen.Profile.route) {
-                ProfileScreen(onLogout = {
-                    CURRENT_DEMO_ROLE = null
-                    role = null
-                    navController.navigate(Screen.Login.route) {
-                        popUpTo(0) { inclusive = true }
+                ProfileScreen(
+                    onLogout = {
+                        CURRENT_DEMO_ROLE = null
+                        role = null
+                        navController.navigate(Screen.Login.route) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    },
+                    onNavigateToCamera = {
+                        navController.navigate(Screen.CameraTest.route)
                     }
-                })
+                )
+            }
+            composable(Screen.CameraTest.route) {
+                CameraScreen(
+                    onImageCaptured = { uri -> 
+                        // Por ahora solo se muestra en el CameraScreen
+                    },
+                    onError = { exc ->
+                        // Manejar error
+                    }
+                )
+            }
+            composable(
+                route = Screen.ImageViewer.route,
+                arguments = listOf(
+                    androidx.navigation.navArgument("imageUrl") { type = androidx.navigation.NavType.StringType }
+                )
+            ) { backStackEntry ->
+                val imageUrl = backStackEntry.arguments?.getString("imageUrl") ?: ""
+                com.example.gestionhotelera.ui.components.ImageViewerScreen(
+                    imageUrl = imageUrl,
+                    onClose = { navController.popBackStack() }
+                )
             }
         }
     }

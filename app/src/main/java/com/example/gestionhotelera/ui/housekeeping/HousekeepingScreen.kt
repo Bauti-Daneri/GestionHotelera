@@ -1,5 +1,6 @@
 package com.example.gestionhotelera.ui.housekeeping
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -9,14 +10,17 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.gestionhotelera.domain.model.Room
-import com.example.gestionhotelera.domain.model.RoomStatus
-import com.example.gestionhotelera.domain.model.TicketCategory
-import com.example.gestionhotelera.domain.model.UserRole
+import com.example.gestionhotelera.domain.model.*
 import com.example.gestionhotelera.ui.components.*
+import com.example.gestionhotelera.ui.housekeeping.components.ReportMaintenanceBottomSheet
+import com.example.gestionhotelera.ui.housekeeping.components.RoomDetailBottomSheet
 import com.example.gestionhotelera.ui.theme.DestructiveRed
 import com.example.gestionhotelera.ui.theme.PrimaryBlue
 import com.example.gestionhotelera.ui.theme.SuccessGreen
@@ -24,7 +28,8 @@ import com.example.gestionhotelera.ui.theme.SuccessGreen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HousekeepingScreen(
-    viewModel: HousekeepingViewModel = hiltViewModel()
+    viewModel: HousekeepingViewModel = hiltViewModel(),
+    onNavigateToImageViewer: (String) -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var selectedRoomWithHousekeepers by remember { mutableStateOf<RoomWithHousekeepers?>(null) }
@@ -33,9 +38,14 @@ fun HousekeepingScreen(
     Scaffold { padding ->
         Column(
             modifier = Modifier
-                .padding(padding)
                 .fillMaxSize()
+                .padding(bottom = padding.calculateBottomPadding())
         ) {
+            ScreenTitle(
+                title = "Limpieza",
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+
             // Fixed Top Header (No TopBar as requested)
             Column(
                 modifier = Modifier
@@ -101,11 +111,12 @@ fun HousekeepingScreen(
         if (showReportMaintenance) {
             ReportMaintenanceBottomSheet(
                 onDismiss = { showReportMaintenance = false },
-                onReport = { category, description ->
-                    viewModel.reportMaintenance(room.id, category, description)
+                onReport = { category, description, imageUrl ->
+                    viewModel.reportMaintenance(room.id, category, description, imageUrl)
                     showReportMaintenance = false
                     selectedRoomWithHousekeepers = null
-                }
+                },
+                onImageClick = onNavigateToImageViewer
             )
         } else {
             RoomDetailBottomSheet(
@@ -138,109 +149,6 @@ fun StatusMetricCard(
         ) {
             Text(text = value, style = MaterialTheme.typography.headlineMedium, color = color)
             Text(text = title, style = MaterialTheme.typography.labelSmall)
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun RoomDetailBottomSheet(
-    room: Room,
-    onDismiss: () -> Unit,
-    onStatusChange: (RoomStatus) -> Unit,
-    onReportMaintenance: () -> Unit
-) {
-    ModalBottomSheet(onDismissRequest = onDismiss) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-                .navigationBarsPadding(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Text("Habitación ${room.number}", style = MaterialTheme.typography.titleLarge)
-            
-            Text("Estado de la Habitación", style = MaterialTheme.typography.labelLarge)
-            
-            Button(
-                onClick = { onStatusChange(RoomStatus.DIRTY) },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = DestructiveRed.copy(alpha = 0.1f), contentColor = DestructiveRed)
-            ) { Text("Sucia / Requiere Limpieza") }
-            
-            Button(
-                onClick = { onStatusChange(RoomStatus.IN_PROGRESS) },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = PrimaryBlue.copy(alpha = 0.1f), contentColor = PrimaryBlue)
-            ) { Text("En Proceso de Limpieza") }
-            
-            Button(
-                onClick = { onStatusChange(RoomStatus.CLEAN) },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = SuccessGreen.copy(alpha = 0.1f), contentColor = SuccessGreen)
-            ) { Text("Limpia / Disponible") }
-            
-            HorizontalDivider()
-            
-            TextButton(
-                onClick = onReportMaintenance,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Icon(Icons.Rounded.ReportProblem, contentDescription = null)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text("Reportar Problema de Mantenimiento")
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ReportMaintenanceBottomSheet(
-    onDismiss: () -> Unit,
-    onReport: (TicketCategory, String) -> Unit
-) {
-    var category by remember { mutableStateOf(TicketCategory.PLUMBING) }
-    var description by remember { mutableStateOf("") }
-
-    ModalBottomSheet(onDismissRequest = onDismiss) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-                .navigationBarsPadding(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Text("Reportar Problema", style = MaterialTheme.typography.titleLarge)
-            
-            Text("Categoría", style = MaterialTheme.typography.labelLarge)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                TicketCategory.values().forEach { cat ->
-                    FilterChip(
-                        selected = category == cat,
-                        onClick = { category = cat },
-                        label = { Text(cat.name) }
-                    )
-                }
-            }
-            
-            OutlinedTextField(
-                value = description,
-                onValueChange = { description = it },
-                label = { Text("Descripción del problema") },
-                modifier = Modifier.fillMaxWidth(),
-                minLines = 3
-            )
-            
-            Button(
-                onClick = { onReport(category, description) },
-                modifier = Modifier.fillMaxWidth(),
-                enabled = description.isNotBlank()
-            ) {
-                Text("Crear Ticket")
-            }
-            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

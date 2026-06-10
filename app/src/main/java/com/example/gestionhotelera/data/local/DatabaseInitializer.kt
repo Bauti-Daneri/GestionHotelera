@@ -39,7 +39,19 @@ class DatabaseInitializer @Inject constructor(
             rooms.forEachIndexed { index, num ->
                 val id = "room-$num"
                 roomDao.insertRoom(
-                    RoomEntity(id, hotelId, num, "Standard", if (index % 2 == 0) RoomStatus.CLEAN else RoomStatus.DIRTY, now, now, now, false, SyncStatus.SYNCED)
+                    RoomEntity(
+                        id = id,
+                        hotelId = hotelId,
+                        number = num,
+                        floor = "1",
+                        type = "Standard",
+                        status = if (index % 2 == 0) RoomStatus.CLEAN else RoomStatus.DIRTY,
+                        lastCleaned = now,
+                        createdAt = now,
+                        updatedAt = now,
+                        isDirty = false,
+                        syncStatus = SyncStatus.SYNCED
+                    )
                 )
                 
                 // Assign some rooms to the housekeeper by default

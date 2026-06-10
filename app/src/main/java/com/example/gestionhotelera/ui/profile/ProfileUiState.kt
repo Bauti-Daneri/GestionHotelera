@@ -8,5 +8,8 @@ data class ProfileUiState(
     val hotelId: String = "",
     val isDarkMode: Boolean = false,
     val isLoading: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val totalTickets: Int = 12,
+    val completedTickets: Int = 8,
+    val successMessage: String? = null
 )

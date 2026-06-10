@@ -5,21 +5,29 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.CameraAlt
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.gestionhotelera.domain.model.TicketCategory
-import com.example.gestionhotelera.domain.model.TicketStatus
+import com.example.gestionhotelera.domain.model.*
 import com.example.gestionhotelera.ui.components.MaintenanceTicketCard
+import com.example.gestionhotelera.ui.components.ScreenTitle
+import com.example.gestionhotelera.ui.maintenance.components.CreateTicketBottomSheet
 import com.example.gestionhotelera.ui.theme.PrimaryBlue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MaintenanceScreen(
-    viewModel: MaintenanceViewModel = hiltViewModel()
+    viewModel: MaintenanceViewModel = hiltViewModel(),
+    onNavigateToImageViewer: (String) -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showCreateTicketSheet by remember { mutableStateOf(false) }
@@ -27,9 +35,14 @@ fun MaintenanceScreen(
     Scaffold { padding ->
         Column(
             modifier = Modifier
-                .padding(padding)
                 .fillMaxSize()
+                .padding(bottom = padding.calculateBottomPadding())
         ) {
+            ScreenTitle(
+                title = "Mantenimiento",
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+
             // Fixed Top Section
             Column(
                 modifier = Modifier
@@ -51,7 +64,7 @@ fun MaintenanceScreen(
                         Tab(
                             selected = uiState.filter == category,
                             onClick = { viewModel.setFilter(category) },
-                            text = { Text(category.name) }
+                            text = { Text(category.displayName.uppercase()) }
                         )
                     }
                 }
@@ -83,7 +96,8 @@ fun MaintenanceScreen(
                 items(uiState.tickets) { ticket ->
                     MaintenanceTicketCard(
                         ticket = ticket,
-                        onStatusChange = { status -> viewModel.updateTicketStatus(ticket.id, status) }
+                        onStatusChange = { status -> viewModel.updateTicketStatus(ticket.id, status) },
+                        onImageClick = { url -> onNavigateToImageViewer(url) }
                     )
                 }
             }
@@ -93,69 +107,10 @@ fun MaintenanceScreen(
     if (showCreateTicketSheet) {
         CreateTicketBottomSheet(
             onDismiss = { showCreateTicketSheet = false },
-            onCreate = { roomId, category, description ->
-                viewModel.createTicket(roomId, category, description)
+            onCreate = { roomId, category, description, imageUrl ->
+                viewModel.createTicket(roomId, category, description, imageUrl)
                 showCreateTicketSheet = false
             }
         )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CreateTicketBottomSheet(
-    onDismiss: () -> Unit,
-    onCreate: (String, TicketCategory, String) -> Unit
-) {
-    var roomId by remember { mutableStateOf("") }
-    var category by remember { mutableStateOf(TicketCategory.PLUMBING) }
-    var description by remember { mutableStateOf("") }
-
-    ModalBottomSheet(onDismissRequest = onDismiss) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-                .navigationBarsPadding(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Text("Nuevo Reporte de Mantenimiento", style = MaterialTheme.typography.titleLarge)
-            
-            OutlinedTextField(
-                value = roomId,
-                onValueChange = { roomId = it },
-                label = { Text("Número de Habitación") },
-                placeholder = { Text("Ej: 203") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Text("Categoría", style = MaterialTheme.typography.labelLarge)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                TicketCategory.values().forEach { cat ->
-                    FilterChip(
-                        selected = category == cat,
-                        onClick = { category = cat },
-                        label = { Text(cat.name) }
-                    )
-                }
-            }
-            
-            OutlinedTextField(
-                value = description,
-                onValueChange = { description = it },
-                label = { Text("Descripción del Problema") },
-                modifier = Modifier.fillMaxWidth(),
-                minLines = 3
-            )
-            
-            Button(
-                onClick = { onCreate(roomId, category, description) },
-                modifier = Modifier.fillMaxWidth(),
-                enabled = roomId.isNotBlank() && description.isNotBlank()
-            ) {
-                Text("Crear Ticket")
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-        }
     }
 }

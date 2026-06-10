@@ -9,21 +9,29 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector?
     object Login : Screen("login", "Login")
 
     // Admin Flow
-    object AdminHome : Screen("admin_home", "Administración", Icons.Rounded.Dashboard)
+    object AdminHome : Screen("admin_home", "Admin", Icons.Rounded.Dashboard)
     object EmployeeManagement : Screen("employee_mgmt", "Empleados", Icons.Rounded.People)
     
     // Housekeeping Flow
-    object HousekeepingHome : Screen("housekeeping_home", "Housekeeping", Icons.Rounded.CleaningServices)
+    object HousekeepingHome : Screen("housekeeping_home", "Limpieza", Icons.Rounded.CleaningServices)
     
     // Maintenance Flow
-    object MaintenanceHome : Screen("maintenance_home", "Mantenimiento", Icons.Rounded.Engineering)
+    object MaintenanceHome : Screen("maintenance_home", "Mant.", Icons.Rounded.Engineering)
     
     // Common
-    object RoomService : Screen("room_service", "Room Service", Icons.Rounded.Restaurant)
+    object RoomService : Screen("room_service", "Room", Icons.Rounded.Restaurant)
     object Profile : Screen("profile", "Perfil", Icons.Rounded.Person)
+    object CameraTest : Screen("camera_test", "Cámara Test", Icons.Rounded.CameraAlt)
     
     // Details
     object RoomDetail : Screen("room_detail/{roomId}", "Detalle de Habitación") {
         fun createRoute(roomId: String) = "room_detail/$roomId"
+    }
+
+    object ImageViewer : Screen("image_viewer/{imageUrl}", "Visualizador de Imagen") {
+        fun createRoute(imageUrl: String): String {
+            val encodedUrl = java.net.URLEncoder.encode(imageUrl, "UTF-8")
+            return "image_viewer/$encodedUrl"
+        }
     }
 }

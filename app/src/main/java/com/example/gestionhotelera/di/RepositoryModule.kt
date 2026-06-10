@@ -35,4 +35,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindProfileRepository(impl: ProfileRepositoryImpl): ProfileRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindHotelRepository(impl: HotelRepositoryImpl): HotelRepository
 }

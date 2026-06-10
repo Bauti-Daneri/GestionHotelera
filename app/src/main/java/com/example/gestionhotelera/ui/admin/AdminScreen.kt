@@ -1,22 +1,33 @@
 package com.example.gestionhotelera.ui.admin
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.gestionhotelera.domain.model.*
 import com.example.gestionhotelera.ui.components.*
+import com.example.gestionhotelera.ui.admin.components.AssignmentBottomSheet
+import com.example.gestionhotelera.ui.admin.components.EmployeeBottomSheet
+import com.example.gestionhotelera.ui.admin.components.RoomBottomSheet
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -25,7 +36,11 @@ fun AdminScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showAddUserSheet by remember { mutableStateOf(false) }
+    var userToEdit by remember { mutableStateOf<User?>(null) }
+    
     var showAddRoomSheet by remember { mutableStateOf(false) }
+    var roomToDelete by remember { mutableStateOf<Room?>(null) }
+    
     var selectedRoomForAssignment by remember { mutableStateOf<Room?>(null) }
     var selectedTab by remember { mutableIntStateOf(0) }
     val tabs = listOf("Usuarios", "Habitaciones")
@@ -38,88 +53,116 @@ fun AdminScreen(
             viewModel.clearError()
         }
     }
+    
+    LaunchedEffect(uiState.successMessage) {
+        uiState.successMessage?.let {
+            snackbarHostState.showSnackbar(it)
+            showAddUserSheet = false
+            userToEdit = null
+            showAddRoomSheet = false
+            viewModel.clearSuccessMessage()
+        }
+    }
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { padding ->
         Column(
             modifier = Modifier
-                .padding(padding)
                 .fillMaxSize()
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    bottom = padding.calculateBottomPadding()
+                )
         ) {
-            // Fixed top section
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ScreenTitle(title = "Administración")
+
+            HotelHeaderCard(
+                name = uiState.hotel?.name ?: "Hotel Plaza Central",
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Surface(
+                shape = MaterialTheme.shapes.extraLarge,
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
             ) {
-
-                HotelHeaderCard(name = uiState.hotel?.name ?: "Hotel Plaza Central")
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                TabRow(
+                    selectedTabIndex = selectedTab,
+                    containerColor = Color.Transparent,
+                    divider = {},
+                    indicator = { tabPositions ->
+                        if (selectedTab < tabPositions.size) {
+                            TabRowDefaults.SecondaryIndicator(
+                                Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
                 ) {
-                    MetricCard(
-                        title = "Tickets Abiertos",
-                        value = uiState.openTicketsCount.toString(),
-                        icon = Icons.Rounded.ConfirmationNumber,
-                        modifier = Modifier.weight(1f)
-                    )
-                    MetricCard(
-                        title = "Ocupación",
-                        value = "${uiState.occupancyRate}%",
-                        icon = Icons.Rounded.PieChart,
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-
-                TabRow(selectedTabIndex = selectedTab) {
                     tabs.forEachIndexed { index, title ->
                         Tab(
                             selected = selectedTab == index,
                             onClick = { selectedTab = index },
-                            text = { Text(title) }
+                            text = {
+                                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    Icon(if (index == 0) Icons.Rounded.Badge else Icons.Rounded.Hotel, null, modifier = Modifier.size(18.dp))
+                                    Text(title)
+                                }
+                            }
                         )
                     }
                 }
+            }
 
-                Button(
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = if (selectedTab == 0) "Gestión de Usuarios" else "Gestión de Habitaciones",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                FilledTonalButton(
                     onClick = {
                         if (selectedTab == 0) showAddUserSheet = true
                         else showAddRoomSheet = true
                     },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = MaterialTheme.shapes.medium
+                    shape = MaterialTheme.shapes.medium,
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp)
                 ) {
                     Icon(
                         if (selectedTab == 0) Icons.Rounded.PersonAdd else Icons.Rounded.AddHome,
-                        contentDescription = null
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp)
                     )
                     Spacer(Modifier.width(8.dp))
-                    Text(if (selectedTab == 0) "Nuevo Usuario" else "Nueva Habitación")
+                    Text(
+                        text = if (selectedTab == 0) "Nuevo" else "Nueva",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
                 }
             }
 
-            // Scrollable section
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                contentPadding = PaddingValues(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = 8.dp,
-                    bottom = 120.dp
-                ),
+                contentPadding = PaddingValues(bottom = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 if (selectedTab == 0) {
                     items(uiState.users) { user ->
                         EmployeeCard(
                             user = user,
-                            onEdit = { /* Implement edit */ },
+                            onEdit = { userToEdit = user },
                             onDelete = { viewModel.deleteUser(user) }
                         )
                     }
@@ -127,7 +170,8 @@ fun AdminScreen(
                     items(uiState.rooms) { room ->
                         RoomCard(
                             room = room,
-                            onClick = { selectedRoomForAssignment = room }
+                            onClick = { selectedRoomForAssignment = room },
+                            onDelete = { roomToDelete = room }
                         )
                     }
                 }
@@ -135,12 +179,31 @@ fun AdminScreen(
         }
     }
 
-    if (showAddUserSheet) {
+    if (showAddUserSheet || userToEdit != null) {
         EmployeeBottomSheet(
-            onDismiss = { showAddUserSheet = false },
-            onSave = { name, email, role, dept, phone ->
-                viewModel.saveUser(name, email, role, dept, phone)
-                showAddUserSheet = false
+            user = userToEdit,
+            nameError = uiState.nameError,
+            emailError = uiState.emailError,
+            phoneError = uiState.phoneError,
+            passwordError = uiState.passwordError,
+            roleError = uiState.roleError,
+            shiftError = uiState.shiftError,
+            onDismiss = { 
+                showAddUserSheet = false 
+                userToEdit = null
+            },
+            onSave = { name, email, role, schedule, phone, password ->
+                if (userToEdit != null) {
+                    viewModel.updateUser(userToEdit!!.copy(
+                        name = name,
+                        email = email,
+                        role = role,
+                        schedule = schedule,
+                        phone = phone
+                    ))
+                } else {
+                    viewModel.saveUser(name, email, role, schedule, phone, password)
+                }
             }
         )
     }
@@ -151,6 +214,30 @@ fun AdminScreen(
             onSave = { number, floor, type, status ->
                 viewModel.createRoom(number, floor, type, status)
                 showAddRoomSheet = false
+            }
+        )
+    }
+
+    if (roomToDelete != null) {
+        AlertDialog(
+            onDismissRequest = { roomToDelete = null },
+            title = { Text("Eliminar habitación") },
+            text = { Text("¿Seguro que querés eliminar esta habitación? Esta acción no se puede deshacer.") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.deleteRoom(roomToDelete!!)
+                        roomToDelete = null
+                    },
+                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                ) {
+                    Text("Eliminar")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { roomToDelete = null }) {
+                    Text("Cancelar")
+                }
             }
         )
     }
@@ -167,216 +254,3 @@ fun AdminScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun RoomBottomSheet(
-    onDismiss: () -> Unit,
-    onSave: (String, String, String, RoomStatus) -> Unit
-) {
-    var number by remember { mutableStateOf("") }
-    var floor by remember { mutableStateOf("") }
-    var type by remember { mutableStateOf("Single") }
-    var status by remember { mutableStateOf(RoomStatus.CLEAN) }
-    val types = listOf("Single", "Double", "Suite")
-
-    ModalBottomSheet(onDismissRequest = onDismiss) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-                .navigationBarsPadding(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Text("Nueva Habitación", style = MaterialTheme.typography.titleLarge)
-            
-            OutlinedTextField(
-                value = number,
-                onValueChange = { number = it },
-                label = { Text("Número de Habitación") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
-            
-            OutlinedTextField(
-                value = floor,
-                onValueChange = { floor = it },
-                label = { Text("Piso") },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Text("Tipo", style = MaterialTheme.typography.labelLarge)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                types.forEach { t ->
-                    FilterChip(
-                        selected = type == t,
-                        onClick = { type = t },
-                        label = { Text(t) }
-                    )
-                }
-            }
-
-            Text("Estado Inicial", style = MaterialTheme.typography.labelLarge)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                RoomStatus.values().forEach { s ->
-                    FilterChip(
-                        selected = status == s,
-                        onClick = { status = s },
-                        label = { Text(s.name) }
-                    )
-                }
-            }
-
-            Button(
-                onClick = { onSave(number, floor, type, status) },
-                modifier = Modifier.fillMaxWidth(),
-                enabled = number.isNotBlank() && floor.isNotBlank()
-            ) {
-                Text("Guardar")
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AssignmentBottomSheet(
-    room: Room,
-    allUsers: List<User>,
-    assignedUsersFlow: Flow<List<User>>,
-    onDismiss: () -> Unit,
-    onAssign: (String) -> Unit,
-    onRemove: (String) -> Unit
-) {
-    val assignedUsers by assignedUsersFlow.collectAsState(initial = emptyList())
-
-    ModalBottomSheet(onDismissRequest = onDismiss) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-                .navigationBarsPadding(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Text("Asignar Personal - Habitación ${room.number}", style = MaterialTheme.typography.titleLarge)
-            
-            Text("Personal Asignado (${assignedUsers.size}/3)", style = MaterialTheme.typography.labelLarge)
-            
-            assignedUsers.forEach { user ->
-                ListItem(
-                    headlineContent = { Text(user.name) },
-                    supportingContent = { Text(user.email) },
-                    trailingContent = {
-                        IconButton(onClick = { onRemove(user.id) }) {
-                            Icon(Icons.Rounded.Delete, contentDescription = "Quitar", tint = MaterialTheme.colorScheme.error)
-                        }
-                    }
-                )
-            }
-
-            if (assignedUsers.size < 3) {
-                HorizontalDivider()
-                Text("Asignar Empleado", style = MaterialTheme.typography.labelLarge)
-                val availableUsers = allUsers.filter { user -> assignedUsers.none { it.id == user.id } }
-                
-                if (availableUsers.isEmpty()) {
-                    Text("No hay más personal de limpieza disponible", style = MaterialTheme.typography.bodyMedium)
-                } else {
-                    LazyColumn(modifier = Modifier.heightIn(max = 200.dp)) {
-                        items(availableUsers) { user ->
-                            ListItem(
-                                headlineContent = { Text(user.name) },
-                                modifier = Modifier.clickable { onAssign(user.id) },
-                                trailingContent = { Icon(Icons.Rounded.Add, contentDescription = null) }
-                            )
-                        }
-                    }
-                }
-            } else {
-                Text("Límite de asignación alcanzado", color = MaterialTheme.colorScheme.error)
-            }
-
-            Button(
-                onClick = onDismiss,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Cerrar")
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun EmployeeBottomSheet(
-    onDismiss: () -> Unit,
-    onSave: (String, String, UserRole, String, String) -> Unit
-) {
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var role by remember { mutableStateOf(UserRole.HOUSEKEEPING) }
-    var dept by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
-
-    ModalBottomSheet(onDismissRequest = onDismiss) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-                .navigationBarsPadding(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Text("Nuevo Usuario", style = MaterialTheme.typography.titleLarge)
-            
-            OutlinedTextField(
-                value = name,
-                onValueChange = { name = it },
-                label = { Text("Nombre Completo") },
-                modifier = Modifier.fillMaxWidth()
-            )
-            
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Email") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            OutlinedTextField(
-                value = phone,
-                onValueChange = { phone = it },
-                label = { Text("Teléfono") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            OutlinedTextField(
-                value = dept,
-                onValueChange = { dept = it },
-                label = { Text("Departamento") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Text("Rol", style = MaterialTheme.typography.labelLarge)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                UserRole.values().forEach { userRole ->
-                    FilterChip(
-                        selected = role == userRole,
-                        onClick = { role = userRole },
-                        label = { Text(userRole.name) }
-                    )
-                }
-            }
-
-            Button(
-                onClick = { onSave(name, email, role, dept, phone) },
-                modifier = Modifier.fillMaxWidth(),
-                enabled = name.isNotBlank() && email.isNotBlank()
-            ) {
-                Text("Guardar")
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-    }
-}

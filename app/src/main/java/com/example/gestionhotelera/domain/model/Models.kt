@@ -18,6 +18,7 @@ data class User(
     val role: UserRole,
     val phone: String = "",
     val department: String = "",
+    val schedule: String = "",
     val createdAt: Long,
     val updatedAt: Long,
     val syncStatus: SyncStatus = SyncStatus.SYNCED
@@ -27,6 +28,7 @@ data class Room(
     val id: String,
     val hotelId: String,
     val number: String,
+    val floor: String,
     val type: String,
     val status: RoomStatus,
     val lastCleaned: Long,

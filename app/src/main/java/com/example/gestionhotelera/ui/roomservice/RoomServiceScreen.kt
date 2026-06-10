@@ -17,6 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.gestionhotelera.domain.model.*
 import com.example.gestionhotelera.ui.components.RoomServiceOrderCard
+import com.example.gestionhotelera.ui.components.ScreenTitle
 import com.example.gestionhotelera.ui.theme.PrimaryBlue
 
 @Composable
@@ -29,9 +30,14 @@ fun RoomServiceScreen(
     Scaffold { padding ->
         Column(
             modifier = Modifier
-                .padding(padding)
                 .fillMaxSize()
+                .padding(bottom = padding.calculateBottomPadding())
         ) {
+            ScreenTitle(
+                title = "Room Service",
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+
             // Fixed top section
             Column(
                 modifier = Modifier
@@ -55,7 +61,7 @@ fun RoomServiceScreen(
                         Tab(
                             selected = uiState.filter == status,
                             onClick = { viewModel.setFilter(status) },
-                            text = { Text(status.name) }
+                            text = { Text(status.displayName.uppercase()) }
                         )
                     }
                 }
@@ -120,69 +126,5 @@ fun RoomServiceScreen(
                 showCreateOrderSheet = false
             }
         )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CreateOrderBottomSheet(
-    onDismiss: () -> Unit,
-    onCreate: (String, String, Double) -> Unit
-) {
-    var roomId by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var price by remember { mutableStateOf("") }
-
-    ModalBottomSheet(onDismissRequest = onDismiss) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-                .navigationBarsPadding(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Text("Nuevo Pedido", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-            
-            OutlinedTextField(
-                value = roomId,
-                onValueChange = { roomId = it },
-                label = { Text("Número de Habitación") },
-                placeholder = { Text("Ej: 101") },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-            )
-
-            OutlinedTextField(
-                value = description,
-                onValueChange = { description = it },
-                label = { Text("Descripción del pedido") },
-                placeholder = { Text("Ej: Cena completa, Bebidas, etc.") },
-                modifier = Modifier.fillMaxWidth(),
-                minLines = 3
-            )
-
-            OutlinedTextField(
-                value = price,
-                onValueChange = { price = it },
-                label = { Text("Precio Total") },
-                placeholder = { Text("0.00") },
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                prefix = { Text("$ ") }
-            )
-            
-            Button(
-                onClick = { 
-                    val priceDouble = price.toDoubleOrNull() ?: 0.0
-                    onCreate(roomId, description, priceDouble)
-                },
-                modifier = Modifier.fillMaxWidth(),
-                enabled = roomId.isNotBlank() && description.isNotBlank() && price.toDoubleOrNull() != null,
-                colors = ButtonDefaults.buttonColors(containerColor = PrimaryBlue)
-            ) {
-                Text("Crear Pedido")
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-        }
     }
 }

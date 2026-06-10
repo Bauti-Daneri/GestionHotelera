@@ -28,6 +28,9 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE email = :email")
     suspend fun getUserByEmail(email: String): UserEntity?
 
+    @Query("SELECT * FROM users WHERE phone = :phone")
+    suspend fun getUserByPhone(phone: String): UserEntity?
+
     @Query("SELECT COUNT(*) FROM users WHERE hotelId = :hotelId")
     suspend fun countUsersByHotelId(hotelId: String): Int
 
