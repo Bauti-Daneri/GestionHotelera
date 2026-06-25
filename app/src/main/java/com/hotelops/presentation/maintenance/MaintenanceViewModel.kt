@@ -2,6 +2,7 @@ package com.hotelops.presentation.maintenance
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import android.net.Uri
 import com.hotelops.domain.model.*
 import com.hotelops.domain.usecase.maintenance.*
 import com.hotelops.domain.usecase.room.GetRoomsUseCase
@@ -20,6 +21,8 @@ data class MaintenanceState(
     val isLoading: Boolean = false,
     val filterStatus: TicketStatus? = null,
     val showCreateDialog: Boolean = false,
+    val showCamera: Boolean = false,
+    val capturedImageUri: Uri? = null,
     val error: String? = null
 )
 
@@ -57,8 +60,14 @@ class MaintenanceViewModel @Inject constructor(
     }
 
     fun setFilter(status: TicketStatus?) { _state.value = _state.value.copy(filterStatus = status) }
-    fun showCreateDialog() { _state.value = _state.value.copy(showCreateDialog = true) }
+    fun showCreateDialog() { _state.value = _state.value.copy(showCreateDialog = true, capturedImageUri = null) }
     fun hideDialog() { _state.value = _state.value.copy(showCreateDialog = false) }
+    fun showCamera() { _state.value = _state.value.copy(showCamera = true) }
+    fun hideCamera() { _state.value = _state.value.copy(showCamera = false) }
+
+    fun onImageCaptured(uri: Uri) {
+        _state.value = _state.value.copy(capturedImageUri = uri, showCamera = false)
+    }
 
     fun createTicket(
         hotelId: String,
@@ -70,6 +79,7 @@ class MaintenanceViewModel @Inject constructor(
         reportedByName: String,
         reportedById: String
     ) {
+        val imageUrl = _state.value.capturedImageUri?.toString()
         createTicketUseCase(
             hotelId = hotelId,
             roomId = room.id,
@@ -78,7 +88,7 @@ class MaintenanceViewModel @Inject constructor(
             category = category,
             priority = priority,
             reportedBy = reportedById,
-            imageUrl = null
+            imageUrl = imageUrl
         ).onEach { result ->
             if (result is Resource.Success) {
                 hideDialog()

@@ -1,22 +1,29 @@
 package com.hotelops.presentation.maintenance
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.hotelops.domain.model.MaintenanceTicket
 import com.hotelops.domain.model.Room
 import com.hotelops.domain.model.TicketCategory
 import com.hotelops.domain.model.TicketStatus
 import com.hotelops.domain.model.User
+import com.hotelops.presentation.camera.CameraScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -97,9 +104,18 @@ fun MaintenanceScreen(
         }
     }
 
+    if (state.showCamera) {
+        CameraScreen(
+            onImageCaptured = { viewModel.onImageCaptured(it) },
+            onDismiss = { viewModel.hideCamera() }
+        )
+    }
+
     if (state.showCreateDialog) {
         CreateTicketDialog(
             rooms = state.rooms,
+            capturedImageUri = state.capturedImageUri,
+            onOpenCamera = { viewModel.showCamera() },
             onDismiss = { viewModel.hideDialog() },
             onConfirm = { room, title, desc, category, priority ->
                 viewModel.createTicket(
@@ -152,6 +168,17 @@ private fun TicketCard(ticket: MaintenanceTicket, onStatusChange: (TicketStatus)
                     }
                 }
             }
+            ticket.imageUrl?.let { url ->
+                AsyncImage(
+                    model = url,
+                    contentDescription = "Evidencia",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(150.dp)
+                        .clip(MaterialTheme.shapes.medium),
+                    contentScale = ContentScale.Crop
+                )
+            }
             Text(ticket.description, style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -170,6 +197,8 @@ private fun TicketCard(ticket: MaintenanceTicket, onStatusChange: (TicketStatus)
 @Composable
 private fun CreateTicketDialog(
     rooms: List<Room>,
+    capturedImageUri: android.net.Uri?,
+    onOpenCamera: () -> Unit,
     onDismiss: () -> Unit,
     onConfirm: (Room, String, String, TicketCategory, String) -> Unit
 ) {
@@ -191,6 +220,29 @@ private fun CreateTicketDialog(
                     label = { Text("Título *") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
                 OutlinedTextField(value = description, onValueChange = { description = it },
                     label = { Text("Descripción") }, modifier = Modifier.fillMaxWidth(), maxLines = 3)
+
+                // Cámara
+                if (capturedImageUri != null) {
+                    AsyncImage(
+                        model = capturedImageUri,
+                        contentDescription = "Foto capturada",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp)
+                            .clip(MaterialTheme.shapes.small)
+                            .clickable { onOpenCamera() },
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    OutlinedButton(
+                        onClick = onOpenCamera,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(Icons.Default.CameraAlt, contentDescription = null)
+                        Spacer(Modifier.width(8.dp))
+                        Text("Tomar Foto")
+                    }
+                }
 
                 ExposedDropdownMenuBox(expanded = roomExpanded, onExpandedChange = { roomExpanded = it }) {
                     OutlinedTextField(
