@@ -16,6 +16,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.hotelops.domain.model.MaintenanceTicket
@@ -105,10 +107,15 @@ fun MaintenanceScreen(
     }
 
     if (state.showCamera) {
-        CameraScreen(
-            onImageCaptured = { viewModel.onImageCaptured(it) },
-            onDismiss = { viewModel.hideCamera() }
-        )
+        Dialog(
+            onDismissRequest = { viewModel.hideCamera() },
+            properties = DialogProperties(usePlatformDefaultWidth = false)
+        ) {
+            CameraScreen(
+                onImageCaptured = { viewModel.onImageCaptured(it) },
+                onDismiss = { viewModel.hideCamera() }
+            )
+        }
     }
 
     if (state.showCreateDialog) {

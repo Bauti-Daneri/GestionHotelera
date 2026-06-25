@@ -7,6 +7,7 @@ import androidx.compose.runtime.*;
 import androidx.compose.ui.Alignment;
 import androidx.compose.ui.Modifier;
 import androidx.compose.ui.layout.ContentScale;
+import androidx.compose.ui.window.DialogProperties;
 import com.hotelops.domain.model.MaintenanceTicket;
 import com.hotelops.domain.model.Room;
 import com.hotelops.domain.model.TicketCategory;
