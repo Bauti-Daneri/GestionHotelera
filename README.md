@@ -1,140 +1,82 @@
 # HotelOps Android
 
-Sistema de gestión operativa hotelera multi-tenant — App nativa Kotlin + Jetpack Compose.
+Sistema de gestión operativa hotelera multi-tenant — App nativa Kotlin + Jetpack Compose con **Material Design 3**.
 
-## Estado
+---
 
-**v2.1.0 — 100% funcional · 87 archivos Kotlin**
+## 🚀 Estado Actual: v2.5.0 — 100% Funcional y Conectado
 
-Todos los módulos están implementados con UI completa. La app usa **Firebase Auth + Firestore** como backend con soporte offline-first mediante Room Database como caché local.
+La aplicación ha sido actualizada y optimizada para cumplir con los estándares de **Android 15 (API 35)** y utiliza un backend real con **Firebase**.
 
-## Cómo compilar
+### Características Principales
+- **Autenticación Real:** Login y Registro de hoteles conectados a Firebase Auth.
+- **Base de Datos en la Nube:** Sincronización en tiempo real con Firebase Firestore.
+- **Offline-First Avanzado:** La app funciona sin internet gracias a Room Database. Los cambios se guardan localmente y se suben solos mediante un `SyncWorker` (WorkManager) al recuperar la conexión.
+- **Interfaz Moderna:** Migración completa a **Material Design 3** para una experiencia visual coherente y adaptable.
+- **Notificaciones Push:** Integración con Firebase Cloud Messaging (FCM) para alertas operativas.
+- **Arquitectura Robusta:** Implementación basada en **Clean Architecture** (Domain, Data, Presentation) con uso intensivo de **UseCases**.
 
-1. Abrir esta carpeta (`android/`) en Android Studio Hedgehog o superior
-2. Sincronizar Gradle — descarga dependencias automáticamente
-3. Ejecutar en emulador API 24+ o dispositivo físico
+---
 
-Para compilar con Firebase funcional, colocar el archivo `google-services.json`
-en la carpeta `app/` (se descarga desde la consola de Firebase).
-
-## Módulos implementados
-
-| Pantalla | ViewModel | Estado |
-|----------|-----------|--------|
-| Login | LoginViewModel | ✅ |
-| Registro de hotel | RegisterHotelViewModel | ✅ |
-| Main + BottomNav | MainViewModel | ✅ |
-| Admin (usuarios + habitaciones) | AdminViewModel | ✅ |
-| Limpieza | HousekeepingViewModel | ✅ |
-| Mantenimiento | MaintenanceViewModel | ✅ |
-| Room Service | RoomServiceViewModel | ✅ |
-| Perfil | — (stateless) | ✅ |
-
-## Arquitectura
-
-```
-app/src/main/java/com/hotelops/
-├── domain/
-│   ├── model/          Hotel, User, UserRole, Room, RoomStatus, RoomType,
-│   │                   MaintenanceTicket, TicketStatus, TicketCategory,
-│   │                   RoomServiceOrder, OrderItem, OrderStatus
-│   ├── repository/     AuthRepository, RoomRepository, UserRepository,
-│   │                   MaintenanceRepository, RoomServiceRepository
-│   ├── usecase/        auth/ · room/ · user/ · maintenance/ · roomservice/
-│   └── util/           Resource<T>
-│
-├── data/
-│   ├── local/
-│   │   ├── database/   HotelOpsDatabase + Converters
-│   │   ├── dao/        HotelDao, UserDao, RoomDao,
-│   │   │               MaintenanceDao, RoomServiceDao
-│   │   └── entity/     HotelEntity, UserEntity, RoomEntity,
-│   │                   MaintenanceTicketEntity, RoomServiceOrderEntity
-│   ├── mapper/         HotelMapper, UserMapper, RoomMapper,
-│   │                   MaintenanceMapper, RoomServiceMapper
-│   └── repository/     AuthRepositoryImpl, RoomRepositoryImpl
-│
-├── di/
-│   ├── AppModule.kt        Dispatchers + SharedPreferences
-│   ├── DatabaseModule.kt   Room DB + DAOs
-│   └── RepositoryModule.kt Hilt bindings
-│
-└── presentation/
-    ├── login/          LoginScreen · ViewModel · State · Event
-    ├── register/       RegisterHotelScreen · ViewModel · State · Event
-    ├── main/           MainScreen (BottomNav) · MainViewModel
-    ├── admin/          AdminScreen · AdminViewModel · AdminState
-    ├── housekeeping/   HousekeepingScreen · HousekeepingViewModel
-    ├── maintenance/    MaintenanceScreen · MaintenanceViewModel
-    ├── roomservice/    RoomServiceScreen · RoomServiceViewModel
-    ├── profile/        ProfileScreen
-    ├── navigation/     HotelOpsNavigation · Screen
-    ├── components/     EmptyState · ErrorMessage · LoadingIndicator · StatusBadge
-    └── theme/          Color · Theme · Type
-```
-
-## Navegación
-
-```
-Login ──────────────────────────────────── MainScreen
-  └── [Registrar hotel] → RegisterHotel ──►     ├── Admin        (solo ADMIN)
-                                                 ├── Limpieza     (ADMIN + HOUSEKEEPING)
-                                                 ├── Mantenimiento (ADMIN + MAINTENANCE)
-                                                 ├── Room Service  (todos)
-                                                 └── Perfil → Logout → Login
-```
-
-## Autenticación offline-first
-
-- Contraseñas con hash SHA-256
-- Sesión persistida en SharedPreferences
-- Login busca el usuario en Room DB por email (sin necesidad de internet)
-- Registro crea hotel + admin en la DB local en el mismo flujo
-
-Para el primer uso: usar la pantalla de registro para crear la cuenta de administrador.
-
-## Roles
-
-| Rol | Tabs visibles |
-|-----|---------------|
-| ADMIN | Admin · Limpieza · Mantenimiento · Room Service · Perfil |
-| HOUSEKEEPING | Limpieza · Room Service · Perfil |
-| MAINTENANCE | Mantenimiento · Room Service · Perfil |
-
-## Stack
+## 🛠️ Stack Tecnológico
 
 | Tecnología | Uso |
 |------------|-----|
-| Kotlin 1.9.20 | Lenguaje principal |
-| Jetpack Compose | UI declarativa |
-| Material Design 3 | Sistema de diseño |
-| Hilt | Inyección de dependencias |
-| Room | Caché local SQLite (offline-first) |
-| Navigation Compose | Navegación entre pantallas |
-| Coroutines + Flow | Programación reactiva |
-| Kotlinx Serialization | Serialización JSON |
-| SharedPreferences | Persistencia de sesión |
-| Firebase Auth | Autenticación de usuarios |
-| Firebase Firestore | Base de datos en la nube (multi-tenant) |
-| Firebase Storage | Almacenamiento de imágenes (tickets) |
-| Firebase Cloud Messaging | Notificaciones push |
-| Coil | Carga de imágenes |
+| **Kotlin 1.9.24** | Lenguaje de desarrollo principal |
+| **Jetpack Compose** | UI declarativa con Material 3 |
+| **Hilt** | Inyección de dependencias |
+| **Room** | Caché local SQLite (Soporte offline) |
+| **Firebase** | Auth, Firestore, Messaging, Analytics (BoM 34.15.0) |
+| **WorkManager** | Sincronización de datos en segundo plano |
+| **Coroutines + Flow** | Gestión de asincronía y flujos de datos |
+| **Timber** | Sistema de logging profesional |
 
-## Para activar Firebase
+---
 
-1. Ir a [console.firebase.google.com](https://console.firebase.google.com)
-2. Crear proyecto → Añadir app Android con package `com.hotelops`
-3. Descargar `google-services.json` y copiarlo en `app/`
-4. En Firebase Console habilitar:
-   - **Authentication** → Email/Password
-   - **Firestore Database** → crear en modo producción
-   - **Storage** → para fotos de tickets
-5. En Firestore, las reglas deben filtrar por `hotelId` del usuario autenticado
+## 📦 Instalación y Configuración (Para Colaboradores)
 
-## Pendiente para producción
+Si acabas de descargar el proyecto, sigue estos pasos para que funcione:
 
-- [ ] Añadir `google-services.json` en `app/`
-- [ ] Configurar reglas de seguridad en Firestore (filtrar por hotelId)
-- [ ] Implementar Firestore Realtime listeners para actualizaciones en tiempo real
-- [ ] SplashScreen con verificación de sesión existente
-- [ ] Tests unitarios de ViewModels y Use Cases
+### 1. Requisitos
+- Android Studio **Ladybug** (2024.2.1) o superior.
+- JDK 17 configurado en el proyecto.
+
+### 2. Configurar Firebase (PASO CRÍTICO)
+Por seguridad, el archivo de claves no se sube a Git.
+1. Crea un proyecto en [Firebase Console](https://console.firebase.google.com).
+2. Añade una app Android con el paquete: `com.hotelops`.
+3. Descarga el archivo `google-services.json`.
+4. Colócalo en la carpeta: `HotelOps/app/`.
+5. En la consola de Firebase, activa **Email/Password Auth** y **Cloud Firestore**.
+
+### 3. Sincronizar y Ejecutar
+1. Abre el proyecto en Android Studio.
+2. Espera a que **Gradle** termine la sincronización inicial.
+3. Conecta un dispositivo físico o emulador (API 24+).
+4. Pulsa **Run ▶**.
+
+---
+
+## 🏗️ Arquitectura del Proyecto
+
+```
+app/src/main/java/com/hotelops/
+├── domain/         # Reglas de negocio (Modelos, Repositorios, UseCases)
+├── data/           # Implementación de datos (Local con Room, Remote con Firestore)
+├── presentation/   # Capa de UI (Screens, ViewModels, Theme M3)
+├── sync/           # Lógica de sincronización en segundo plano (WorkManager)
+├── di/             # Módulos de Inyección de Dependencias (Hilt)
+└── HotelOpsApplication.kt # Configuración global (Canales de notificación, Sync)
+```
+
+---
+
+## 🛡️ Compatibilidad
+- **Android 15 Ready:** El proyecto soluciona la advertencia de alineación de **16 KB**, siendo compatible con dispositivos de próxima generación.
+- **Mínimo:** API 24 (Android 7.0).
+- **Target:** API 35 (Android 15).
+
+---
+
+> [!IMPORTANT]  
+> Recuerda configurar las **Reglas de Seguridad** en Firestore para que la lectura/escritura solo esté permitida a usuarios autenticados (`request.auth != null`).
