@@ -1,23 +1,25 @@
 package com.hotelops.presentation.profile
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.hotelops.domain.model.User
+import com.hotelops.presentation.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,103 +29,125 @@ fun ProfileScreen(
 ) {
     var showLogoutDialog by remember { mutableStateOf(false) }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        TopAppBar(
-            title = { Text("Perfil") },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { 
+                    Text(
+                        "Perfil", 
+                        style = MaterialTheme.typography.headlineMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                            color = Primary
+                        )
+                    ) 
+                }
             )
-        )
-
+        }
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(padding)
+                .background(Background)
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Avatar and name
-            Card(modifier = Modifier.fillMaxWidth()) {
+            // Profile Header Card
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(containerColor = Surface),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    modifier = Modifier.padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Surface(
+                    Box(
                         modifier = Modifier
-                            .size(80.dp)
-                            .clip(CircleShape),
-                        color = MaterialTheme.colorScheme.primaryContainer
+                            .size(100.dp)
+                            .clip(CircleShape)
+                            .background(Primary),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Text(
-                                text = currentUser?.name?.firstOrNull()?.uppercaseChar()?.toString() ?: "?",
-                                style = MaterialTheme.typography.headlineLarge,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer
-                            )
-                        }
-                    }
-                    Text(currentUser?.name ?: "-", style = MaterialTheme.typography.titleLarge)
-                    AssistChip(onClick = {}, label = { Text(currentUser?.role?.toDisplayName() ?: "-") })
-                }
-            }
-
-            // Details
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text("Información", style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.primary)
-                    ProfileRow(Icons.Default.Email, "Email", currentUser?.email ?: "-")
-                    ProfileRow(Icons.Default.Info, "Departamento", currentUser?.department ?: "-")
-                    ProfileRow(Icons.Default.AccountCircle, "ID Empleado", currentUser?.employeeId ?: "-")
-                    if (currentUser?.phone != null) {
-                        ProfileRow(Icons.Default.Phone, "Teléfono", currentUser.phone)
-                    }
-                }
-            }
-
-            // Actions
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(8.dp)) {
-                    ListItem(
-                        headlineContent = { Text("Cerrar Sesión") },
-                        leadingContent = { Icon(Icons.Default.ExitToApp, contentDescription = null,
-                            tint = MaterialTheme.colorScheme.error) },
-                        modifier = androidx.compose.ui.Modifier,
-                        colors = ListItemDefaults.colors(
-                            headlineColor = MaterialTheme.colorScheme.error
+                        Text(
+                            currentUser?.name?.take(2)?.uppercase() ?: "??",
+                            color = Color.White,
+                            fontSize = 32.sp,
+                            fontWeight = FontWeight.Bold
                         )
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        currentUser?.name ?: "Usuario",
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold
                     )
-                    Button(
-                        onClick = { showLogoutDialog = true },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.errorContainer,
-                            contentColor = MaterialTheme.colorScheme.onErrorContainer
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    Surface(
+                        color = ColorAdmin,
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier.padding(top = 8.dp)
                     ) {
-                        Icon(Icons.Default.ExitToApp, contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Cerrar Sesión")
+                        Text(
+                            currentUser?.role?.name ?: "ROL",
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                            color = Color.White,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Hotel Info Card
+            InfoSectionCard(title = "Hotel") {
+                ProfileRow(Icons.Default.Apartment, "Establecimiento", "Hotel Plaza Central")
+                Divider(color = SurfaceVariant, modifier = Modifier.padding(vertical = 12.dp))
+                ProfileRow(Icons.Default.Badge, "ID de Hotel", "HOTEL-DEMO-001")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Personal Info Card
+            InfoSectionCard(title = "Información Personal") {
+                ProfileRow(Icons.Default.Email, "Email", currentUser?.email ?: "")
+                Divider(color = SurfaceVariant, modifier = Modifier.padding(vertical = 12.dp))
+                ProfileRow(Icons.Default.Phone, "Teléfono", "+34 612 345 678")
+                Divider(color = SurfaceVariant, modifier = Modifier.padding(vertical = 12.dp))
+                ProfileRow(Icons.Default.Business, "Departamento", currentUser?.department ?: "")
+                Divider(color = SurfaceVariant, modifier = Modifier.padding(vertical = 12.dp))
+                ProfileRow(Icons.Default.AccessTime, "Horario", "Turno Mañana (6:00 - 14:00)")
+                Divider(color = SurfaceVariant, modifier = Modifier.padding(vertical = 12.dp))
+                ProfileRow(Icons.Default.Person, "ID Empleado", currentUser?.employeeId ?: "")
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Button(
+                onClick = { showLogoutDialog = true },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Error)
+            ) {
+                Icon(Icons.Default.Logout, contentDescription = null)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Cerrar Sesión")
+            }
+            
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 
     if (showLogoutDialog) {
         AlertDialog(
             onDismissRequest = { showLogoutDialog = false },
-            title = { Text("Cerrar Sesión") },
+            title = { Text("Confirmar") },
             text = { Text("¿Estás seguro de que deseas cerrar sesión?") },
             confirmButton = {
-                TextButton(onClick = { showLogoutDialog = false; onLogout() }) {
-                    Text("Cerrar Sesión", color = MaterialTheme.colorScheme.error)
-                }
+                TextButton(onClick = onLogout) { Text("Cerrar Sesión", color = Error) }
             },
             dismissButton = {
                 TextButton(onClick = { showLogoutDialog = false }) { Text("Cancelar") }
@@ -133,14 +157,40 @@ fun ProfileScreen(
 }
 
 @Composable
-private fun ProfileRow(icon: androidx.compose.ui.graphics.vector.ImageVector, label: String, value: String) {
-    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        Icon(icon, contentDescription = null, modifier = Modifier.size(20.dp),
-            tint = MaterialTheme.colorScheme.primary)
+fun InfoSectionCard(title: String, content: @Composable ColumnScope.() -> Unit) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = Surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Column(modifier = Modifier.padding(20.dp)) {
+            Text(title, fontWeight = FontWeight.Bold, color = Primary, fontSize = 16.sp)
+            Spacer(modifier = Modifier.height(20.dp))
+            content()
+        }
+    }
+}
+
+@Composable
+private fun ProfileRow(icon: ImageVector, label: String, value: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Surface(
+            modifier = Modifier.size(40.dp),
+            color = SurfaceVariant,
+            shape = RoundedCornerShape(10.dp)
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Icon(icon, contentDescription = null, modifier = Modifier.size(20.dp), tint = Primary)
+            }
+        }
+        Spacer(modifier = Modifier.width(16.dp))
         Column {
-            Text(label, style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
-            Text(value, style = MaterialTheme.typography.bodyMedium)
+            Text(label, fontSize = 12.sp, color = OnSurfaceVariant)
+            Text(value, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = OnSurface)
         }
     }
 }

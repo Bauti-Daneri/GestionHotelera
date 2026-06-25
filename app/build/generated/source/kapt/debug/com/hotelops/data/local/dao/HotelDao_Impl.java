@@ -198,7 +198,7 @@ public final class HotelDao_Impl implements HotelDao {
   }
 
   @Override
-  public Object insertHotel(final HotelEntity hotel, final Continuation<? super Unit> $completion) {
+  public Object insertHotel(final HotelEntity hotel, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -212,11 +212,11 @@ public final class HotelDao_Impl implements HotelDao {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
-  public Object deleteHotel(final HotelEntity hotel, final Continuation<? super Unit> $completion) {
+  public Object deleteHotel(final HotelEntity hotel, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -230,11 +230,11 @@ public final class HotelDao_Impl implements HotelDao {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
-  public Object updateHotel(final HotelEntity hotel, final Continuation<? super Unit> $completion) {
+  public Object updateHotel(final HotelEntity hotel, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -248,12 +248,11 @@ public final class HotelDao_Impl implements HotelDao {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
-  public Object deleteHotelById(final String hotelId,
-      final Continuation<? super Unit> $completion) {
+  public Object deleteHotelById(final String hotelId, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -278,12 +277,12 @@ public final class HotelDao_Impl implements HotelDao {
           __preparedStmtOfDeleteHotelById.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
   public Object markAsSynced(final String hotelId, final long syncedAt,
-      final Continuation<? super Unit> $completion) {
+      final Continuation<? super Unit> arg2) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -310,7 +309,7 @@ public final class HotelDao_Impl implements HotelDao {
           __preparedStmtOfMarkAsSynced.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg2);
   }
 
   @Override
@@ -506,7 +505,7 @@ public final class HotelDao_Impl implements HotelDao {
   }
 
   @Override
-  public Object getDirtyHotels(final Continuation<? super List<HotelEntity>> $completion) {
+  public Object getDirtyHotels(final Continuation<? super List<HotelEntity>> arg0) {
     final String _sql = "SELECT * FROM hotels WHERE isDirty = 1";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
     final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
@@ -592,7 +591,7 @@ public final class HotelDao_Impl implements HotelDao {
           _statement.release();
         }
       }
-    }, $completion);
+    }, arg0);
   }
 
   @NonNull

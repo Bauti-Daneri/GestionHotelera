@@ -1,112 +1,90 @@
 package com.hotelops.presentation.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.hotelops.domain.model.*
+import androidx.compose.ui.unit.sp
+import com.hotelops.domain.model.OrderStatus
+import com.hotelops.domain.model.RoomStatus
+import com.hotelops.domain.model.TicketStatus
 import com.hotelops.presentation.theme.*
 
 @Composable
-fun RoomStatusBadge(
-    status: RoomStatus,
-    modifier: Modifier = Modifier
-) {
-    val (backgroundColor, textColor) = when (status) {
-        RoomStatus.DIRTY -> StatusDirty to Color.White
-        RoomStatus.CLEANING -> StatusInProgress to Color.White
-        RoomStatus.CLEAN -> StatusClean to Color.White
-        RoomStatus.INSPECTING -> MaterialTheme.colorScheme.secondary to MaterialTheme.colorScheme.onSecondary
-        RoomStatus.OUT_OF_SERVICE -> MaterialTheme.colorScheme.error to MaterialTheme.colorScheme.onError
+fun RoomStatusBadge(status: RoomStatus, modifier: Modifier = Modifier) {
+    val (color, textColor) = when (status) {
+        RoomStatus.DIRTY -> ColorDirty to Color.White
+        RoomStatus.CLEANING -> ColorInProgress to Color.White
+        RoomStatus.CLEAN -> ColorClean to Color.White
+        RoomStatus.AVAILABLE -> ColorAvailable to Color.White
+        else -> MaterialTheme.colorScheme.outline to MaterialTheme.colorScheme.onSurfaceVariant
     }
-
-    StatusBadge(
-        text = status.toDisplayName(),
-        backgroundColor = backgroundColor,
-        textColor = textColor,
-        modifier = modifier
-    )
+    StatusBadge(text = status.toDisplayName(), containerColor = color, contentColor = textColor, modifier = modifier)
 }
 
 @Composable
-fun TicketStatusBadge(
-    status: TicketStatus,
-    modifier: Modifier = Modifier
-) {
-    val (backgroundColor, textColor) = when (status) {
-        TicketStatus.PENDING -> MaterialTheme.colorScheme.errorContainer to MaterialTheme.colorScheme.onErrorContainer
-        TicketStatus.IN_PROGRESS -> StatusInProgress to Color.White
-        TicketStatus.COMPLETED -> StatusClean to Color.White
+fun TicketStatusBadge(status: TicketStatus, modifier: Modifier = Modifier) {
+    val (color, textColor) = when (status) {
+        TicketStatus.PENDING -> ColorDirty to Color.White
+        TicketStatus.IN_PROGRESS -> ColorInProgress to Color.White
+        TicketStatus.COMPLETED -> ColorClean to Color.White
     }
-
-    StatusBadge(
-        text = status.toDisplayName(),
-        backgroundColor = backgroundColor,
-        textColor = textColor,
-        modifier = modifier
-    )
+    StatusBadge(text = status.toDisplayName(), containerColor = color, contentColor = textColor, modifier = modifier)
 }
 
 @Composable
-fun OrderStatusBadge(
-    status: OrderStatus,
-    modifier: Modifier = Modifier
-) {
-    val (backgroundColor, textColor) = when (status) {
-        OrderStatus.PENDING -> MaterialTheme.colorScheme.errorContainer to MaterialTheme.colorScheme.onErrorContainer
-        OrderStatus.PREPARING -> StatusInProgress to Color.White
-        OrderStatus.READY -> MaterialTheme.colorScheme.secondaryContainer to MaterialTheme.colorScheme.onSecondaryContainer
-        OrderStatus.DELIVERED -> StatusClean to Color.White
+fun OrderStatusBadge(status: OrderStatus, modifier: Modifier = Modifier) {
+    val (color, textColor) = when (status) {
+        OrderStatus.PENDING -> ColorInProgress to Color.White
+        OrderStatus.PREPARING -> ColorAvailable to Color.White
+        OrderStatus.READY -> ColorAvailable to Color.White
+        OrderStatus.DELIVERED -> ColorClean to Color.White
     }
-
-    StatusBadge(
-        text = status.toDisplayName(),
-        backgroundColor = backgroundColor,
-        textColor = textColor,
-        modifier = modifier
-    )
+    StatusBadge(text = status.toDisplayName(), containerColor = color, contentColor = textColor, modifier = modifier)
 }
 
 @Composable
-private fun StatusBadge(
+fun StatusBadge(
     text: String,
-    backgroundColor: Color,
-    textColor: Color,
+    containerColor: Color,
+    contentColor: Color,
     modifier: Modifier = Modifier
 ) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.labelSmall,
-        color = textColor,
+    Surface(
+        color = containerColor,
+        contentColor = contentColor,
+        shape = RoundedCornerShape(8.dp),
         modifier = modifier
-            .background(
-                color = backgroundColor,
-                shape = RoundedCornerShape(4.dp)
-            )
-            .padding(horizontal = 8.dp, vertical = 4.dp)
-    )
+    ) {
+        Text(
+            text = text,
+            fontSize = 10.sp,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+        )
+    }
 }
 
-fun RoomStatus.toDisplayName(): String = when (this) {
+fun RoomStatus.toDisplayName() = when (this) {
     RoomStatus.DIRTY -> "Sucia"
-    RoomStatus.CLEANING -> "Limpiando"
+    RoomStatus.CLEANING -> "En Proceso"
     RoomStatus.CLEAN -> "Limpia"
     RoomStatus.INSPECTING -> "Inspeccionando"
-    RoomStatus.OUT_OF_SERVICE -> "Fuera de Servicio"
+    RoomStatus.OUT_OF_SERVICE -> "F/S"
+    RoomStatus.AVAILABLE -> "Disponible"
 }
 
-fun TicketStatus.toDisplayName(): String = when (this) {
-    TicketStatus.PENDING -> "Pendiente"
+fun TicketStatus.toDisplayName() = when (this) {
+    TicketStatus.PENDING -> "Abierto"
     TicketStatus.IN_PROGRESS -> "En Progreso"
-    TicketStatus.COMPLETED -> "Completado"
+    TicketStatus.COMPLETED -> "Cerrado"
 }
 
-fun OrderStatus.toDisplayName(): String = when (this) {
+fun OrderStatus.toDisplayName() = when (this) {
     OrderStatus.PENDING -> "Pendiente"
     OrderStatus.PREPARING -> "Preparando"
     OrderStatus.READY -> "Listo"

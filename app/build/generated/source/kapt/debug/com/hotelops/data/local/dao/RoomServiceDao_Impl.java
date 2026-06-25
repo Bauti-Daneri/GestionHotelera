@@ -252,7 +252,7 @@ public final class RoomServiceDao_Impl implements RoomServiceDao {
 
   @Override
   public Object insertOrder(final RoomServiceOrderEntity order,
-      final Continuation<? super Unit> $completion) {
+      final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -266,12 +266,12 @@ public final class RoomServiceDao_Impl implements RoomServiceDao {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
   public Object insertOrders(final List<RoomServiceOrderEntity> orders,
-      final Continuation<? super Unit> $completion) {
+      final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -285,12 +285,12 @@ public final class RoomServiceDao_Impl implements RoomServiceDao {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
   public Object deleteOrder(final RoomServiceOrderEntity order,
-      final Continuation<? super Unit> $completion) {
+      final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -304,12 +304,12 @@ public final class RoomServiceDao_Impl implements RoomServiceDao {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
   public Object updateOrder(final RoomServiceOrderEntity order,
-      final Continuation<? super Unit> $completion) {
+      final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -323,12 +323,11 @@ public final class RoomServiceDao_Impl implements RoomServiceDao {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
-  public Object deleteOrderById(final String orderId,
-      final Continuation<? super Unit> $completion) {
+  public Object deleteOrderById(final String orderId, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -353,12 +352,12 @@ public final class RoomServiceDao_Impl implements RoomServiceDao {
           __preparedStmtOfDeleteOrderById.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
   public Object markAsSynced(final String orderId, final long syncedAt,
-      final Continuation<? super Unit> $completion) {
+      final Continuation<? super Unit> arg2) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -385,12 +384,12 @@ public final class RoomServiceDao_Impl implements RoomServiceDao {
           __preparedStmtOfMarkAsSynced.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg2);
   }
 
   @Override
   public Object updateOrderStatus(final String orderId, final OrderStatus status,
-      final long updatedAt, final Long deliveredAt, final Continuation<? super Unit> $completion) {
+      final long updatedAt, final Long deliveredAt, final Continuation<? super Unit> arg4) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -430,12 +429,11 @@ public final class RoomServiceDao_Impl implements RoomServiceDao {
           __preparedStmtOfUpdateOrderStatus.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg4);
   }
 
   @Override
-  public Object deleteOrdersByHotel(final String hotelId,
-      final Continuation<? super Unit> $completion) {
+  public Object deleteOrdersByHotel(final String hotelId, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -460,7 +458,7 @@ public final class RoomServiceDao_Impl implements RoomServiceDao {
           __preparedStmtOfDeleteOrdersByHotel.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
@@ -1094,8 +1092,7 @@ public final class RoomServiceDao_Impl implements RoomServiceDao {
   }
 
   @Override
-  public Object getDirtyOrders(
-      final Continuation<? super List<RoomServiceOrderEntity>> $completion) {
+  public Object getDirtyOrders(final Continuation<? super List<RoomServiceOrderEntity>> arg0) {
     final String _sql = "SELECT * FROM room_service_orders WHERE isDirty = 1";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
     final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
@@ -1205,7 +1202,7 @@ public final class RoomServiceDao_Impl implements RoomServiceDao {
           _statement.release();
         }
       }
-    }, $completion);
+    }, arg0);
   }
 
   @NonNull

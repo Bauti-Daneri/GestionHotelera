@@ -5,7 +5,8 @@ enum class RoomStatus {
     CLEANING,
     CLEAN,
     INSPECTING,
-    OUT_OF_SERVICE
+    OUT_OF_SERVICE,
+    AVAILABLE
 }
 
 enum class RoomType {

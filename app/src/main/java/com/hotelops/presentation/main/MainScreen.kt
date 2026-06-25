@@ -1,17 +1,28 @@
 package com.hotelops.presentation.main
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.Dashboard
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Restaurant
+import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material.icons.outlined.Build
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Restaurant
+import androidx.compose.material.icons.outlined.Shield
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -20,28 +31,41 @@ import com.hotelops.domain.model.UserRole
 import com.hotelops.presentation.admin.AdminScreen
 import com.hotelops.presentation.housekeeping.HousekeepingScreen
 import com.hotelops.presentation.maintenance.MaintenanceScreen
+import com.hotelops.presentation.navigation.Screen
 import com.hotelops.presentation.profile.ProfileScreen
 import com.hotelops.presentation.roomservice.RoomServiceScreen
+import com.hotelops.presentation.theme.Primary
 
-private sealed class BottomNavItem(
+sealed class BottomNavItem(
     val route: String,
     val label: String,
-    val icon: ImageVector,
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector,
     val roles: List<UserRole>
 ) {
-    object Admin : BottomNavItem("main_admin", "Admin", Icons.Default.Settings,
-        listOf(UserRole.ADMIN))
-    object Housekeeping : BottomNavItem("main_housekeeping", "Limpieza", Icons.Default.Star,
-        listOf(UserRole.ADMIN, UserRole.HOUSEKEEPING))
-    object Maintenance : BottomNavItem("main_maintenance", "Mantenimiento", Icons.Default.Build,
-        listOf(UserRole.ADMIN, UserRole.MAINTENANCE))
-    object RoomService : BottomNavItem("main_roomservice", "Room Service", Icons.Default.Dashboard,
-        listOf(UserRole.ADMIN, UserRole.HOUSEKEEPING, UserRole.MAINTENANCE))
-    object Profile : BottomNavItem("main_profile", "Perfil", Icons.Default.Person,
-        listOf(UserRole.ADMIN, UserRole.HOUSEKEEPING, UserRole.MAINTENANCE))
+    object Admin : BottomNavItem(
+        "admin", "Admin", Icons.Filled.Shield, Icons.Outlined.Shield,
+        listOf(UserRole.ADMIN)
+    )
+    object Housekeeping : BottomNavItem(
+        "housekeeping", "Limpieza", Icons.Filled.Home, Icons.Outlined.Home,
+        listOf(UserRole.ADMIN, UserRole.HOUSEKEEPING)
+    )
+    object Maintenance : BottomNavItem(
+        "maintenance", "Mantenimiento", Icons.Filled.Build, Icons.Outlined.Build,
+        listOf(UserRole.ADMIN, UserRole.MAINTENANCE)
+    )
+    object RoomService : BottomNavItem(
+        "room_service", "Room Service", Icons.Filled.Restaurant, Icons.Outlined.Restaurant,
+        UserRole.entries
+    )
+    object Profile : BottomNavItem(
+        "profile", "Perfil", Icons.Filled.Person, Icons.Outlined.Person,
+        UserRole.entries
+    )
 }
 
-private val allItems = listOf(
+val allItems = listOf(
     BottomNavItem.Admin,
     BottomNavItem.Housekeeping,
     BottomNavItem.Maintenance,
@@ -55,70 +79,73 @@ fun MainScreen(
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
 
     LaunchedEffect(state.isLoggedOut) {
-        if (state.isLoggedOut) onLogout()
+        if (state.isLoggedOut) {
+            onLogout()
+        }
     }
 
-    val currentUser = state.currentUser
-    val userRole = currentUser?.role ?: UserRole.HOUSEKEEPING
-
-    val visibleItems = allItems.filter { userRole in it.roles }
-    val startRoute = when (userRole) {
-        UserRole.ADMIN -> BottomNavItem.Admin.route
-        UserRole.HOUSEKEEPING -> BottomNavItem.Housekeeping.route
-        UserRole.MAINTENANCE -> BottomNavItem.Maintenance.route
+    val visibleItems = remember(state.currentUser?.role) {
+        allItems.filter { it.roles.contains(state.currentUser?.role) }
     }
-
-    val navController = rememberNavController()
-    val currentBackStack by navController.currentBackStackEntryAsState()
-    val currentRoute = currentBackStack?.destination?.route
 
     Scaffold(
         bottomBar = {
-            NavigationBar {
+            NavigationBar(
+                containerColor = MaterialTheme.colorScheme.surface,
+                tonalElevation = 8.dp
+            ) {
                 visibleItems.forEach { item ->
+                    val isSelected = currentDestination?.hierarchy?.any { it.route == item.route } == true
                     NavigationBarItem(
-                        icon = { Icon(item.icon, contentDescription = item.label) },
-                        label = { Text(item.label) },
-                        selected = currentRoute == item.route,
+                        icon = {
+                            Icon(
+                                imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
+                                contentDescription = item.label,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        },
+                        label = { 
+                            Text(
+                                item.label, 
+                                fontSize = 10.sp,
+                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                            ) 
+                        },
+                        selected = isSelected,
                         onClick = {
-                            if (currentRoute != item.route) {
-                                navController.navigate(item.route) {
-                                    popUpTo(startRoute) { saveState = true }
-                                    launchSingleTop = true
-                                    restoreState = true
+                            navController.navigate(item.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
                                 }
+                                launchSingleTop = true
+                                restoreState = true
                             }
-                        }
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = Primary,
+                            selectedTextColor = Primary,
+                            indicatorColor = MaterialTheme.colorScheme.primaryContainer
+                        )
                     )
                 }
             }
         }
-    ) { innerPadding ->
+    ) { padding ->
         NavHost(
             navController = navController,
-            startDestination = startRoute,
-            modifier = Modifier.padding(innerPadding)
+            startDestination = if (state.currentUser?.role == UserRole.ADMIN) "admin" else "housekeeping",
+            modifier = Modifier.padding(padding)
         ) {
-            composable(BottomNavItem.Admin.route) {
-                AdminScreen(currentUser = currentUser)
-            }
-            composable(BottomNavItem.Housekeeping.route) {
-                HousekeepingScreen(currentUser = currentUser)
-            }
-            composable(BottomNavItem.Maintenance.route) {
-                MaintenanceScreen(currentUser = currentUser)
-            }
-            composable(BottomNavItem.RoomService.route) {
-                RoomServiceScreen(currentUser = currentUser)
-            }
-            composable(BottomNavItem.Profile.route) {
-                ProfileScreen(
-                    currentUser = currentUser,
-                    onLogout = { viewModel.logout() }
-                )
-            }
+            composable("admin") { AdminScreen(state.currentUser) }
+            composable("housekeeping") { HousekeepingScreen(state.currentUser) }
+            composable("maintenance") { MaintenanceScreen(state.currentUser) }
+            composable("room_service") { RoomServiceScreen(state.currentUser) }
+            composable("profile") { ProfileScreen(state.currentUser, viewModel::logout) }
         }
     }
 }

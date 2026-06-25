@@ -310,7 +310,7 @@ public final class MaintenanceDao_Impl implements MaintenanceDao {
 
   @Override
   public Object insertTicket(final MaintenanceTicketEntity ticket,
-      final Continuation<? super Unit> $completion) {
+      final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -324,12 +324,12 @@ public final class MaintenanceDao_Impl implements MaintenanceDao {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
   public Object insertTickets(final List<MaintenanceTicketEntity> tickets,
-      final Continuation<? super Unit> $completion) {
+      final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -343,12 +343,12 @@ public final class MaintenanceDao_Impl implements MaintenanceDao {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
   public Object deleteTicket(final MaintenanceTicketEntity ticket,
-      final Continuation<? super Unit> $completion) {
+      final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -362,12 +362,12 @@ public final class MaintenanceDao_Impl implements MaintenanceDao {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
   public Object updateTicket(final MaintenanceTicketEntity ticket,
-      final Continuation<? super Unit> $completion) {
+      final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -381,12 +381,11 @@ public final class MaintenanceDao_Impl implements MaintenanceDao {
           __db.endTransaction();
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
-  public Object deleteTicketById(final String ticketId,
-      final Continuation<? super Unit> $completion) {
+  public Object deleteTicketById(final String ticketId, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -411,12 +410,12 @@ public final class MaintenanceDao_Impl implements MaintenanceDao {
           __preparedStmtOfDeleteTicketById.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
   public Object markAsSynced(final String ticketId, final long syncedAt,
-      final Continuation<? super Unit> $completion) {
+      final Continuation<? super Unit> arg2) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -443,12 +442,12 @@ public final class MaintenanceDao_Impl implements MaintenanceDao {
           __preparedStmtOfMarkAsSynced.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg2);
   }
 
   @Override
   public Object updateTicketStatus(final String ticketId, final TicketStatus status,
-      final long updatedAt, final Long completedAt, final Continuation<? super Unit> $completion) {
+      final long updatedAt, final Long completedAt, final Continuation<? super Unit> arg4) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -488,12 +487,11 @@ public final class MaintenanceDao_Impl implements MaintenanceDao {
           __preparedStmtOfUpdateTicketStatus.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg4);
   }
 
   @Override
-  public Object deleteTicketsByHotel(final String hotelId,
-      final Continuation<? super Unit> $completion) {
+  public Object deleteTicketsByHotel(final String hotelId, final Continuation<? super Unit> arg1) {
     return CoroutinesRoom.execute(__db, true, new Callable<Unit>() {
       @Override
       @NonNull
@@ -518,7 +516,7 @@ public final class MaintenanceDao_Impl implements MaintenanceDao {
           __preparedStmtOfDeleteTicketsByHotel.release(_stmt);
         }
       }
-    }, $completion);
+    }, arg1);
   }
 
   @Override
@@ -1524,8 +1522,7 @@ public final class MaintenanceDao_Impl implements MaintenanceDao {
   }
 
   @Override
-  public Object getDirtyTickets(
-      final Continuation<? super List<MaintenanceTicketEntity>> $completion) {
+  public Object getDirtyTickets(final Continuation<? super List<MaintenanceTicketEntity>> arg0) {
     final String _sql = "SELECT * FROM maintenance_tickets WHERE isDirty = 1";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
     final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
@@ -1674,7 +1671,7 @@ public final class MaintenanceDao_Impl implements MaintenanceDao {
           _statement.release();
         }
       }
-    }, $completion);
+    }, arg0);
   }
 
   @NonNull

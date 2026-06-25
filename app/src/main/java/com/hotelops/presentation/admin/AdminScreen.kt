@@ -1,22 +1,31 @@
 package com.hotelops.presentation.admin
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.PersonAdd
+import androidx.compose.material.icons.automirrored.filled.Assignment
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hotelops.domain.model.Room
 import com.hotelops.domain.model.RoomStatus
 import com.hotelops.domain.model.User
 import com.hotelops.domain.model.UserRole
+import com.hotelops.presentation.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,39 +42,104 @@ fun AdminScreen(
     var selectedTab by remember { mutableIntStateOf(0) }
     val tabs = listOf("Usuarios", "Habitaciones")
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        TopAppBar(
-            title = { Text("Administración") },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { 
+                    Text(
+                        "Administración", 
+                        style = MaterialTheme.typography.headlineMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                            color = Primary
+                        )
+                    ) 
+                },
+                actions = {
+                    AssistChip(
+                        onClick = { },
+                        label = { Text("Admin", color = Primary) },
+                        leadingIcon = { Icon(Icons.Default.Settings, contentDescription = null, modifier = Modifier.size(16.dp)) },
+                        shape = RoundedCornerShape(16.dp),
+                        colors = AssistChipDefaults.assistChipColors(containerColor = SurfaceVariant)
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                }
             )
-        )
-        TabRow(selectedTabIndex = selectedTab) {
-            tabs.forEachIndexed { index, title ->
-                Tab(
-                    selected = selectedTab == index,
-                    onClick = { selectedTab = index },
-                    text = { Text(title) }
+        }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .background(Background)
+        ) {
+            // Hotel Header Card
+            HotelHeaderCard(hotelName = "Hotel Plaza Central", hotelId = "HOTEL-DEMO-001")
+
+            // Stats Grid
+            AdminStatsGrid(
+                roomsCount = state.rooms.size,
+                employeesCount = state.users.size,
+                ticketsCount = 3,
+                occupancy = 75
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Custom Tab Row
+            TabRow(
+                selectedTabIndex = selectedTab,
+                containerColor = Color.Transparent,
+                contentColor = Primary,
+                divider = {},
+                indicator = { tabPositions ->
+                    if (selectedTab < tabPositions.size) {
+                        TabRowDefaults.SecondaryIndicator(
+                            Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
+                            color = Primary
+                        )
+                    }
+                },
+                modifier = Modifier.padding(horizontal = 16.dp)
+            ) {
+                tabs.forEachIndexed { index, title ->
+                    val selected = selectedTab == index
+                    Tab(
+                        selected = selected,
+                        onClick = { selectedTab = index },
+                        text = {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = if (index == 0) Icons.Default.People else Icons.Default.MeetingRoom,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(title, fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal)
+                            }
+                        }
+                    )
+                }
+            }
+
+            if (selectedTab == 0) {
+                UsersTab(
+                    users = state.users,
+                    isLoading = state.isLoading,
+                    onAddClick = { viewModel.showAddUserDialog() },
+                    onDeleteClick = { viewModel.deleteUser(it) }
+                )
+            } else {
+                RoomsTab(
+                    rooms = state.rooms,
+                    isLoading = state.isLoading,
+                    onAddClick = { viewModel.showAddRoomDialog() },
+                    onDeleteClick = { viewModel.deleteRoom(it) }
                 )
             }
         }
-        when (selectedTab) {
-            0 -> UsersTab(
-                users = state.users,
-                isLoading = state.isLoading,
-                onAddUser = { viewModel.showAddUserDialog() },
-                onDeleteUser = { viewModel.deleteUser(it) }
-            )
-            1 -> RoomsTab(
-                rooms = state.rooms,
-                isLoading = state.isLoading,
-                onAddRoom = { viewModel.showAddRoomDialog() },
-                onDeleteRoom = { viewModel.deleteRoom(it) }
-            )
-        }
     }
 
-    // Add User Dialog
     if (state.showAddUserDialog) {
         AddUserDialog(
             onDismiss = { viewModel.hideDialogs() },
@@ -75,52 +149,100 @@ fun AdminScreen(
         )
     }
 
-    // Add Room Dialog
     if (state.showAddRoomDialog) {
         AddRoomDialog(
             onDismiss = { viewModel.hideDialogs() },
-            onConfirm = { number, floor, type ->
-                viewModel.addRoom(number, floor, type)
+            onConfirm = { roomNumber, floor, type ->
+                viewModel.addRoom(roomNumber, floor, type)
             }
         )
     }
 }
 
 @Composable
-private fun UsersTab(
+fun HotelHeaderCard(hotelName: String, hotelId: String) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = Primary)
+    ) {
+        Row(
+            modifier = Modifier.padding(24.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Color.White.copy(alpha = 0.2f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(Icons.Default.Apartment, contentDescription = null, tint = Color.White)
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+            Column {
+                Text(hotelName, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text("ID: $hotelId", color = Color.White.copy(alpha = 0.7f), fontSize = 14.sp)
+            }
+        }
+    }
+}
+
+@Composable
+fun AdminStatsGrid(roomsCount: Int, employeesCount: Int, ticketsCount: Int, occupancy: Int) {
+    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            StatItem(Modifier.weight(1f), roomsCount.toString(), "Habitaciones", Icons.Default.Apartment, ColorAdmin)
+            StatItem(Modifier.weight(1f), employeesCount.toString(), "Empleados", Icons.Default.Groups, ColorClean)
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            StatItem(Modifier.weight(1f), ticketsCount.toString(), "Tickets Abiertos", Icons.AutoMirrored.Filled.Assignment, ColorInProgress)
+            StatItem(Modifier.weight(1f), "$occupancy%", "Ocupación", Icons.Default.SensorDoor, ColorAvailable)
+        }
+    }
+}
+
+@Composable
+fun StatItem(modifier: Modifier, value: String, label: String, icon: ImageVector, iconColor: Color) {
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = Surface),
+        border = CardDefaults.outlinedCardBorder()
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(iconColor.copy(alpha = 0.1f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(icon, contentDescription = null, tint = iconColor, modifier = Modifier.size(20.dp))
+            }
+            Spacer(modifier = Modifier.width(12.dp))
+            Column {
+                Text(value, fontWeight = FontWeight.Bold, fontSize = 18.sp, color = OnSurface)
+                Text(label, fontSize = 11.sp, color = OnSurfaceVariant)
+            }
+        }
+    }
+}
+
+@Composable
+fun UsersTab(
     users: List<User>,
     isLoading: Boolean,
-    onAddUser: () -> Unit,
-    onDeleteUser: (User) -> Unit
+    onAddClick: () -> Unit,
+    onDeleteClick: (User) -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        if (isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(users, key = { it.id }) { user ->
-                    UserCard(user = user, onDelete = { onDeleteUser(user) })
-                }
-            }
-        }
-        FloatingActionButton(
-            onClick = onAddUser,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-        ) {
-            Icon(Icons.Default.PersonAdd, contentDescription = "Agregar usuario")
-        }
-    }
-}
-
-@Composable
-private fun UserCard(user: User, onDelete: () -> Unit) {
-    Card(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxSize()) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -128,72 +250,117 @@ private fun UserCard(user: User, onDelete: () -> Unit) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(user.name, style = MaterialTheme.typography.titleSmall)
-                Text(user.email, style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
-                AssistChip(
-                    onClick = {},
-                    label = { Text(user.role.toDisplayName()) }
-                )
+            Text("Gestión de Usuarios", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Primary)
+            Button(
+                onClick = onAddClick,
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Primary),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                Icon(Icons.Default.PersonAdd, contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Nuevo Usuario")
             }
-            IconButton(onClick = onDelete) {
-                Icon(Icons.Default.Delete, contentDescription = "Eliminar",
-                    tint = MaterialTheme.colorScheme.error)
+        }
+
+        if (isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(color = Primary)
+            }
+        } else {
+            LazyColumn(
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(users) { user ->
+                    UserCard(user = user, onDeleteClick = { onDeleteClick(user) })
+                }
             }
         }
     }
 }
 
 @Composable
-private fun RoomsTab(
+fun UserCard(user: User, onDeleteClick: () -> Unit) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = Surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            val roleColor = when (user.role) {
+                UserRole.ADMIN -> ColorAdmin
+                UserRole.HOUSEKEEPING -> ColorClean
+                UserRole.MAINTENANCE -> ColorInProgress
+            }
+            val roleIcon = when (user.role) {
+                UserRole.ADMIN -> Icons.Default.Shield
+                UserRole.HOUSEKEEPING -> Icons.Default.AutoAwesome
+                UserRole.MAINTENANCE -> Icons.Default.Build
+            }
+
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(CircleShape)
+                    .background(roleColor),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(roleIcon, contentDescription = null, tint = Color.White)
+            }
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Column(modifier = Modifier.weight(1f)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(user.name, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Surface(
+                        color = roleColor,
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(
+                            user.role.toDisplayName(),
+                            color = Color.White,
+                            fontSize = 10.sp,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Default.Email, contentDescription = null, modifier = Modifier.size(14.dp), tint = OnSurfaceVariant)
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(user.email, fontSize = 13.sp, color = OnSurfaceVariant)
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Default.Business, contentDescription = null, modifier = Modifier.size(14.dp), tint = OnSurfaceVariant)
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(user.department, fontSize = 13.sp, color = OnSurfaceVariant)
+                }
+                Text("ID: ${user.employeeId}", fontSize = 11.sp, color = OnSurfaceVariant.copy(alpha = 0.6f))
+            }
+
+            Row {
+                IconButton(onClick = { }) { Icon(Icons.Default.Edit, contentDescription = "Edit", tint = OnSurfaceVariant) }
+                IconButton(onClick = onDeleteClick) { Icon(Icons.Default.Delete, contentDescription = "Delete", tint = ColorDirty) }
+            }
+        }
+    }
+}
+
+@Composable
+fun RoomsTab(
     rooms: List<Room>,
     isLoading: Boolean,
-    onAddRoom: () -> Unit,
-    onDeleteRoom: (Room) -> Unit
+    onAddClick: () -> Unit,
+    onDeleteClick: (Room) -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        if (isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(rooms, key = { it.id }) { room ->
-                    RoomCard(room = room, onDelete = { onDeleteRoom(room) })
-                }
-            }
-        }
-        FloatingActionButton(
-            onClick = onAddRoom,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(16.dp)
-        ) {
-            Icon(Icons.Default.Add, contentDescription = "Agregar habitación")
-        }
-    }
-}
-
-@Composable
-private fun RoomCard(room: Room, onDelete: () -> Unit) {
-    val statusColor = when (room.status) {
-        RoomStatus.CLEAN -> MaterialTheme.colorScheme.tertiary
-        RoomStatus.DIRTY -> MaterialTheme.colorScheme.error
-        RoomStatus.CLEANING -> MaterialTheme.colorScheme.secondary
-        RoomStatus.INSPECTING -> MaterialTheme.colorScheme.primary
-        RoomStatus.OUT_OF_SERVICE -> MaterialTheme.colorScheme.outline
-    }
-    val statusLabel = when (room.status) {
-        RoomStatus.CLEAN -> "Limpia"
-        RoomStatus.DIRTY -> "Sucia"
-        RoomStatus.CLEANING -> "En limpieza"
-        RoomStatus.INSPECTING -> "Inspeccionando"
-        RoomStatus.OUT_OF_SERVICE -> "Fuera de servicio"
-    }
-    Card(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxSize()) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -201,19 +368,77 @@ private fun RoomCard(room: Room, onDelete: () -> Unit) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text("Habitación ${room.roomNumber}", style = MaterialTheme.typography.titleSmall)
-                Text("Piso ${room.floor} · ${room.type.name}", style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
-                AssistChip(
-                    onClick = {},
-                    label = { Text(statusLabel) },
-                    colors = AssistChipDefaults.assistChipColors(labelColor = statusColor)
-                )
+            Text("Gestión de Habitaciones", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Primary)
+            Button(
+                onClick = onAddClick,
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Primary)
+            ) {
+                Icon(Icons.Default.Add, contentDescription = null)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Agregar")
             }
-            IconButton(onClick = onDelete) {
-                Icon(Icons.Default.Delete, contentDescription = "Eliminar",
-                    tint = MaterialTheme.colorScheme.error)
+        }
+
+        if (isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(color = Primary)
+            }
+        } else {
+            LazyColumn(
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(rooms) { room ->
+                    RoomCard(room = room, onDeleteClick = { onDeleteClick(room) })
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun RoomCard(room: Room, onDeleteClick: () -> Unit) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = Surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(SurfaceVariant),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(Icons.Default.MeetingRoom, contentDescription = null, tint = Primary)
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("#${room.roomNumber}", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Surface(
+                        color = ColorAvailable,
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(
+                            room.type.name,
+                            color = Color.White,
+                            fontSize = 10.sp,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                        )
+                    }
+                }
+                Text("Piso ${room.floor}", color = OnSurfaceVariant, fontSize = 14.sp)
+            }
+            IconButton(onClick = onDeleteClick) {
+                Icon(Icons.Default.Delete, contentDescription = "Delete", tint = ColorDirty.copy(alpha = 0.5f))
             }
         }
     }
@@ -233,7 +458,7 @@ private fun AddUserDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Agregar Usuario") },
+        title = { Text("Agregar Usuario", fontWeight = FontWeight.Bold) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedTextField(value = name, onValueChange = { name = it },
@@ -263,7 +488,7 @@ private fun AddUserDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = { onConfirm(name, email, password, selectedRole) }) { Text("Agregar") }
+            TextButton(onClick = { onConfirm(name, email, password, selectedRole) }) { Text("Agregar", fontWeight = FontWeight.Bold) }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) { Text("Cancelar") }
@@ -285,7 +510,7 @@ private fun AddRoomDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Agregar Habitación") },
+        title = { Text("Agregar Habitación", fontWeight = FontWeight.Bold) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedTextField(value = roomNumber, onValueChange = { roomNumber = it },
@@ -310,7 +535,7 @@ private fun AddRoomDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = { onConfirm(roomNumber, floor.toIntOrNull() ?: 1, type) }) { Text("Agregar") }
+            TextButton(onClick = { onConfirm(roomNumber, floor.toIntOrNull() ?: 1, type) }) { Text("Agregar", fontWeight = FontWeight.Bold) }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) { Text("Cancelar") }
