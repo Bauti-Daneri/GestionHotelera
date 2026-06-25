@@ -1,0 +1,44 @@
+# Build artifacts
+*.iml
+.gradle
+/local.properties
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Android Studio / IntelliJ
+*.ipr
+*.iws
+*.iml
+.idea/
+
+# Keystore files (Secrets)
+*.jks
+*.keystore
+*.p12
+google_play_signing.json
+
+# Firebase / Google Services (Important: Do not share your real keys)
+app/google-services.json
+
+# Unit test reports
+/test-reports
+/verification-reports
+
+# Log files
+*.log
+
+# Project specific
+DETALLES_SOLUCION.md
+PENDIENTES.md
+PROGRESO.md
+COMO_ABRIR.md
+java_pid*.hprof

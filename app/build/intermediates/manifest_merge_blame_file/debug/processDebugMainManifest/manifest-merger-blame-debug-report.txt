@@ -1,0 +1,734 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.hotelops"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+9        android:targetSdkVersion="35" />
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:5:5-67
+11-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:5:22-64
+12    <uses-permission android:name="android.permission.CAMERA" />
+12-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:6:5-65
+12-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:6:22-62
+13    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+13-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:7:5-77
+13-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:7:22-74
+14    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+14-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:8:5-79
+14-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:8:22-76
+15
+16    <uses-feature
+16-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:10:5-12:36
+17        android:name="android.hardware.camera"
+17-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:11:9-47
+18        android:required="false" />
+18-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:12:9-33
+19
+20    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Required by older versions of Google Play services to create IID tokens -->
+20-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:24:5-68
+20-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:24:22-65
+21    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+21-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:26:5-82
+21-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:26:22-79
+22    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
+22-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\ce2dc73f0ca8c95ace5cd537fff8f30e\transformed\play-services-measurement-21.5.0\AndroidManifest.xml:26:5-110
+22-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\ce2dc73f0ca8c95ace5cd537fff8f30e\transformed\play-services-measurement-21.5.0\AndroidManifest.xml:26:22-107
+23    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+23-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\bf873e86b44986ab8ef8e6d41cd05c21\transformed\play-services-measurement-api-21.5.0\AndroidManifest.xml:25:5-79
+23-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\bf873e86b44986ab8ef8e6d41cd05c21\transformed\play-services-measurement-api-21.5.0\AndroidManifest.xml:25:22-76
+24    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_ATTRIBUTION" />
+24-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\bf873e86b44986ab8ef8e6d41cd05c21\transformed\play-services-measurement-api-21.5.0\AndroidManifest.xml:26:5-88
+24-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\bf873e86b44986ab8ef8e6d41cd05c21\transformed\play-services-measurement-api-21.5.0\AndroidManifest.xml:26:22-85
+25    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_AD_ID" />
+25-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\bf873e86b44986ab8ef8e6d41cd05c21\transformed\play-services-measurement-api-21.5.0\AndroidManifest.xml:27:5-82
+25-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\bf873e86b44986ab8ef8e6d41cd05c21\transformed\play-services-measurement-api-21.5.0\AndroidManifest.xml:27:22-79
+26    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+26-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:25:5-81
+26-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:25:22-78
+27    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+27-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:26:5-77
+27-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:26:22-74
+28
+29    <permission
+29-->[androidx.core:core:1.12.0] C:\Users\jonya\.gradle\caches\transforms-3\5df40050157a3c61ef3930323de85d44\transformed\core-1.12.0\AndroidManifest.xml:22:5-24:47
+30        android:name="com.hotelops.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+30-->[androidx.core:core:1.12.0] C:\Users\jonya\.gradle\caches\transforms-3\5df40050157a3c61ef3930323de85d44\transformed\core-1.12.0\AndroidManifest.xml:23:9-81
+31        android:protectionLevel="signature" />
+31-->[androidx.core:core:1.12.0] C:\Users\jonya\.gradle\caches\transforms-3\5df40050157a3c61ef3930323de85d44\transformed\core-1.12.0\AndroidManifest.xml:24:9-44
+32
+33    <uses-permission android:name="com.hotelops.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+33-->[androidx.core:core:1.12.0] C:\Users\jonya\.gradle\caches\transforms-3\5df40050157a3c61ef3930323de85d44\transformed\core-1.12.0\AndroidManifest.xml:26:5-97
+33-->[androidx.core:core:1.12.0] C:\Users\jonya\.gradle\caches\transforms-3\5df40050157a3c61ef3930323de85d44\transformed\core-1.12.0\AndroidManifest.xml:26:22-94
+34
+35    <application
+35-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:14:5-56:19
+36        android:name="com.hotelops.HotelOpsApplication"
+36-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:15:9-44
+37        android:allowBackup="true"
+37-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:16:9-35
+38        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+38-->[androidx.core:core:1.12.0] C:\Users\jonya\.gradle\caches\transforms-3\5df40050157a3c61ef3930323de85d44\transformed\core-1.12.0\AndroidManifest.xml:28:18-86
+39        android:dataExtractionRules="@xml/data_extraction_rules"
+39-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:17:9-65
+40        android:debuggable="true"
+41        android:extractNativeLibs="true"
+42        android:fullBackupContent="@xml/backup_rules"
+42-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:18:9-54
+43        android:icon="@mipmap/ic_launcher"
+43-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:19:9-43
+44        android:label="@string/app_name"
+44-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:20:9-41
+45        android:roundIcon="@mipmap/ic_launcher_round"
+45-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:21:9-54
+46        android:supportsRtl="true"
+46-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:22:9-35
+47        android:testOnly="true"
+48        android:theme="@style/Theme.HotelOps" >
+48-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:23:9-46
+49        <activity
+49-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:26:9-34:20
+50            android:name="com.hotelops.MainActivity"
+50-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:27:13-41
+51            android:exported="true"
+51-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:28:13-36
+52            android:theme="@style/Theme.HotelOps" >
+52-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:29:13-50
+53            <intent-filter>
+53-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:30:13-33:29
+54                <action android:name="android.intent.action.MAIN" />
+54-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:31:17-69
+54-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:31:25-66
+55
+56                <category android:name="android.intent.category.LAUNCHER" />
+56-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:32:17-77
+56-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:32:27-74
+57            </intent-filter>
+58        </activity>
+59
+60        <!-- Firebase Messaging Service -->
+61        <service
+61-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:37:9-43:19
+62            android:name="com.hotelops.HotelOpsMessagingService"
+62-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:38:13-53
+63            android:exported="false" >
+63-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:39:13-37
+64            <intent-filter>
+64-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:40:13-42:29
+65                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+65-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:41:17-78
+65-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:41:25-75
+66            </intent-filter>
+67        </service>
+68
+69        <!-- WorkManager initialization -->
+70        <provider
+71            android:name="androidx.startup.InitializationProvider"
+71-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:47:13-67
+72            android:authorities="com.hotelops.androidx-startup"
+72-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:48:13-68
+73            android:exported="false" >
+73-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:49:13-37
+74            <meta-data
+74-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:51:13-53:52
+75                android:name="androidx.work.WorkManagerInitializer"
+75-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:52:17-68
+76                android:value="androidx.startup" />
+76-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:53:17-49
+77            <meta-data
+77-->[androidx.emoji2:emoji2:1.3.0] C:\Users\jonya\.gradle\caches\transforms-3\e9faa6afb1c61d71ae8fc535da538d50\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+78                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+78-->[androidx.emoji2:emoji2:1.3.0] C:\Users\jonya\.gradle\caches\transforms-3\e9faa6afb1c61d71ae8fc535da538d50\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
+79                android:value="androidx.startup" />
+79-->[androidx.emoji2:emoji2:1.3.0] C:\Users\jonya\.gradle\caches\transforms-3\e9faa6afb1c61d71ae8fc535da538d50\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
+80            <meta-data
+80-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\jonya\.gradle\caches\transforms-3\edf828748721af25c36f9a4a643d407f\transformed\lifecycle-process-2.7.0\AndroidManifest.xml:29:13-31:52
+81                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+81-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\jonya\.gradle\caches\transforms-3\edf828748721af25c36f9a4a643d407f\transformed\lifecycle-process-2.7.0\AndroidManifest.xml:30:17-78
+82                android:value="androidx.startup" />
+82-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\jonya\.gradle\caches\transforms-3\edf828748721af25c36f9a4a643d407f\transformed\lifecycle-process-2.7.0\AndroidManifest.xml:31:17-49
+83            <meta-data
+83-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+84                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+84-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+85                android:value="androidx.startup" />
+85-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+86        </provider>
+87
+88        <!--
+89        Service for holding metadata. Cannot be instantiated.
+90        Metadata will be merged from other manifests.
+91        -->
+92        <service
+92-->[androidx.camera:camera-core:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\875b43d7b5fbca6f7a3db6f777d60a62\transformed\camera-core-1.3.1\AndroidManifest.xml:29:9-33:78
+93            android:name="androidx.camera.core.impl.MetadataHolderService"
+93-->[androidx.camera:camera-core:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\875b43d7b5fbca6f7a3db6f777d60a62\transformed\camera-core-1.3.1\AndroidManifest.xml:30:13-75
+94            android:enabled="false"
+94-->[androidx.camera:camera-core:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\875b43d7b5fbca6f7a3db6f777d60a62\transformed\camera-core-1.3.1\AndroidManifest.xml:31:13-36
+95            android:exported="false" >
+95-->[androidx.camera:camera-core:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\875b43d7b5fbca6f7a3db6f777d60a62\transformed\camera-core-1.3.1\AndroidManifest.xml:32:13-37
+96            <meta-data
+96-->[androidx.camera:camera-camera2:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\debcd3a1e6d46254e7a1e732cedf9794\transformed\camera-camera2-1.3.1\AndroidManifest.xml:30:13-32:89
+97                android:name="androidx.camera.core.impl.MetadataHolderService.DEFAULT_CONFIG_PROVIDER"
+97-->[androidx.camera:camera-camera2:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\debcd3a1e6d46254e7a1e732cedf9794\transformed\camera-camera2-1.3.1\AndroidManifest.xml:31:17-103
+98                android:value="androidx.camera.camera2.Camera2Config$DefaultProvider" />
+98-->[androidx.camera:camera-camera2:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\debcd3a1e6d46254e7a1e732cedf9794\transformed\camera-camera2-1.3.1\AndroidManifest.xml:32:17-86
+99        </service>
+100
+101        <activity
+101-->[androidx.compose.ui:ui-tooling-android:1.6.1] C:\Users\jonya\.gradle\caches\transforms-3\613b5bec91f484f0008a9a0ae07ea8ee\transformed\ui-tooling-release\AndroidManifest.xml:23:9-25:39
+102            android:name="androidx.compose.ui.tooling.PreviewActivity"
+102-->[androidx.compose.ui:ui-tooling-android:1.6.1] C:\Users\jonya\.gradle\caches\transforms-3\613b5bec91f484f0008a9a0ae07ea8ee\transformed\ui-tooling-release\AndroidManifest.xml:24:13-71
+103            android:exported="true" />
+103-->[androidx.compose.ui:ui-tooling-android:1.6.1] C:\Users\jonya\.gradle\caches\transforms-3\613b5bec91f484f0008a9a0ae07ea8ee\transformed\ui-tooling-release\AndroidManifest.xml:25:13-36
+104        <activity
+104-->[androidx.compose.ui:ui-test-manifest:1.6.1] C:\Users\jonya\.gradle\caches\transforms-3\26de38b9b48a5447a253626ea5001600\transformed\ui-test-manifest-1.6.1\AndroidManifest.xml:23:9-25:39
+105            android:name="androidx.activity.ComponentActivity"
+105-->[androidx.compose.ui:ui-test-manifest:1.6.1] C:\Users\jonya\.gradle\caches\transforms-3\26de38b9b48a5447a253626ea5001600\transformed\ui-test-manifest-1.6.1\AndroidManifest.xml:24:13-63
+106            android:exported="true" />
+106-->[androidx.compose.ui:ui-test-manifest:1.6.1] C:\Users\jonya\.gradle\caches\transforms-3\26de38b9b48a5447a253626ea5001600\transformed\ui-test-manifest-1.6.1\AndroidManifest.xml:25:13-36
+107        <activity
+107-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:29:9-46:20
+108            android:name="com.google.firebase.auth.internal.GenericIdpActivity"
+108-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:30:13-80
+109            android:excludeFromRecents="true"
+109-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:31:13-46
+110            android:exported="true"
+110-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:32:13-36
+111            android:launchMode="singleTask"
+111-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:33:13-44
+112            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+112-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:34:13-72
+113            <intent-filter>
+113-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:35:13-45:29
+114                <action android:name="android.intent.action.VIEW" />
+114-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:36:17-69
+114-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:36:25-66
+115
+116                <category android:name="android.intent.category.DEFAULT" />
+116-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:38:17-76
+116-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:38:27-73
+117                <category android:name="android.intent.category.BROWSABLE" />
+117-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:39:17-78
+117-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:39:27-75
+118
+119                <data
+119-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:41:17-44:51
+120                    android:host="firebase.auth"
+120-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:42:21-49
+121                    android:path="/"
+121-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:43:21-37
+122                    android:scheme="genericidp" />
+122-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:44:21-48
+123            </intent-filter>
+124        </activity>
+125        <activity
+125-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:47:9-64:20
+126            android:name="com.google.firebase.auth.internal.RecaptchaActivity"
+126-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:48:13-79
+127            android:excludeFromRecents="true"
+127-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:49:13-46
+128            android:exported="true"
+128-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:50:13-36
+129            android:launchMode="singleTask"
+129-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:51:13-44
+130            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+130-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:52:13-72
+131            <intent-filter>
+131-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:53:13-63:29
+132                <action android:name="android.intent.action.VIEW" />
+132-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:36:17-69
+132-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:36:25-66
+133
+134                <category android:name="android.intent.category.DEFAULT" />
+134-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:38:17-76
+134-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:38:27-73
+135                <category android:name="android.intent.category.BROWSABLE" />
+135-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:39:17-78
+135-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:39:27-75
+136
+137                <data
+137-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:41:17-44:51
+138                    android:host="firebase.auth"
+138-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:42:21-49
+139                    android:path="/"
+139-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:43:21-37
+140                    android:scheme="recaptcha" />
+140-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:44:21-48
+141            </intent-filter>
+142        </activity>
+143
+144        <service
+144-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:66:9-72:19
+145            android:name="com.google.firebase.components.ComponentDiscoveryService"
+145-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:67:13-84
+146            android:directBootAware="true"
+146-->[com.google.firebase:firebase-common:20.4.2] C:\Users\jonya\.gradle\caches\transforms-3\cbf0c87732f9f254ff27d1871787d566\transformed\firebase-common-20.4.2\AndroidManifest.xml:32:13-43
+147            android:exported="false" >
+147-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:68:13-37
+148            <meta-data
+148-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:69:13-71:85
+149                android:name="com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar"
+149-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:70:17-109
+150                android:value="com.google.firebase.components.ComponentRegistrar" />
+150-->[com.google.firebase:firebase-auth:22.3.0] C:\Users\jonya\.gradle\caches\transforms-3\0b03578e2114449900839723676df36f\transformed\firebase-auth-22.3.0\AndroidManifest.xml:71:17-82
+151            <meta-data
+151-->[com.google.firebase:firebase-firestore:24.10.0] C:\Users\jonya\.gradle\caches\transforms-3\266fb993178b2df1657ca33202f7a2ac\transformed\firebase-firestore-24.10.0\AndroidManifest.xml:17:13-19:85
+152                android:name="com.google.firebase.components:com.google.firebase.firestore.FirebaseFirestoreKtxRegistrar"
+152-->[com.google.firebase:firebase-firestore:24.10.0] C:\Users\jonya\.gradle\caches\transforms-3\266fb993178b2df1657ca33202f7a2ac\transformed\firebase-firestore-24.10.0\AndroidManifest.xml:18:17-122
+153                android:value="com.google.firebase.components.ComponentRegistrar" />
+153-->[com.google.firebase:firebase-firestore:24.10.0] C:\Users\jonya\.gradle\caches\transforms-3\266fb993178b2df1657ca33202f7a2ac\transformed\firebase-firestore-24.10.0\AndroidManifest.xml:19:17-82
+154            <meta-data
+154-->[com.google.firebase:firebase-firestore:24.10.0] C:\Users\jonya\.gradle\caches\transforms-3\266fb993178b2df1657ca33202f7a2ac\transformed\firebase-firestore-24.10.0\AndroidManifest.xml:20:13-22:85
+155                android:name="com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar"
+155-->[com.google.firebase:firebase-firestore:24.10.0] C:\Users\jonya\.gradle\caches\transforms-3\266fb993178b2df1657ca33202f7a2ac\transformed\firebase-firestore-24.10.0\AndroidManifest.xml:21:17-111
+156                android:value="com.google.firebase.components.ComponentRegistrar" />
+156-->[com.google.firebase:firebase-firestore:24.10.0] C:\Users\jonya\.gradle\caches\transforms-3\266fb993178b2df1657ca33202f7a2ac\transformed\firebase-firestore-24.10.0\AndroidManifest.xml:22:17-82
+157            <meta-data
+157-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:57:13-59:85
+158                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingKtxRegistrar"
+158-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:58:17-122
+159                android:value="com.google.firebase.components.ComponentRegistrar" />
+159-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:59:17-82
+160            <meta-data
+160-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:60:13-62:85
+161                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar"
+161-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:61:17-119
+162                android:value="com.google.firebase.components.ComponentRegistrar" />
+162-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:62:17-82
+163            <meta-data
+163-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\bf873e86b44986ab8ef8e6d41cd05c21\transformed\play-services-measurement-api-21.5.0\AndroidManifest.xml:37:13-39:85
+164                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
+164-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\bf873e86b44986ab8ef8e6d41cd05c21\transformed\play-services-measurement-api-21.5.0\AndroidManifest.xml:38:17-139
+165                android:value="com.google.firebase.components.ComponentRegistrar" />
+165-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\bf873e86b44986ab8ef8e6d41cd05c21\transformed\play-services-measurement-api-21.5.0\AndroidManifest.xml:39:17-82
+166            <meta-data
+166-->[com.google.firebase:firebase-storage:20.3.0] C:\Users\jonya\.gradle\caches\transforms-3\a2b755308b2a4592977aa57a3af3083c\transformed\firebase-storage-20.3.0\AndroidManifest.xml:30:13-32:85
+167                android:name="com.google.firebase.components:com.google.firebase.storage.FirebaseStorageKtxRegistrar"
+167-->[com.google.firebase:firebase-storage:20.3.0] C:\Users\jonya\.gradle\caches\transforms-3\a2b755308b2a4592977aa57a3af3083c\transformed\firebase-storage-20.3.0\AndroidManifest.xml:31:17-118
+168                android:value="com.google.firebase.components.ComponentRegistrar" />
+168-->[com.google.firebase:firebase-storage:20.3.0] C:\Users\jonya\.gradle\caches\transforms-3\a2b755308b2a4592977aa57a3af3083c\transformed\firebase-storage-20.3.0\AndroidManifest.xml:32:17-82
+169            <meta-data
+169-->[com.google.firebase:firebase-storage:20.3.0] C:\Users\jonya\.gradle\caches\transforms-3\a2b755308b2a4592977aa57a3af3083c\transformed\firebase-storage-20.3.0\AndroidManifest.xml:33:13-35:85
+170                android:name="com.google.firebase.components:com.google.firebase.storage.StorageRegistrar"
+170-->[com.google.firebase:firebase-storage:20.3.0] C:\Users\jonya\.gradle\caches\transforms-3\a2b755308b2a4592977aa57a3af3083c\transformed\firebase-storage-20.3.0\AndroidManifest.xml:34:17-107
+171                android:value="com.google.firebase.components.ComponentRegistrar" />
+171-->[com.google.firebase:firebase-storage:20.3.0] C:\Users\jonya\.gradle\caches\transforms-3\a2b755308b2a4592977aa57a3af3083c\transformed\firebase-storage-20.3.0\AndroidManifest.xml:35:17-82
+172            <meta-data
+172-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\jonya\.gradle\caches\transforms-3\78c69653d63dde378cdc88073249c5eb\transformed\firebase-installations-17.2.0\AndroidManifest.xml:15:13-17:85
+173                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsKtxRegistrar"
+173-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\jonya\.gradle\caches\transforms-3\78c69653d63dde378cdc88073249c5eb\transformed\firebase-installations-17.2.0\AndroidManifest.xml:16:17-130
+174                android:value="com.google.firebase.components.ComponentRegistrar" />
+174-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\jonya\.gradle\caches\transforms-3\78c69653d63dde378cdc88073249c5eb\transformed\firebase-installations-17.2.0\AndroidManifest.xml:17:17-82
+175            <meta-data
+175-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\jonya\.gradle\caches\transforms-3\78c69653d63dde378cdc88073249c5eb\transformed\firebase-installations-17.2.0\AndroidManifest.xml:18:13-20:85
+176                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+176-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\jonya\.gradle\caches\transforms-3\78c69653d63dde378cdc88073249c5eb\transformed\firebase-installations-17.2.0\AndroidManifest.xml:19:17-127
+177                android:value="com.google.firebase.components.ComponentRegistrar" />
+177-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\jonya\.gradle\caches\transforms-3\78c69653d63dde378cdc88073249c5eb\transformed\firebase-installations-17.2.0\AndroidManifest.xml:20:17-82
+178            <meta-data
+178-->[com.google.firebase:firebase-appcheck:17.1.1] C:\Users\jonya\.gradle\caches\transforms-3\c031810fe08d6f4ad00a610112ed55e9\transformed\firebase-appcheck-17.1.1\AndroidManifest.xml:25:13-27:85
+179                android:name="com.google.firebase.components:com.google.firebase.appcheck.FirebaseAppCheckKtxRegistrar"
+179-->[com.google.firebase:firebase-appcheck:17.1.1] C:\Users\jonya\.gradle\caches\transforms-3\c031810fe08d6f4ad00a610112ed55e9\transformed\firebase-appcheck-17.1.1\AndroidManifest.xml:26:17-120
+180                android:value="com.google.firebase.components.ComponentRegistrar" />
+180-->[com.google.firebase:firebase-appcheck:17.1.1] C:\Users\jonya\.gradle\caches\transforms-3\c031810fe08d6f4ad00a610112ed55e9\transformed\firebase-appcheck-17.1.1\AndroidManifest.xml:27:17-82
+181            <meta-data
+181-->[com.google.firebase:firebase-appcheck:17.1.1] C:\Users\jonya\.gradle\caches\transforms-3\c031810fe08d6f4ad00a610112ed55e9\transformed\firebase-appcheck-17.1.1\AndroidManifest.xml:28:13-30:85
+182                android:name="com.google.firebase.components:com.google.firebase.appcheck.FirebaseAppCheckRegistrar"
+182-->[com.google.firebase:firebase-appcheck:17.1.1] C:\Users\jonya\.gradle\caches\transforms-3\c031810fe08d6f4ad00a610112ed55e9\transformed\firebase-appcheck-17.1.1\AndroidManifest.xml:29:17-117
+183                android:value="com.google.firebase.components.ComponentRegistrar" />
+183-->[com.google.firebase:firebase-appcheck:17.1.1] C:\Users\jonya\.gradle\caches\transforms-3\c031810fe08d6f4ad00a610112ed55e9\transformed\firebase-appcheck-17.1.1\AndroidManifest.xml:30:17-82
+184            <meta-data
+184-->[com.google.firebase:firebase-common-ktx:20.4.2] C:\Users\jonya\.gradle\caches\transforms-3\8d0c0e02f195e453f8f96ae4ac5fe043\transformed\firebase-common-ktx-20.4.2\AndroidManifest.xml:12:13-14:85
+185                android:name="com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonLegacyRegistrar"
+185-->[com.google.firebase:firebase-common-ktx:20.4.2] C:\Users\jonya\.gradle\caches\transforms-3\8d0c0e02f195e453f8f96ae4ac5fe043\transformed\firebase-common-ktx-20.4.2\AndroidManifest.xml:13:17-116
+186                android:value="com.google.firebase.components.ComponentRegistrar" />
+186-->[com.google.firebase:firebase-common-ktx:20.4.2] C:\Users\jonya\.gradle\caches\transforms-3\8d0c0e02f195e453f8f96ae4ac5fe043\transformed\firebase-common-ktx-20.4.2\AndroidManifest.xml:14:17-82
+187            <meta-data
+187-->[com.google.firebase:firebase-common:20.4.2] C:\Users\jonya\.gradle\caches\transforms-3\cbf0c87732f9f254ff27d1871787d566\transformed\firebase-common-20.4.2\AndroidManifest.xml:35:13-37:85
+188                android:name="com.google.firebase.components:com.google.firebase.FirebaseCommonKtxRegistrar"
+188-->[com.google.firebase:firebase-common:20.4.2] C:\Users\jonya\.gradle\caches\transforms-3\cbf0c87732f9f254ff27d1871787d566\transformed\firebase-common-20.4.2\AndroidManifest.xml:36:17-109
+189                android:value="com.google.firebase.components.ComponentRegistrar" />
+189-->[com.google.firebase:firebase-common:20.4.2] C:\Users\jonya\.gradle\caches\transforms-3\cbf0c87732f9f254ff27d1871787d566\transformed\firebase-common-20.4.2\AndroidManifest.xml:37:17-82
+190            <meta-data
+190-->[com.google.firebase:firebase-datatransport:18.1.7] C:\Users\jonya\.gradle\caches\transforms-3\cdc0cb7d8c543cd55b250a7715af9cf3\transformed\firebase-datatransport-18.1.7\AndroidManifest.xml:27:13-29:85
+191                android:name="com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar"
+191-->[com.google.firebase:firebase-datatransport:18.1.7] C:\Users\jonya\.gradle\caches\transforms-3\cdc0cb7d8c543cd55b250a7715af9cf3\transformed\firebase-datatransport-18.1.7\AndroidManifest.xml:28:17-115
+192                android:value="com.google.firebase.components.ComponentRegistrar" />
+192-->[com.google.firebase:firebase-datatransport:18.1.7] C:\Users\jonya\.gradle\caches\transforms-3\cdc0cb7d8c543cd55b250a7715af9cf3\transformed\firebase-datatransport-18.1.7\AndroidManifest.xml:29:17-82
+193        </service>
+194
+195        <receiver
+195-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:29:9-40:20
+196            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+196-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:30:13-78
+197            android:exported="true"
+197-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:31:13-36
+198            android:permission="com.google.android.c2dm.permission.SEND" >
+198-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:32:13-73
+199            <intent-filter>
+199-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:33:13-35:29
+200                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+200-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:34:17-81
+200-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:34:25-78
+201            </intent-filter>
+202
+203            <meta-data
+203-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:37:13-39:40
+204                android:name="com.google.android.gms.cloudmessaging.FINISHED_AFTER_HANDLED"
+204-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:38:17-92
+205                android:value="true" />
+205-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:39:17-37
+206        </receiver>
+207        <!--
+208             FirebaseMessagingService performs security checks at runtime,
+209             but set to not exported to explicitly avoid allowing another app to call it.
+210        -->
+211        <service
+211-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:46:9-53:19
+212            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+212-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:47:13-82
+213            android:directBootAware="true"
+213-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:48:13-43
+214            android:exported="false" >
+214-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\jonya\.gradle\caches\transforms-3\7b81d0d24ca6279520829293b5fd2d11\transformed\firebase-messaging-23.4.0\AndroidManifest.xml:49:13-37
+215            <intent-filter android:priority="-500" >
+215-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:40:13-42:29
+216                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+216-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:41:17-78
+216-->C:\Users\jonya\Desktop\TPO\HotelOps\app\src\main\AndroidManifest.xml:41:25-75
+217            </intent-filter>
+218        </service>
+219
+220        <receiver
+220-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\ce2dc73f0ca8c95ace5cd537fff8f30e\transformed\play-services-measurement-21.5.0\AndroidManifest.xml:29:9-33:20
+221            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
+221-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\ce2dc73f0ca8c95ace5cd537fff8f30e\transformed\play-services-measurement-21.5.0\AndroidManifest.xml:30:13-85
+222            android:enabled="true"
+222-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\ce2dc73f0ca8c95ace5cd537fff8f30e\transformed\play-services-measurement-21.5.0\AndroidManifest.xml:31:13-35
+223            android:exported="false" >
+223-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\ce2dc73f0ca8c95ace5cd537fff8f30e\transformed\play-services-measurement-21.5.0\AndroidManifest.xml:32:13-37
+224        </receiver>
+225
+226        <service
+226-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\ce2dc73f0ca8c95ace5cd537fff8f30e\transformed\play-services-measurement-21.5.0\AndroidManifest.xml:35:9-38:40
+227            android:name="com.google.android.gms.measurement.AppMeasurementService"
+227-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\ce2dc73f0ca8c95ace5cd537fff8f30e\transformed\play-services-measurement-21.5.0\AndroidManifest.xml:36:13-84
+228            android:enabled="true"
+228-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\ce2dc73f0ca8c95ace5cd537fff8f30e\transformed\play-services-measurement-21.5.0\AndroidManifest.xml:37:13-35
+229            android:exported="false" />
+229-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\ce2dc73f0ca8c95ace5cd537fff8f30e\transformed\play-services-measurement-21.5.0\AndroidManifest.xml:38:13-37
+230        <service
+230-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\ce2dc73f0ca8c95ace5cd537fff8f30e\transformed\play-services-measurement-21.5.0\AndroidManifest.xml:39:9-43:72
+231            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
+231-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\ce2dc73f0ca8c95ace5cd537fff8f30e\transformed\play-services-measurement-21.5.0\AndroidManifest.xml:40:13-87
+232            android:enabled="true"
+232-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\ce2dc73f0ca8c95ace5cd537fff8f30e\transformed\play-services-measurement-21.5.0\AndroidManifest.xml:41:13-35
+233            android:exported="false"
+233-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\ce2dc73f0ca8c95ace5cd537fff8f30e\transformed\play-services-measurement-21.5.0\AndroidManifest.xml:42:13-37
+234            android:permission="android.permission.BIND_JOB_SERVICE" />
+234-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\ce2dc73f0ca8c95ace5cd537fff8f30e\transformed\play-services-measurement-21.5.0\AndroidManifest.xml:43:13-69
+235
+236        <property
+236-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\bf873e86b44986ab8ef8e6d41cd05c21\transformed\play-services-measurement-api-21.5.0\AndroidManifest.xml:30:9-32:61
+237            android:name="android.adservices.AD_SERVICES_CONFIG"
+237-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\bf873e86b44986ab8ef8e6d41cd05c21\transformed\play-services-measurement-api-21.5.0\AndroidManifest.xml:31:13-65
+238            android:resource="@xml/ga_ad_services_config" />
+238-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\jonya\.gradle\caches\transforms-3\bf873e86b44986ab8ef8e6d41cd05c21\transformed\play-services-measurement-api-21.5.0\AndroidManifest.xml:32:13-58
+239
+240        <provider
+240-->[com.google.firebase:firebase-common:20.4.2] C:\Users\jonya\.gradle\caches\transforms-3\cbf0c87732f9f254ff27d1871787d566\transformed\firebase-common-20.4.2\AndroidManifest.xml:23:9-28:39
+241            android:name="com.google.firebase.provider.FirebaseInitProvider"
+241-->[com.google.firebase:firebase-common:20.4.2] C:\Users\jonya\.gradle\caches\transforms-3\cbf0c87732f9f254ff27d1871787d566\transformed\firebase-common-20.4.2\AndroidManifest.xml:24:13-77
+242            android:authorities="com.hotelops.firebaseinitprovider"
+242-->[com.google.firebase:firebase-common:20.4.2] C:\Users\jonya\.gradle\caches\transforms-3\cbf0c87732f9f254ff27d1871787d566\transformed\firebase-common-20.4.2\AndroidManifest.xml:25:13-72
+243            android:directBootAware="true"
+243-->[com.google.firebase:firebase-common:20.4.2] C:\Users\jonya\.gradle\caches\transforms-3\cbf0c87732f9f254ff27d1871787d566\transformed\firebase-common-20.4.2\AndroidManifest.xml:26:13-43
+244            android:exported="false"
+244-->[com.google.firebase:firebase-common:20.4.2] C:\Users\jonya\.gradle\caches\transforms-3\cbf0c87732f9f254ff27d1871787d566\transformed\firebase-common-20.4.2\AndroidManifest.xml:27:13-37
+245            android:initOrder="100" />
+245-->[com.google.firebase:firebase-common:20.4.2] C:\Users\jonya\.gradle\caches\transforms-3\cbf0c87732f9f254ff27d1871787d566\transformed\firebase-common-20.4.2\AndroidManifest.xml:28:13-36
+246
+247        <activity
+247-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\jonya\.gradle\caches\transforms-3\08424f706b17e02d9d478d6d6c39f92a\transformed\play-services-base-18.0.1\AndroidManifest.xml:20:9-22:45
+248            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+248-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\jonya\.gradle\caches\transforms-3\08424f706b17e02d9d478d6d6c39f92a\transformed\play-services-base-18.0.1\AndroidManifest.xml:20:19-85
+249            android:exported="false"
+249-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\jonya\.gradle\caches\transforms-3\08424f706b17e02d9d478d6d6c39f92a\transformed\play-services-base-18.0.1\AndroidManifest.xml:22:19-43
+250            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+250-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\jonya\.gradle\caches\transforms-3\08424f706b17e02d9d478d6d6c39f92a\transformed\play-services-base-18.0.1\AndroidManifest.xml:21:19-78
+251
+252        <service
+252-->[androidx.room:room-runtime:2.6.1] C:\Users\jonya\.gradle\caches\transforms-3\478048832f2fcbd93cf6833caf959769\transformed\room-runtime-2.6.1\AndroidManifest.xml:24:9-28:63
+253            android:name="androidx.room.MultiInstanceInvalidationService"
+253-->[androidx.room:room-runtime:2.6.1] C:\Users\jonya\.gradle\caches\transforms-3\478048832f2fcbd93cf6833caf959769\transformed\room-runtime-2.6.1\AndroidManifest.xml:25:13-74
+254            android:directBootAware="true"
+254-->[androidx.room:room-runtime:2.6.1] C:\Users\jonya\.gradle\caches\transforms-3\478048832f2fcbd93cf6833caf959769\transformed\room-runtime-2.6.1\AndroidManifest.xml:26:13-43
+255            android:exported="false" />
+255-->[androidx.room:room-runtime:2.6.1] C:\Users\jonya\.gradle\caches\transforms-3\478048832f2fcbd93cf6833caf959769\transformed\room-runtime-2.6.1\AndroidManifest.xml:27:13-37
+256        <service
+256-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:39:9-45:35
+257            android:name="androidx.work.impl.background.systemalarm.SystemAlarmService"
+257-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:40:13-88
+258            android:directBootAware="false"
+258-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:41:13-44
+259            android:enabled="@bool/enable_system_alarm_service_default"
+259-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:42:13-72
+260            android:exported="false" />
+260-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:43:13-37
+261        <service
+261-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:46:9-52:35
+262            android:name="androidx.work.impl.background.systemjob.SystemJobService"
+262-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:47:13-84
+263            android:directBootAware="false"
+263-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:48:13-44
+264            android:enabled="@bool/enable_system_job_service_default"
+264-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:49:13-70
+265            android:exported="true"
+265-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:50:13-36
+266            android:permission="android.permission.BIND_JOB_SERVICE" />
+266-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:51:13-69
+267        <service
+267-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:53:9-59:35
+268            android:name="androidx.work.impl.foreground.SystemForegroundService"
+268-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:54:13-81
+269            android:directBootAware="false"
+269-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:55:13-44
+270            android:enabled="@bool/enable_system_foreground_service_default"
+270-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:56:13-77
+271            android:exported="false" />
+271-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:57:13-37
+272
+273        <receiver
+273-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:61:9-66:35
+274            android:name="androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver"
+274-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:62:13-88
+275            android:directBootAware="false"
+275-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:63:13-44
+276            android:enabled="true"
+276-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:64:13-35
+277            android:exported="false" />
+277-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:65:13-37
+278        <receiver
+278-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:67:9-77:20
+279            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy"
+279-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:68:13-106
+280            android:directBootAware="false"
+280-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:69:13-44
+281            android:enabled="false"
+281-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:70:13-36
+282            android:exported="false" >
+282-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:71:13-37
+283            <intent-filter>
+283-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:73:13-76:29
+284                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+284-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:74:17-87
+284-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:74:25-84
+285                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+285-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:75:17-90
+285-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:75:25-87
+286            </intent-filter>
+287        </receiver>
+288        <receiver
+288-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:78:9-88:20
+289            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy"
+289-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:79:13-104
+290            android:directBootAware="false"
+290-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:80:13-44
+291            android:enabled="false"
+291-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:81:13-36
+292            android:exported="false" >
+292-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:82:13-37
+293            <intent-filter>
+293-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:84:13-87:29
+294                <action android:name="android.intent.action.BATTERY_OKAY" />
+294-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:85:17-77
+294-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:85:25-74
+295                <action android:name="android.intent.action.BATTERY_LOW" />
+295-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:86:17-76
+295-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:86:25-73
+296            </intent-filter>
+297        </receiver>
+298        <receiver
+298-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:89:9-99:20
+299            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy"
+299-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:90:13-104
+300            android:directBootAware="false"
+300-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:91:13-44
+301            android:enabled="false"
+301-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:92:13-36
+302            android:exported="false" >
+302-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:93:13-37
+303            <intent-filter>
+303-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:95:13-98:29
+304                <action android:name="android.intent.action.DEVICE_STORAGE_LOW" />
+304-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:96:17-83
+304-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:96:25-80
+305                <action android:name="android.intent.action.DEVICE_STORAGE_OK" />
+305-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:97:17-82
+305-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:97:25-79
+306            </intent-filter>
+307        </receiver>
+308        <receiver
+308-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:100:9-109:20
+309            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$NetworkStateProxy"
+309-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:101:13-103
+310            android:directBootAware="false"
+310-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:102:13-44
+311            android:enabled="false"
+311-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:103:13-36
+312            android:exported="false" >
+312-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:104:13-37
+313            <intent-filter>
+313-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:106:13-108:29
+314                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+314-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:107:17-79
+314-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:107:25-76
+315            </intent-filter>
+316        </receiver>
+317        <receiver
+317-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:110:9-121:20
+318            android:name="androidx.work.impl.background.systemalarm.RescheduleReceiver"
+318-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:111:13-88
+319            android:directBootAware="false"
+319-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:112:13-44
+320            android:enabled="false"
+320-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:113:13-36
+321            android:exported="false" >
+321-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:114:13-37
+322            <intent-filter>
+322-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:116:13-120:29
+323                <action android:name="android.intent.action.BOOT_COMPLETED" />
+323-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:117:17-79
+323-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:117:25-76
+324                <action android:name="android.intent.action.TIME_SET" />
+324-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:118:17-73
+324-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:118:25-70
+325                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+325-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:119:17-81
+325-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:119:25-78
+326            </intent-filter>
+327        </receiver>
+328        <receiver
+328-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:122:9-131:20
+329            android:name="androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver"
+329-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:123:13-99
+330            android:directBootAware="false"
+330-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:124:13-44
+331            android:enabled="@bool/enable_system_alarm_service_default"
+331-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:125:13-72
+332            android:exported="false" >
+332-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:126:13-37
+333            <intent-filter>
+333-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:128:13-130:29
+334                <action android:name="androidx.work.impl.background.systemalarm.UpdateProxies" />
+334-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:129:17-98
+334-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:129:25-95
+335            </intent-filter>
+336        </receiver>
+337        <receiver
+337-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:132:9-142:20
+338            android:name="androidx.work.impl.diagnostics.DiagnosticsReceiver"
+338-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:133:13-78
+339            android:directBootAware="false"
+339-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:134:13-44
+340            android:enabled="true"
+340-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:135:13-35
+341            android:exported="true"
+341-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:136:13-36
+342            android:permission="android.permission.DUMP" >
+342-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:137:13-57
+343            <intent-filter>
+343-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:139:13-141:29
+344                <action android:name="androidx.work.diagnostics.REQUEST_DIAGNOSTICS" />
+344-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:140:17-88
+344-->[androidx.work:work-runtime:2.9.0] C:\Users\jonya\.gradle\caches\transforms-3\a90ffb811ffc5b32a4668c8ea34de817\transformed\work-runtime-2.9.0\AndroidManifest.xml:140:25-85
+345            </intent-filter>
+346        </receiver>
+347
+348        <uses-library
+348-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] C:\Users\jonya\.gradle\caches\transforms-3\1b0aebef69a0dd6fc794c60eb79808ee\transformed\ads-adservices-1.0.0-beta05\AndroidManifest.xml:23:9-25:40
+349            android:name="android.ext.adservices"
+349-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] C:\Users\jonya\.gradle\caches\transforms-3\1b0aebef69a0dd6fc794c60eb79808ee\transformed\ads-adservices-1.0.0-beta05\AndroidManifest.xml:24:13-50
+350            android:required="false" />
+350-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] C:\Users\jonya\.gradle\caches\transforms-3\1b0aebef69a0dd6fc794c60eb79808ee\transformed\ads-adservices-1.0.0-beta05\AndroidManifest.xml:25:13-37
+351
+352        <meta-data
+352-->[com.google.android.gms:play-services-basement:18.1.0] C:\Users\jonya\.gradle\caches\transforms-3\e0f5261b2c994b2428d4f5ed066daa24\transformed\play-services-basement-18.1.0\AndroidManifest.xml:21:9-23:69
+353            android:name="com.google.android.gms.version"
+353-->[com.google.android.gms:play-services-basement:18.1.0] C:\Users\jonya\.gradle\caches\transforms-3\e0f5261b2c994b2428d4f5ed066daa24\transformed\play-services-basement-18.1.0\AndroidManifest.xml:22:13-58
+354            android:value="@integer/google_play_services_version" />
+354-->[com.google.android.gms:play-services-basement:18.1.0] C:\Users\jonya\.gradle\caches\transforms-3\e0f5261b2c994b2428d4f5ed066daa24\transformed\play-services-basement-18.1.0\AndroidManifest.xml:23:13-66
+355
+356        <service
+356-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\jonya\.gradle\caches\transforms-3\f6b703d5b88136e319a492058d1847ea\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:28:9-34:19
+357            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+357-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\jonya\.gradle\caches\transforms-3\f6b703d5b88136e319a492058d1847ea\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:29:13-103
+358            android:exported="false" >
+358-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\jonya\.gradle\caches\transforms-3\f6b703d5b88136e319a492058d1847ea\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:30:13-37
+359            <meta-data
+359-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\jonya\.gradle\caches\transforms-3\f6b703d5b88136e319a492058d1847ea\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:31:13-33:39
+360                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+360-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\jonya\.gradle\caches\transforms-3\f6b703d5b88136e319a492058d1847ea\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:32:17-94
+361                android:value="cct" />
+361-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\jonya\.gradle\caches\transforms-3\f6b703d5b88136e319a492058d1847ea\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:33:17-36
+362        </service>
+363        <service
+363-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\jonya\.gradle\caches\transforms-3\e2add16e3f63cf9d54d4b9ee50afacb0\transformed\transport-runtime-3.1.8\AndroidManifest.xml:26:9-30:19
+364            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+364-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\jonya\.gradle\caches\transforms-3\e2add16e3f63cf9d54d4b9ee50afacb0\transformed\transport-runtime-3.1.8\AndroidManifest.xml:27:13-117
+365            android:exported="false"
+365-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\jonya\.gradle\caches\transforms-3\e2add16e3f63cf9d54d4b9ee50afacb0\transformed\transport-runtime-3.1.8\AndroidManifest.xml:28:13-37
+366            android:permission="android.permission.BIND_JOB_SERVICE" >
+366-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\jonya\.gradle\caches\transforms-3\e2add16e3f63cf9d54d4b9ee50afacb0\transformed\transport-runtime-3.1.8\AndroidManifest.xml:29:13-69
+367        </service>
+368
+369        <receiver
+369-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\jonya\.gradle\caches\transforms-3\e2add16e3f63cf9d54d4b9ee50afacb0\transformed\transport-runtime-3.1.8\AndroidManifest.xml:32:9-34:40
+370            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+370-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\jonya\.gradle\caches\transforms-3\e2add16e3f63cf9d54d4b9ee50afacb0\transformed\transport-runtime-3.1.8\AndroidManifest.xml:33:13-132
+371            android:exported="false" />
+371-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\jonya\.gradle\caches\transforms-3\e2add16e3f63cf9d54d4b9ee50afacb0\transformed\transport-runtime-3.1.8\AndroidManifest.xml:34:13-37
+372        <receiver
+372-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+373            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+373-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+374            android:directBootAware="false"
+374-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+375            android:enabled="true"
+375-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+376            android:exported="true"
+376-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+377            android:permission="android.permission.DUMP" >
+377-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
+378            <intent-filter>
+378-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+379                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+379-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+379-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
+380            </intent-filter>
+381            <intent-filter>
+381-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+382                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+382-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+382-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+383            </intent-filter>
+384            <intent-filter>
+384-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+385                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+385-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+385-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+386            </intent-filter>
+387            <intent-filter>
+387-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+388                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+388-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+388-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\jonya\.gradle\caches\transforms-3\59bb49e9e2dbd969ee56b52ba0a1ee11\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
+389            </intent-filter>
+390        </receiver>
+391    </application>
+392
+393</manifest>

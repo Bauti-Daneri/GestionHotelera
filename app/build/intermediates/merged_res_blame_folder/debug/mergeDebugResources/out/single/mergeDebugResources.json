@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "com.hotelops.app-debug-93:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.hotelops.app-main-95:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.hotelops.app-debug-93:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.hotelops.app-main-95:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.hotelops.app-debug-93:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.hotelops.app-main-95:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.hotelops.app-debug-93:/xml_backup_rules.xml.flat",
+        "source": "com.hotelops.app-main-95:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.hotelops.app-debug-93:/xml_data_extraction_rules.xml.flat",
+        "source": "com.hotelops.app-main-95:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.hotelops.app-debug-93:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.hotelops.app-main-95:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    }
+]
