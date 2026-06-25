@@ -27,6 +27,7 @@ import com.hotelops.data.local.database.HotelOpsDatabase;
 import com.hotelops.data.repository.AuthRepositoryImpl;
 import com.hotelops.data.repository.MaintenanceRepositoryImpl;
 import com.hotelops.data.repository.RoomRepositoryImpl;
+import com.hotelops.data.repository.RoomServiceRepositoryImpl;
 import com.hotelops.data.repository.UserRepositoryImpl;
 import com.hotelops.di.AppModule_ProvideSharedPreferencesFactory;
 import com.hotelops.di.DatabaseModule_ProvideHotelDaoFactory;
@@ -40,18 +41,22 @@ import com.hotelops.di.FirebaseModule_ProvideFirebaseFirestoreFactory;
 import com.hotelops.domain.repository.AuthRepository;
 import com.hotelops.domain.repository.MaintenanceRepository;
 import com.hotelops.domain.repository.RoomRepository;
+import com.hotelops.domain.repository.RoomServiceRepository;
 import com.hotelops.domain.repository.UserRepository;
 import com.hotelops.domain.usecase.auth.GetCurrentUserUseCase;
 import com.hotelops.domain.usecase.auth.LoginUseCase;
 import com.hotelops.domain.usecase.auth.LogoutUseCase;
 import com.hotelops.domain.usecase.auth.RegisterHotelUseCase;
 import com.hotelops.domain.usecase.maintenance.CreateTicketUseCase;
+import com.hotelops.domain.usecase.maintenance.DeleteTicketUseCase;
 import com.hotelops.domain.usecase.maintenance.GetTicketsUseCase;
 import com.hotelops.domain.usecase.maintenance.UpdateTicketStatusUseCase;
 import com.hotelops.domain.usecase.room.AddRoomUseCase;
 import com.hotelops.domain.usecase.room.DeleteRoomUseCase;
 import com.hotelops.domain.usecase.room.GetRoomsUseCase;
 import com.hotelops.domain.usecase.room.UpdateRoomStatusUseCase;
+import com.hotelops.domain.usecase.roomservice.DeleteOrderUseCase;
+import com.hotelops.domain.usecase.roomservice.GetOrdersUseCase;
 import com.hotelops.domain.usecase.user.CreateUserUseCase;
 import com.hotelops.domain.usecase.user.DeleteUserUseCase;
 import com.hotelops.domain.usecase.user.GetUsersUseCase;
@@ -484,6 +489,14 @@ public final class DaggerHotelOpsApplication_HiltComponents_SingletonC {
       return new GetRoomsUseCase(singletonCImpl.bindRoomRepositoryProvider.get());
     }
 
+    private GetTicketsUseCase getTicketsUseCase() {
+      return new GetTicketsUseCase(singletonCImpl.bindMaintenanceRepositoryProvider.get());
+    }
+
+    private GetOrdersUseCase getOrdersUseCase() {
+      return new GetOrdersUseCase(singletonCImpl.bindRoomServiceRepositoryProvider.get());
+    }
+
     private CreateUserUseCase createUserUseCase() {
       return new CreateUserUseCase(singletonCImpl.bindUserRepositoryProvider.get());
     }
@@ -504,6 +517,14 @@ public final class DaggerHotelOpsApplication_HiltComponents_SingletonC {
       return new UpdateRoomStatusUseCase(singletonCImpl.bindRoomRepositoryProvider.get());
     }
 
+    private DeleteTicketUseCase deleteTicketUseCase() {
+      return new DeleteTicketUseCase(singletonCImpl.bindMaintenanceRepositoryProvider.get());
+    }
+
+    private DeleteOrderUseCase deleteOrderUseCase() {
+      return new DeleteOrderUseCase(singletonCImpl.bindRoomServiceRepositoryProvider.get());
+    }
+
     private LoginUseCase loginUseCase() {
       return new LoginUseCase(singletonCImpl.bindAuthRepositoryProvider.get());
     }
@@ -514,10 +535,6 @@ public final class DaggerHotelOpsApplication_HiltComponents_SingletonC {
 
     private LogoutUseCase logoutUseCase() {
       return new LogoutUseCase(singletonCImpl.bindAuthRepositoryProvider.get());
-    }
-
-    private GetTicketsUseCase getTicketsUseCase() {
-      return new GetTicketsUseCase(singletonCImpl.bindMaintenanceRepositoryProvider.get());
     }
 
     private CreateTicketUseCase createTicketUseCase() {
@@ -576,7 +593,7 @@ public final class DaggerHotelOpsApplication_HiltComponents_SingletonC {
       public T get() {
         switch (id) {
           case 0: // com.hotelops.presentation.admin.AdminViewModel 
-          return (T) new AdminViewModel(viewModelCImpl.getUsersUseCase(), viewModelCImpl.getRoomsUseCase(), viewModelCImpl.createUserUseCase(), viewModelCImpl.deleteUserUseCase(), viewModelCImpl.addRoomUseCase(), viewModelCImpl.deleteRoomUseCase());
+          return (T) new AdminViewModel(viewModelCImpl.getUsersUseCase(), viewModelCImpl.getRoomsUseCase(), viewModelCImpl.getTicketsUseCase(), viewModelCImpl.getOrdersUseCase(), viewModelCImpl.createUserUseCase(), viewModelCImpl.deleteUserUseCase(), viewModelCImpl.addRoomUseCase(), viewModelCImpl.deleteRoomUseCase(), viewModelCImpl.updateRoomStatusUseCase(), viewModelCImpl.deleteTicketUseCase(), viewModelCImpl.deleteOrderUseCase());
 
           case 1: // com.hotelops.presentation.housekeeping.HousekeepingViewModel 
           return (T) new HousekeepingViewModel(viewModelCImpl.getRoomsUseCase(), viewModelCImpl.updateRoomStatusUseCase());
@@ -702,15 +719,19 @@ public final class DaggerHotelOpsApplication_HiltComponents_SingletonC {
 
     private Provider<RoomRepository> bindRoomRepositoryProvider;
 
+    private Provider<MaintenanceRepositoryImpl> maintenanceRepositoryImplProvider;
+
+    private Provider<MaintenanceRepository> bindMaintenanceRepositoryProvider;
+
+    private Provider<RoomServiceRepositoryImpl> roomServiceRepositoryImplProvider;
+
+    private Provider<RoomServiceRepository> bindRoomServiceRepositoryProvider;
+
     private Provider<SharedPreferences> provideSharedPreferencesProvider;
 
     private Provider<AuthRepositoryImpl> authRepositoryImplProvider;
 
     private Provider<AuthRepository> bindAuthRepositoryProvider;
-
-    private Provider<MaintenanceRepositoryImpl> maintenanceRepositoryImplProvider;
-
-    private Provider<MaintenanceRepository> bindMaintenanceRepositoryProvider;
 
     private SingletonCImpl(ApplicationContextModule applicationContextModuleParam) {
       this.applicationContextModule = applicationContextModuleParam;
@@ -742,11 +763,13 @@ public final class DaggerHotelOpsApplication_HiltComponents_SingletonC {
       this.bindUserRepositoryProvider = DoubleCheck.provider((Provider) userRepositoryImplProvider);
       this.roomRepositoryImplProvider = new SwitchingProvider<>(singletonCImpl, 10);
       this.bindRoomRepositoryProvider = DoubleCheck.provider((Provider) roomRepositoryImplProvider);
-      this.provideSharedPreferencesProvider = DoubleCheck.provider(new SwitchingProvider<SharedPreferences>(singletonCImpl, 12));
-      this.authRepositoryImplProvider = new SwitchingProvider<>(singletonCImpl, 11);
-      this.bindAuthRepositoryProvider = DoubleCheck.provider((Provider) authRepositoryImplProvider);
-      this.maintenanceRepositoryImplProvider = new SwitchingProvider<>(singletonCImpl, 13);
+      this.maintenanceRepositoryImplProvider = new SwitchingProvider<>(singletonCImpl, 11);
       this.bindMaintenanceRepositoryProvider = DoubleCheck.provider((Provider) maintenanceRepositoryImplProvider);
+      this.roomServiceRepositoryImplProvider = new SwitchingProvider<>(singletonCImpl, 12);
+      this.bindRoomServiceRepositoryProvider = DoubleCheck.provider((Provider) roomServiceRepositoryImplProvider);
+      this.provideSharedPreferencesProvider = DoubleCheck.provider(new SwitchingProvider<SharedPreferences>(singletonCImpl, 14));
+      this.authRepositoryImplProvider = new SwitchingProvider<>(singletonCImpl, 13);
+      this.bindAuthRepositoryProvider = DoubleCheck.provider((Provider) authRepositoryImplProvider);
     }
 
     @Override
@@ -827,14 +850,17 @@ public final class DaggerHotelOpsApplication_HiltComponents_SingletonC {
           case 10: // com.hotelops.data.repository.RoomRepositoryImpl 
           return (T) new RoomRepositoryImpl(singletonCImpl.provideRoomDaoProvider.get(), singletonCImpl.provideFirebaseFirestoreProvider.get());
 
-          case 11: // com.hotelops.data.repository.AuthRepositoryImpl 
+          case 11: // com.hotelops.data.repository.MaintenanceRepositoryImpl 
+          return (T) new MaintenanceRepositoryImpl(singletonCImpl.provideMaintenanceDaoProvider.get(), singletonCImpl.provideFirebaseFirestoreProvider.get());
+
+          case 12: // com.hotelops.data.repository.RoomServiceRepositoryImpl 
+          return (T) new RoomServiceRepositoryImpl(singletonCImpl.provideRoomServiceDaoProvider.get(), singletonCImpl.provideFirebaseFirestoreProvider.get());
+
+          case 13: // com.hotelops.data.repository.AuthRepositoryImpl 
           return (T) new AuthRepositoryImpl(singletonCImpl.provideFirebaseAuthProvider.get(), singletonCImpl.provideFirebaseFirestoreProvider.get(), singletonCImpl.provideUserDaoProvider.get(), singletonCImpl.provideHotelDaoProvider.get(), singletonCImpl.provideSharedPreferencesProvider.get());
 
-          case 12: // android.content.SharedPreferences 
+          case 14: // android.content.SharedPreferences 
           return (T) AppModule_ProvideSharedPreferencesFactory.provideSharedPreferences(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
-
-          case 13: // com.hotelops.data.repository.MaintenanceRepositoryImpl 
-          return (T) new MaintenanceRepositoryImpl(singletonCImpl.provideMaintenanceDaoProvider.get(), singletonCImpl.provideFirebaseFirestoreProvider.get());
 
           default: throw new AssertionError(id);
         }

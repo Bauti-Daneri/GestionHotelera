@@ -21,6 +21,8 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.compose.ui.graphics.Color
+import com.hotelops.presentation.theme.Primary
 import timber.log.Timber
 import java.io.File
 import java.text.SimpleDateFormat
@@ -78,9 +80,13 @@ fun CameraScreen(
                     onImageCaptured(uri)
                 }
             },
-            modifier = Modifier.padding(32.dp).align(Alignment.BottomCenter)
+            modifier = Modifier
+                .padding(bottom = 64.dp) // Subido para evitar barra de sistema
+                .align(Alignment.BottomCenter),
+            containerColor = Color.White,
+            contentColor = Primary
         ) {
-            Icon(Icons.Default.Camera, contentDescription = "Capturar")
+            Icon(Icons.Default.Camera, contentDescription = "Capturar", modifier = Modifier.size(32.dp))
         }
     }
 }

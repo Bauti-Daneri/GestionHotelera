@@ -1,6 +1,7 @@
 package com.hotelops.presentation.roomservice
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -13,6 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -96,8 +98,9 @@ fun RoomServiceScreen(
                 shape = RoundedCornerShape(24.dp),
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null, modifier = Modifier.size(18.dp)) },
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    containerColor = Surface,
-                    unfocusedBorderColor = Color.Transparent
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent,
+                    containerColor = Surface
                 )
             )
 
@@ -202,7 +205,7 @@ private fun OrderCard(order: RoomServiceOrder, onStatusChange: (OrderStatus) -> 
             order.items.forEach { item ->
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     Text("${item.quantity}x ${item.name}", fontSize = 14.sp, color = OnSurfaceVariant)
-                    Text("$${item.price}", fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                    Text("$${item.price * item.quantity}", fontSize = 14.sp, fontWeight = FontWeight.Medium)
                 }
                 Spacer(modifier = Modifier.height(4.dp))
             }
@@ -215,10 +218,9 @@ private fun OrderCard(order: RoomServiceOrder, onStatusChange: (OrderStatus) -> 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.Default.AccessTime, contentDescription = null, modifier = Modifier.size(14.dp), tint = OnSurfaceVariant)
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text("08:30", fontSize = 14.sp, color = OnSurfaceVariant)
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Text("$${order.totalAmount}", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Primary)
+                    Text("Hoy", fontSize = 14.sp, color = OnSurfaceVariant)
                 }
+                Text("$${order.totalAmount}", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Primary)
             }
 
             if (order.status != OrderStatus.DELIVERED) {
@@ -229,13 +231,13 @@ private fun OrderCard(order: RoomServiceOrder, onStatusChange: (OrderStatus) -> 
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(12.dp)
                     ) {
-                        Text("Marcar En Proceso", fontSize = 12.sp)
+                        Text("Preparar", fontSize = 12.sp)
                     }
                     Button(
                         onClick = { onStatusChange(OrderStatus.DELIVERED) },
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Primary)
+                        colors = ButtonDefaults.buttonColors(containerColor = ColorClean)
                     ) {
                         Icon(Icons.Default.CheckCircle, contentDescription = null, modifier = Modifier.size(16.dp))
                         Spacer(modifier = Modifier.width(8.dp))
@@ -259,40 +261,129 @@ private fun CreateOrderDialog(
     var instructions by remember { mutableStateOf("") }
     var roomExpanded by remember { mutableStateOf(false) }
 
+    // Mock Menu de Items
+    val menuItems = listOf(
+        OrderItem("Desayuno Continental", 1, 15.0),
+        OrderItem("Café Espresso", 1, 5.0),
+        OrderItem("Hamburguesa Gourmet", 1, 20.0),
+        OrderItem("Vino Tinto", 1, 25.0)
+    )
+    
+    val selectedItems = remember { mutableStateListOf<OrderItem>() }
+    val totalAmount = selectedItems.sumOf { it.price * it.quantity }
+
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Nuevo Pedido", fontWeight = FontWeight.Bold) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                OutlinedTextField(value = guestName, onValueChange = { guestName = it },
-                    label = { Text("Nombre del Huésped") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                item {
+                    OutlinedTextField(value = guestName, onValueChange = { guestName = it },
+                        label = { Text("Nombre del Huésped") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
+                }
 
-                ExposedDropdownMenuBox(expanded = roomExpanded, onExpandedChange = { roomExpanded = it }) {
-                    OutlinedTextField(
-                        value = selectedRoom?.let { "Hab. ${it.roomNumber}" } ?: "Seleccionar habitación",
-                        onValueChange = {}, readOnly = true,
-                        label = { Text("Habitación") },
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(roomExpanded) },
-                        modifier = Modifier.menuAnchor().fillMaxWidth()
-                    )
-                    ExposedDropdownMenu(expanded = roomExpanded, onDismissRequest = { roomExpanded = false }) {
-                        rooms.forEach { room ->
-                            DropdownMenuItem(
-                                text = { Text("Hab. ${room.roomNumber}") },
-                                onClick = { selectedRoom = room; roomExpanded = false }
-                            )
+                item {
+                    ExposedDropdownMenuBox(expanded = roomExpanded, onExpandedChange = { roomExpanded = it }) {
+                        OutlinedTextField(
+                            value = selectedRoom?.let { "Hab. ${it.roomNumber}" } ?: "Seleccionar habitación",
+                            onValueChange = {}, readOnly = true,
+                            label = { Text("Habitación") },
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(roomExpanded) },
+                            modifier = Modifier.menuAnchor().fillMaxWidth()
+                        )
+                        ExposedDropdownMenu(expanded = roomExpanded, onDismissRequest = { roomExpanded = false }) {
+                            rooms.forEach { room ->
+                                DropdownMenuItem(
+                                    text = { Text("Hab. ${room.roomNumber}") },
+                                    onClick = { selectedRoom = room; roomExpanded = false }
+                                )
+                            }
                         }
                     }
                 }
+
+                item {
+                    Text("Seleccionar Ítems", fontWeight = FontWeight.Bold, color = Primary, fontSize = 14.sp)
+                }
+
+                items(menuItems) { item ->
+                    val isSelected = selectedItems.any { it.name == item.name }
+                    val currentItem = selectedItems.find { it.name == item.name }
+                    
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(if (isSelected) PrimaryContainer else Color.Transparent)
+                            .clickable {
+                                if (isSelected) selectedItems.remove(currentItem)
+                                else selectedItems.add(item.copy())
+                            }
+                            .padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(item.name, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                            Text("$${item.price}", fontSize = 12.sp, color = OnSurfaceVariant)
+                        }
+                        
+                        if (isSelected) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                IconButton(
+                                    onClick = { 
+                                        if (currentItem!!.quantity > 1) {
+                                            val index = selectedItems.indexOf(currentItem)
+                                            selectedItems[index] = currentItem.copy(quantity = currentItem.quantity - 1)
+                                        } else {
+                                            selectedItems.remove(currentItem)
+                                        }
+                                    },
+                                    modifier = Modifier.size(24.dp)
+                                ) {
+                                    Icon(Icons.Default.Remove, contentDescription = null, tint = Primary)
+                                }
+                                Text("${currentItem!!.quantity}", modifier = Modifier.padding(horizontal = 8.dp))
+                                IconButton(
+                                    onClick = { 
+                                        val index = selectedItems.indexOf(currentItem)
+                                        selectedItems[index] = currentItem.copy(quantity = currentItem.quantity + 1)
+                                    },
+                                    modifier = Modifier.size(24.dp)
+                                ) {
+                                    Icon(Icons.Default.Add, contentDescription = null, tint = Primary)
+                                }
+                            }
+                        } else {
+                            Icon(Icons.Default.AddCircle, contentDescription = null, tint = Primary)
+                        }
+                    }
+                }
+
+                item {
+                    OutlinedTextField(value = instructions, onValueChange = { instructions = it },
+                        label = { Text("Instrucciones Especiales") }, modifier = Modifier.fillMaxWidth(), maxLines = 2)
+                }
                 
-                OutlinedTextField(value = instructions, onValueChange = { instructions = it },
-                    label = { Text("Instrucciones Especiales") }, modifier = Modifier.fillMaxWidth(), maxLines = 2)
+                item {
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        Text("Total:", fontWeight = FontWeight.Bold)
+                        Text("$${totalAmount}", fontWeight = FontWeight.Bold, color = Primary, fontSize = 18.sp)
+                    }
+                }
             }
         },
         confirmButton = {
-            TextButton(onClick = {
-                selectedRoom?.let { onConfirm(it, guestName, emptyList(), instructions) }
-            }) { Text("Crear", fontWeight = FontWeight.Bold) }
+            TextButton(
+                enabled = selectedItems.isNotEmpty() && guestName.isNotBlank(),
+                onClick = {
+                    selectedRoom?.let { onConfirm(it, guestName, selectedItems.toList(), instructions) }
+                }
+            ) { Text("Crear", fontWeight = FontWeight.Bold) }
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text("Cancelar") } }
     )

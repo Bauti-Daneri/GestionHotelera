@@ -1,6 +1,7 @@
 package com.hotelops.presentation.admin
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -55,6 +56,22 @@ fun AdminScreen(
                     ) 
                 },
                 actions = {
+                    Box {
+                        var menuExpanded by remember { mutableStateOf(false) }
+                        IconButton(onClick = { menuExpanded = true }) {
+                            Icon(Icons.Default.MoreVert, contentDescription = null)
+                        }
+                        DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {
+                            DropdownMenuItem(
+                                text = { Text("Limpiar Tickets Completados") },
+                                onClick = { viewModel.deleteCompletedTickets(); menuExpanded = false }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Limpiar Pedidos Entregados") },
+                                onClick = { viewModel.deleteDeliveredOrders(); menuExpanded = false }
+                            )
+                        }
+                    }
                     AssistChip(
                         onClick = { },
                         label = { Text("Admin", color = Primary) },
@@ -80,8 +97,10 @@ fun AdminScreen(
             AdminStatsGrid(
                 roomsCount = state.rooms.size,
                 employeesCount = state.users.size,
-                ticketsCount = 3,
-                occupancy = 75
+                ticketsCount = state.tickets.count { it.status != com.hotelops.domain.model.TicketStatus.COMPLETED },
+                occupancy = if (state.rooms.isNotEmpty()) 
+                    ((state.rooms.count { it.status != RoomStatus.AVAILABLE && it.status != RoomStatus.CLEAN }.toFloat() / state.rooms.size) * 100).toInt()
+                    else 0
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -134,7 +153,8 @@ fun AdminScreen(
                     rooms = state.rooms,
                     isLoading = state.isLoading,
                     onAddClick = { viewModel.showAddRoomDialog() },
-                    onDeleteClick = { viewModel.deleteRoom(it) }
+                    onDeleteClick = { viewModel.deleteRoom(it) },
+                    onStatusChange = { room, status -> viewModel.updateRoomStatus(room.id, status) }
                 )
             }
         }
@@ -358,7 +378,8 @@ fun RoomsTab(
     rooms: List<Room>,
     isLoading: Boolean,
     onAddClick: () -> Unit,
-    onDeleteClick: (Room) -> Unit
+    onDeleteClick: (Room) -> Unit,
+    onStatusChange: (Room, RoomStatus) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
@@ -390,7 +411,11 @@ fun RoomsTab(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(rooms) { room ->
-                    RoomCard(room = room, onDeleteClick = { onDeleteClick(room) })
+                    RoomCard(
+                        room = room, 
+                        onDeleteClick = { onDeleteClick(room) },
+                        onStatusChange = { onStatusChange(room, it) }
+                    )
                 }
             }
         }
@@ -398,7 +423,9 @@ fun RoomsTab(
 }
 
 @Composable
-fun RoomCard(room: Room, onDeleteClick: () -> Unit) {
+fun RoomCard(room: Room, onDeleteClick: () -> Unit, onStatusChange: (RoomStatus) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -423,19 +450,35 @@ fun RoomCard(room: Room, onDeleteClick: () -> Unit) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text("#${room.roomNumber}", fontWeight = FontWeight.Bold, fontSize = 18.sp)
                     Spacer(modifier = Modifier.width(8.dp))
-                    Surface(
-                        color = ColorAvailable,
-                        shape = RoundedCornerShape(8.dp)
-                    ) {
-                        Text(
-                            room.type.name,
-                            color = Color.White,
-                            fontSize = 10.sp,
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
-                        )
+                    
+                    val statusColor = when (room.status) {
+                        RoomStatus.AVAILABLE -> ColorAvailable
+                        RoomStatus.CLEAN -> ColorClean
+                        else -> ColorDirty
+                    }
+
+                    Box {
+                        Surface(
+                            color = statusColor,
+                            shape = RoundedCornerShape(8.dp),
+                            modifier = Modifier.clickable { expanded = true }
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)) {
+                                Text(room.status.name, color = Color.White, fontSize = 10.sp)
+                                Icon(Icons.Default.ArrowDropDown, contentDescription = null, tint = Color.White, modifier = Modifier.size(14.dp))
+                            }
+                        }
+                        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                            RoomStatus.entries.forEach { status ->
+                                DropdownMenuItem(
+                                    text = { Text(status.name) },
+                                    onClick = { onStatusChange(status); expanded = false }
+                                )
+                            }
+                        }
                     }
                 }
-                Text("Piso ${room.floor}", color = OnSurfaceVariant, fontSize = 14.sp)
+                Text("Piso ${room.floor} · ${room.type.name}", color = OnSurfaceVariant, fontSize = 14.sp)
             }
             IconButton(onClick = onDeleteClick) {
                 Icon(Icons.Default.Delete, contentDescription = "Delete", tint = ColorDirty.copy(alpha = 0.5f))

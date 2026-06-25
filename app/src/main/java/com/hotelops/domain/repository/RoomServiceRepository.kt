@@ -23,4 +23,6 @@ interface RoomServiceRepository {
         orderId: String,
         status: OrderStatus
     ): Flow<Resource<RoomServiceOrder>>
+
+    fun deleteOrder(orderId: String): Flow<Resource<Unit>>
 }

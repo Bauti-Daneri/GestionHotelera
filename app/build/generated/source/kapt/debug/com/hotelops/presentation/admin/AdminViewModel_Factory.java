@@ -1,8 +1,13 @@
 package com.hotelops.presentation.admin;
 
+import com.hotelops.domain.usecase.maintenance.DeleteTicketUseCase;
+import com.hotelops.domain.usecase.maintenance.GetTicketsUseCase;
 import com.hotelops.domain.usecase.room.AddRoomUseCase;
 import com.hotelops.domain.usecase.room.DeleteRoomUseCase;
 import com.hotelops.domain.usecase.room.GetRoomsUseCase;
+import com.hotelops.domain.usecase.room.UpdateRoomStatusUseCase;
+import com.hotelops.domain.usecase.roomservice.DeleteOrderUseCase;
+import com.hotelops.domain.usecase.roomservice.GetOrdersUseCase;
 import com.hotelops.domain.usecase.user.CreateUserUseCase;
 import com.hotelops.domain.usecase.user.DeleteUserUseCase;
 import com.hotelops.domain.usecase.user.GetUsersUseCase;
@@ -31,6 +36,10 @@ public final class AdminViewModel_Factory implements Factory<AdminViewModel> {
 
   private final Provider<GetRoomsUseCase> getRoomsUseCaseProvider;
 
+  private final Provider<GetTicketsUseCase> getTicketsUseCaseProvider;
+
+  private final Provider<GetOrdersUseCase> getOrdersUseCaseProvider;
+
   private final Provider<CreateUserUseCase> createUserUseCaseProvider;
 
   private final Provider<DeleteUserUseCase> deleteUserUseCaseProvider;
@@ -39,38 +48,61 @@ public final class AdminViewModel_Factory implements Factory<AdminViewModel> {
 
   private final Provider<DeleteRoomUseCase> deleteRoomUseCaseProvider;
 
+  private final Provider<UpdateRoomStatusUseCase> updateRoomStatusUseCaseProvider;
+
+  private final Provider<DeleteTicketUseCase> deleteTicketUseCaseProvider;
+
+  private final Provider<DeleteOrderUseCase> deleteOrderUseCaseProvider;
+
   public AdminViewModel_Factory(Provider<GetUsersUseCase> getUsersUseCaseProvider,
       Provider<GetRoomsUseCase> getRoomsUseCaseProvider,
+      Provider<GetTicketsUseCase> getTicketsUseCaseProvider,
+      Provider<GetOrdersUseCase> getOrdersUseCaseProvider,
       Provider<CreateUserUseCase> createUserUseCaseProvider,
       Provider<DeleteUserUseCase> deleteUserUseCaseProvider,
       Provider<AddRoomUseCase> addRoomUseCaseProvider,
-      Provider<DeleteRoomUseCase> deleteRoomUseCaseProvider) {
+      Provider<DeleteRoomUseCase> deleteRoomUseCaseProvider,
+      Provider<UpdateRoomStatusUseCase> updateRoomStatusUseCaseProvider,
+      Provider<DeleteTicketUseCase> deleteTicketUseCaseProvider,
+      Provider<DeleteOrderUseCase> deleteOrderUseCaseProvider) {
     this.getUsersUseCaseProvider = getUsersUseCaseProvider;
     this.getRoomsUseCaseProvider = getRoomsUseCaseProvider;
+    this.getTicketsUseCaseProvider = getTicketsUseCaseProvider;
+    this.getOrdersUseCaseProvider = getOrdersUseCaseProvider;
     this.createUserUseCaseProvider = createUserUseCaseProvider;
     this.deleteUserUseCaseProvider = deleteUserUseCaseProvider;
     this.addRoomUseCaseProvider = addRoomUseCaseProvider;
     this.deleteRoomUseCaseProvider = deleteRoomUseCaseProvider;
+    this.updateRoomStatusUseCaseProvider = updateRoomStatusUseCaseProvider;
+    this.deleteTicketUseCaseProvider = deleteTicketUseCaseProvider;
+    this.deleteOrderUseCaseProvider = deleteOrderUseCaseProvider;
   }
 
   @Override
   public AdminViewModel get() {
-    return newInstance(getUsersUseCaseProvider.get(), getRoomsUseCaseProvider.get(), createUserUseCaseProvider.get(), deleteUserUseCaseProvider.get(), addRoomUseCaseProvider.get(), deleteRoomUseCaseProvider.get());
+    return newInstance(getUsersUseCaseProvider.get(), getRoomsUseCaseProvider.get(), getTicketsUseCaseProvider.get(), getOrdersUseCaseProvider.get(), createUserUseCaseProvider.get(), deleteUserUseCaseProvider.get(), addRoomUseCaseProvider.get(), deleteRoomUseCaseProvider.get(), updateRoomStatusUseCaseProvider.get(), deleteTicketUseCaseProvider.get(), deleteOrderUseCaseProvider.get());
   }
 
   public static AdminViewModel_Factory create(Provider<GetUsersUseCase> getUsersUseCaseProvider,
       Provider<GetRoomsUseCase> getRoomsUseCaseProvider,
+      Provider<GetTicketsUseCase> getTicketsUseCaseProvider,
+      Provider<GetOrdersUseCase> getOrdersUseCaseProvider,
       Provider<CreateUserUseCase> createUserUseCaseProvider,
       Provider<DeleteUserUseCase> deleteUserUseCaseProvider,
       Provider<AddRoomUseCase> addRoomUseCaseProvider,
-      Provider<DeleteRoomUseCase> deleteRoomUseCaseProvider) {
-    return new AdminViewModel_Factory(getUsersUseCaseProvider, getRoomsUseCaseProvider, createUserUseCaseProvider, deleteUserUseCaseProvider, addRoomUseCaseProvider, deleteRoomUseCaseProvider);
+      Provider<DeleteRoomUseCase> deleteRoomUseCaseProvider,
+      Provider<UpdateRoomStatusUseCase> updateRoomStatusUseCaseProvider,
+      Provider<DeleteTicketUseCase> deleteTicketUseCaseProvider,
+      Provider<DeleteOrderUseCase> deleteOrderUseCaseProvider) {
+    return new AdminViewModel_Factory(getUsersUseCaseProvider, getRoomsUseCaseProvider, getTicketsUseCaseProvider, getOrdersUseCaseProvider, createUserUseCaseProvider, deleteUserUseCaseProvider, addRoomUseCaseProvider, deleteRoomUseCaseProvider, updateRoomStatusUseCaseProvider, deleteTicketUseCaseProvider, deleteOrderUseCaseProvider);
   }
 
   public static AdminViewModel newInstance(GetUsersUseCase getUsersUseCase,
-      GetRoomsUseCase getRoomsUseCase, CreateUserUseCase createUserUseCase,
+      GetRoomsUseCase getRoomsUseCase, GetTicketsUseCase getTicketsUseCase,
+      GetOrdersUseCase getOrdersUseCase, CreateUserUseCase createUserUseCase,
       DeleteUserUseCase deleteUserUseCase, AddRoomUseCase addRoomUseCase,
-      DeleteRoomUseCase deleteRoomUseCase) {
-    return new AdminViewModel(getUsersUseCase, getRoomsUseCase, createUserUseCase, deleteUserUseCase, addRoomUseCase, deleteRoomUseCase);
+      DeleteRoomUseCase deleteRoomUseCase, UpdateRoomStatusUseCase updateRoomStatusUseCase,
+      DeleteTicketUseCase deleteTicketUseCase, DeleteOrderUseCase deleteOrderUseCase) {
+    return new AdminViewModel(getUsersUseCase, getRoomsUseCase, getTicketsUseCase, getOrdersUseCase, createUserUseCase, deleteUserUseCase, addRoomUseCase, deleteRoomUseCase, updateRoomStatusUseCase, deleteTicketUseCase, deleteOrderUseCase);
   }
 }

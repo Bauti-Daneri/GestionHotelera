@@ -20,6 +20,7 @@ data class MaintenanceState(
     val rooms: List<Room> = emptyList(),
     val isLoading: Boolean = false,
     val filterStatus: TicketStatus? = null,
+    val filterCategory: TicketCategory? = null,
     val showCreateDialog: Boolean = false,
     val showCamera: Boolean = false,
     val capturedImageUri: Uri? = null,
@@ -60,6 +61,7 @@ class MaintenanceViewModel @Inject constructor(
     }
 
     fun setFilter(status: TicketStatus?) { _state.value = _state.value.copy(filterStatus = status) }
+    fun setCategoryFilter(category: TicketCategory?) { _state.value = _state.value.copy(filterCategory = category) }
     fun showCreateDialog() { _state.value = _state.value.copy(showCreateDialog = true, capturedImageUri = null) }
     fun hideDialog() { _state.value = _state.value.copy(showCreateDialog = false) }
     fun showCamera() { _state.value = _state.value.copy(showCamera = true) }

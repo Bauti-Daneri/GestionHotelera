@@ -27,4 +27,6 @@ interface MaintenanceRepository {
         status: TicketStatus,
         assignedTo: String?
     ): Flow<Resource<MaintenanceTicket>>
+
+    fun deleteTicket(ticketId: String): Flow<Resource<Unit>>
 }

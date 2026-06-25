@@ -2,7 +2,6 @@ package com.hotelops.presentation.maintenance
 
 import android.net.Uri
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -45,9 +44,12 @@ fun MaintenanceScreen(
         currentUser?.hotelId?.let { viewModel.loadData(it) }
     }
 
-    val filteredTickets = if (state.filterStatus != null)
-        state.tickets.filter { it.status == state.filterStatus }
-    else state.tickets
+    // Aplicar filtros de estado y categoría
+    val filteredTickets = state.tickets.filter { ticket ->
+        val matchesStatus = state.filterStatus == null || ticket.status == state.filterStatus
+        val matchesCategory = state.filterCategory == null || ticket.category == state.filterCategory
+        matchesStatus && matchesCategory
+    }
 
     val categories = listOf(null to "Todos") + TicketCategory.entries.map { it to it.displayName() }
 
@@ -69,7 +71,7 @@ fun MaintenanceScreen(
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Text(
-                            "${state.tickets.size} tickets",
+                            "${filteredTickets.size} tickets",
                             modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
@@ -104,8 +106,8 @@ fun MaintenanceScreen(
             ) {
                 items(categories) { (cat, label) ->
                     FilterChip(
-                        selected = state.filterStatus == null, // Simplified for now
-                        onClick = { },
+                        selected = state.filterCategory == cat,
+                        onClick = { viewModel.setCategoryFilter(cat) },
                         label = { Text(label) },
                         shape = RoundedCornerShape(12.dp),
                         colors = FilterChipDefaults.filterChipColors(
@@ -200,10 +202,24 @@ private fun TicketCard(ticket: MaintenanceTicket, onStatusChange: (TicketStatus)
                     Spacer(modifier = Modifier.width(8.dp))
                     Text("Hab. #${ticket.roomNumber}", fontWeight = FontWeight.Bold, fontSize = 18.sp)
                 }
-                Text("10:30", fontSize = 12.sp, color = OnSurfaceVariant) // Dummy time
+                Text("Hoy", fontSize = 12.sp, color = OnSurfaceVariant)
             }
 
             Spacer(modifier = Modifier.height(12.dp))
+            
+            if (!ticket.imageUrl.isNullOrBlank()) {
+                AsyncImage(
+                    model = ticket.imageUrl,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(150.dp)
+                        .padding(bottom = 12.dp)
+                        .clip(RoundedCornerShape(12.dp)),
+                    contentScale = ContentScale.Crop
+                )
+            }
+
             Text(ticket.title, fontWeight = FontWeight.Medium, color = OnSurface)
             
             Spacer(modifier = Modifier.height(8.dp))
@@ -292,7 +308,6 @@ private fun CreateTicketDialog(
     var selectedPriority by remember { mutableStateOf("MEDIA") }
     var roomExpanded by remember { mutableStateOf(false) }
     var categoryExpanded by remember { mutableStateOf(false) }
-    var priorityExpanded by remember { mutableStateOf(false) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -313,6 +328,18 @@ private fun CreateTicketDialog(
                     Icon(Icons.Default.CameraAlt, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
                     Text(if (capturedImageUri != null) "Cambiar Foto" else "Tomar Foto")
+                }
+
+                if (capturedImageUri != null) {
+                    AsyncImage(
+                        model = capturedImageUri,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp)
+                            .clip(RoundedCornerShape(12.dp)),
+                        contentScale = ContentScale.Crop
+                    )
                 }
 
                 ExposedDropdownMenuBox(expanded = roomExpanded, onExpandedChange = { roomExpanded = it }) {

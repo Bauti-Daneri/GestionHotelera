@@ -128,4 +128,15 @@ class RoomServiceRepositoryImpl @Inject constructor(
             else emit(Resource.Error(e.message ?: "Error al actualizar pedido"))
         }
     }
+
+    override fun deleteOrder(orderId: String): Flow<Resource<Unit>> = flow {
+        emit(Resource.Loading())
+        try {
+            roomServiceDao.deleteOrderById(orderId)
+            firestore.collection(COL_ORDERS).document(orderId).delete().await()
+            emit(Resource.Success(Unit))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message ?: "Error al eliminar pedido"))
+        }
+    }
 }

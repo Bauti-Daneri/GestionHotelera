@@ -139,4 +139,15 @@ class MaintenanceRepositoryImpl @Inject constructor(
             else emit(Resource.Error(e.message ?: "Error al actualizar ticket"))
         }
     }
+
+    override fun deleteTicket(ticketId: String): Flow<Resource<Unit>> = flow {
+        emit(Resource.Loading())
+        try {
+            maintenanceDao.deleteTicketById(ticketId)
+            firestore.collection(COL_TICKETS).document(ticketId).delete().await()
+            emit(Resource.Success(Unit))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message ?: "Error al eliminar ticket"))
+        }
+    }
 }
