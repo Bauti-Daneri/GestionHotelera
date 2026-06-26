@@ -1,44 +1,59 @@
-# Build artifacts
-*.iml
-.gradle
-/local.properties
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
+# ====================================================================
+# HotelOps - GitIgnore Oficial Profesional (Android Studio & Kotlin)
+# ====================================================================
 
-# Android Studio / IntelliJ
+# Build artifacts y temporales de Gradle
+.gradle/
+build/
+app/build/
+/captures
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aar
+*.ap_
+
+# Archivos de configuración local (¡CRÍTICO para Supabase/APIs!)
+local.properties
++local.properties
+
+# Android Studio e IntelliJ IDEA
+.idea/
+*.iml
 *.ipr
 *.iws
-*.iml
-.idea/
+.navigation/
 
-# Keystore files (Secrets)
+# Caché específica de Kotlin
+.kotlin/
+.preload-cache/
+
+# Archivos de firma y Keystores (Seguridad de APKs)
 *.jks
 *.keystore
 *.p12
 google_play_signing.json
 
-# Firebase / Google Services (Important: Do not share your real keys)
+# Google Services y Firebase (Descomentado para evitar fugas de credenciales)
 app/google-services.json
 
-# Unit test reports
-/test-reports
-/verification-reports
+# Reportes de Testing y Calidad de Código (Lint)
+/test-reports/
+/verification-reports/
+/build-export/
+gmaven_stable_index/
 
-# Log files
+# Logs del sistema y volcados de memoria
 *.log
+java_pid*.hprof
+*.hprof
 
-# Project specific
+# Archivos temporales de Sistemas Operativos
+.DS_Store
+Thumbs.db
+
+# Documentación interna de progreso (Opcional - mantener si se desea ignorar)
 DETALLES_SOLUCION.md
 PENDIENTES.md
 PROGRESO.md
 COMO_ABRIR.md
-java_pid*.hprof
