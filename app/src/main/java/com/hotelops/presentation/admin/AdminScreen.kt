@@ -35,6 +35,7 @@ fun AdminScreen(
     viewModel: AdminViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val colorScheme = MaterialTheme.colorScheme
 
     LaunchedEffect(currentUser?.hotelId) {
         currentUser?.hotelId?.let { viewModel.loadData(it) }
@@ -51,7 +52,7 @@ fun AdminScreen(
                         "Administración", 
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontWeight = FontWeight.Bold,
-                            color = Primary
+                            color = colorScheme.headingColor
                         )
                     ) 
                 },
@@ -74,10 +75,10 @@ fun AdminScreen(
                     }
                     AssistChip(
                         onClick = { },
-                        label = { Text("Admin", color = Primary) },
+                        label = { Text("Admin", color = colorScheme.primary) },
                         leadingIcon = { Icon(Icons.Default.Settings, contentDescription = null, modifier = Modifier.size(16.dp)) },
                         shape = RoundedCornerShape(16.dp),
-                        colors = AssistChipDefaults.assistChipColors(containerColor = SurfaceVariant)
+                        colors = AssistChipDefaults.assistChipColors(containerColor = colorScheme.surfaceVariant)
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                 }
@@ -88,7 +89,7 @@ fun AdminScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .background(Background)
+                .background(colorScheme.background)
         ) {
             // Hotel Header Card
             HotelHeaderCard(hotelName = "Hotel Plaza Central", hotelId = "HOTEL-DEMO-001")
@@ -109,13 +110,13 @@ fun AdminScreen(
             TabRow(
                 selectedTabIndex = selectedTab,
                 containerColor = Color.Transparent,
-                contentColor = Primary,
+                contentColor = colorScheme.primary,
                 divider = {},
                 indicator = { tabPositions ->
                     if (selectedTab < tabPositions.size) {
                         TabRowDefaults.SecondaryIndicator(
                             Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
-                            color = Primary
+                            color = colorScheme.primary
                         )
                     }
                 },
@@ -181,12 +182,13 @@ fun AdminScreen(
 
 @Composable
 fun HotelHeaderCard(hotelName: String, hotelId: String) {
+    val colorScheme = MaterialTheme.colorScheme
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = Primary)
+        colors = CardDefaults.cardColors(containerColor = colorScheme.primary)
     ) {
         Row(
             modifier = Modifier.padding(24.dp),
@@ -196,15 +198,15 @@ fun HotelHeaderCard(hotelName: String, hotelId: String) {
                 modifier = Modifier
                     .size(48.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .background(Color.White.copy(alpha = 0.2f)),
+                    .background(colorScheme.onPrimary.copy(alpha = 0.2f)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(Icons.Default.Apartment, contentDescription = null, tint = Color.White)
+                Icon(Icons.Default.Apartment, contentDescription = null, tint = colorScheme.onPrimary)
             }
             Spacer(modifier = Modifier.width(16.dp))
             Column {
-                Text(hotelName, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                Text("ID: $hotelId", color = Color.White.copy(alpha = 0.7f), fontSize = 14.sp)
+                Text(hotelName, color = colorScheme.onPrimary, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text("ID: $hotelId", color = colorScheme.onPrimary.copy(alpha = 0.7f), fontSize = 14.sp)
             }
         }
     }
@@ -227,10 +229,11 @@ fun AdminStatsGrid(roomsCount: Int, employeesCount: Int, ticketsCount: Int, occu
 
 @Composable
 fun StatItem(modifier: Modifier, value: String, label: String, icon: ImageVector, iconColor: Color) {
+    val colorScheme = MaterialTheme.colorScheme
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = Surface),
+        colors = CardDefaults.cardColors(containerColor = colorScheme.surface),
         border = CardDefaults.outlinedCardBorder()
     ) {
         Row(
@@ -248,8 +251,8 @@ fun StatItem(modifier: Modifier, value: String, label: String, icon: ImageVector
             }
             Spacer(modifier = Modifier.width(12.dp))
             Column {
-                Text(value, fontWeight = FontWeight.Bold, fontSize = 18.sp, color = OnSurface)
-                Text(label, fontSize = 11.sp, color = OnSurfaceVariant)
+                Text(value, fontWeight = FontWeight.Bold, fontSize = 18.sp, color = colorScheme.onSurface)
+                Text(label, fontSize = 11.sp, color = colorScheme.onSurfaceVariant)
             }
         }
     }
@@ -262,6 +265,7 @@ fun UsersTab(
     onAddClick: () -> Unit,
     onDeleteClick: (User) -> Unit
 ) {
+    val colorScheme = MaterialTheme.colorScheme
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
             modifier = Modifier
@@ -270,11 +274,11 @@ fun UsersTab(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Gestión de Usuarios", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Primary)
+            Text("Gestión de Usuarios", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = colorScheme.headingColor)
             Button(
                 onClick = onAddClick,
                 shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Primary),
+                colors = ButtonDefaults.buttonColors(containerColor = colorScheme.primary),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
             ) {
                 Icon(Icons.Default.PersonAdd, contentDescription = null, modifier = Modifier.size(18.dp))
@@ -285,7 +289,7 @@ fun UsersTab(
 
         if (isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = Primary)
+                CircularProgressIndicator(color = colorScheme.primary)
             }
         } else {
             LazyColumn(
@@ -302,10 +306,11 @@ fun UsersTab(
 
 @Composable
 fun UserCard(user: User, onDeleteClick: () -> Unit) {
+    val colorScheme = MaterialTheme.colorScheme
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = Surface),
+        colors = CardDefaults.cardColors(containerColor = colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
@@ -337,7 +342,7 @@ fun UserCard(user: User, onDeleteClick: () -> Unit) {
 
             Column(modifier = Modifier.weight(1f)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(user.name, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    Text(user.name, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = colorScheme.onSurface)
                     Spacer(modifier = Modifier.width(8.dp))
                     Surface(
                         color = roleColor,
@@ -353,20 +358,20 @@ fun UserCard(user: User, onDeleteClick: () -> Unit) {
                 }
                 Spacer(modifier = Modifier.height(4.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.Email, contentDescription = null, modifier = Modifier.size(14.dp), tint = OnSurfaceVariant)
+                    Icon(Icons.Default.Email, contentDescription = null, modifier = Modifier.size(14.dp), tint = colorScheme.onSurfaceVariant)
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text(user.email, fontSize = 13.sp, color = OnSurfaceVariant)
+                    Text(user.email, fontSize = 13.sp, color = colorScheme.onSurfaceVariant)
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.Business, contentDescription = null, modifier = Modifier.size(14.dp), tint = OnSurfaceVariant)
+                    Icon(Icons.Default.Business, contentDescription = null, modifier = Modifier.size(14.dp), tint = colorScheme.onSurfaceVariant)
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text(user.department, fontSize = 13.sp, color = OnSurfaceVariant)
+                    Text(user.department, fontSize = 13.sp, color = colorScheme.onSurfaceVariant)
                 }
-                Text("ID: ${user.employeeId}", fontSize = 11.sp, color = OnSurfaceVariant.copy(alpha = 0.6f))
+                Text("ID: ${user.employeeId}", fontSize = 11.sp, color = colorScheme.onSurfaceVariant.copy(alpha = 0.6f))
             }
 
             Row {
-                IconButton(onClick = { }) { Icon(Icons.Default.Edit, contentDescription = "Edit", tint = OnSurfaceVariant) }
+                IconButton(onClick = { }) { Icon(Icons.Default.Edit, contentDescription = "Edit", tint = colorScheme.onSurfaceVariant) }
                 IconButton(onClick = onDeleteClick) { Icon(Icons.Default.Delete, contentDescription = "Delete", tint = ColorDirty) }
             }
         }
@@ -381,6 +386,7 @@ fun RoomsTab(
     onDeleteClick: (Room) -> Unit,
     onStatusChange: (Room, RoomStatus) -> Unit
 ) {
+    val colorScheme = MaterialTheme.colorScheme
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
             modifier = Modifier
@@ -389,11 +395,11 @@ fun RoomsTab(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Gestión de Habitaciones", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Primary)
+            Text("Gestión de Habitaciones", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = colorScheme.headingColor)
             Button(
                 onClick = onAddClick,
                 shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Primary)
+                colors = ButtonDefaults.buttonColors(containerColor = colorScheme.primary)
             ) {
                 Icon(Icons.Default.Add, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
@@ -403,7 +409,7 @@ fun RoomsTab(
 
         if (isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = Primary)
+                CircularProgressIndicator(color = colorScheme.primary)
             }
         } else {
             LazyColumn(
@@ -425,11 +431,12 @@ fun RoomsTab(
 @Composable
 fun RoomCard(room: Room, onDeleteClick: () -> Unit, onStatusChange: (RoomStatus) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
+    val colorScheme = MaterialTheme.colorScheme
 
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = Surface),
+        colors = CardDefaults.cardColors(containerColor = colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
@@ -440,15 +447,15 @@ fun RoomCard(room: Room, onDeleteClick: () -> Unit, onStatusChange: (RoomStatus)
                 modifier = Modifier
                     .size(48.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .background(SurfaceVariant),
+                    .background(colorScheme.surfaceVariant),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(Icons.Default.MeetingRoom, contentDescription = null, tint = Primary)
+                Icon(Icons.Default.MeetingRoom, contentDescription = null, tint = colorScheme.primary)
             }
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("#${room.roomNumber}", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                    Text("#${room.roomNumber}", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = colorScheme.onSurface)
                     Spacer(modifier = Modifier.width(8.dp))
                     
                     val statusColor = when (room.status) {
@@ -478,7 +485,7 @@ fun RoomCard(room: Room, onDeleteClick: () -> Unit, onStatusChange: (RoomStatus)
                         }
                     }
                 }
-                Text("Piso ${room.floor} · ${room.type.name}", color = OnSurfaceVariant, fontSize = 14.sp)
+                Text("Piso ${room.floor} · ${room.type.name}", color = colorScheme.onSurfaceVariant, fontSize = 14.sp)
             }
             IconButton(onClick = onDeleteClick) {
                 Icon(Icons.Default.Delete, contentDescription = "Delete", tint = ColorDirty.copy(alpha = 0.5f))
@@ -531,7 +538,9 @@ private fun AddUserDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = { onConfirm(name, email, password, selectedRole) }) { Text("Agregar", fontWeight = FontWeight.Bold) }
+            TextButton(onClick = { onConfirm(name, email, password, selectedRole) }) {
+                Text("Agregar", fontWeight = FontWeight.Bold)
+            }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) { Text("Cancelar") }
@@ -578,7 +587,9 @@ private fun AddRoomDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = { onConfirm(roomNumber, floor.toIntOrNull() ?: 1, type) }) { Text("Agregar", fontWeight = FontWeight.Bold) }
+            TextButton(onClick = { onConfirm(roomNumber, floor.toIntOrNull() ?: 1, type) }) {
+                Text("Agregar", fontWeight = FontWeight.Bold)
+            }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) { Text("Cancelar") }

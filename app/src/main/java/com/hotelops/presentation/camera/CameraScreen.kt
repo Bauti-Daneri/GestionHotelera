@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.compose.ui.graphics.Color
-import com.hotelops.presentation.theme.Primary
 import timber.log.Timber
 import java.io.File
 import java.text.SimpleDateFormat
@@ -35,6 +34,7 @@ fun CameraScreen(
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
+    val colorScheme = MaterialTheme.colorScheme
     val lifecycleOwner = LocalLifecycleOwner.current
     val previewView = remember { PreviewView(context) }
     val imageCapture = remember { ImageCapture.Builder().build() }
@@ -70,7 +70,7 @@ fun CameraScreen(
             onClick = onDismiss,
             modifier = Modifier.padding(16.dp).align(Alignment.TopStart)
         ) {
-            Icon(Icons.Default.Close, contentDescription = "Cerrar", tint = MaterialTheme.colorScheme.onPrimary)
+            Icon(Icons.Default.Close, contentDescription = "Cerrar", tint = Color.White)
         }
 
         // Bottom controls
@@ -83,8 +83,8 @@ fun CameraScreen(
             modifier = Modifier
                 .padding(bottom = 64.dp) // Subido para evitar barra de sistema
                 .align(Alignment.BottomCenter),
-            containerColor = Color.White,
-            contentColor = Primary
+            containerColor = colorScheme.surface,
+            contentColor = colorScheme.primary
         ) {
             Icon(Icons.Default.Camera, contentDescription = "Capturar", modifier = Modifier.size(32.dp))
         }

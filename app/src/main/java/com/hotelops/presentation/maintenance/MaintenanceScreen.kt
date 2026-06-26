@@ -39,6 +39,7 @@ fun MaintenanceScreen(
     viewModel: MaintenanceViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val colorScheme = MaterialTheme.colorScheme
 
     LaunchedEffect(currentUser?.hotelId) {
         currentUser?.hotelId?.let { viewModel.loadData(it) }
@@ -61,13 +62,13 @@ fun MaintenanceScreen(
                         "Mantenimiento", 
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontWeight = FontWeight.Bold,
-                            color = Primary
+                            color = colorScheme.headingColor
                         )
                     ) 
                 },
                 actions = {
                     Surface(
-                        color = SurfaceVariant,
+                        color = colorScheme.surfaceVariant,
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Text(
@@ -75,7 +76,7 @@ fun MaintenanceScreen(
                             modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
-                            color = OnSurfaceVariant
+                            color = colorScheme.onSurfaceVariant
                         )
                     }
                     Spacer(modifier = Modifier.width(16.dp))
@@ -85,8 +86,8 @@ fun MaintenanceScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { viewModel.showCreateDialog() },
-                containerColor = ColorClean,
-                contentColor = Color.White,
+                containerColor = colorScheme.primary,
+                contentColor = colorScheme.onPrimary,
                 shape = CircleShape
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Nuevo ticket")
@@ -97,7 +98,7 @@ fun MaintenanceScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .background(Background)
+                .background(colorScheme.background)
         ) {
             // Category Chips
             LazyRow(
@@ -111,8 +112,10 @@ fun MaintenanceScreen(
                         label = { Text(label) },
                         shape = RoundedCornerShape(12.dp),
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = Primary,
-                            selectedLabelColor = Color.White
+                            selectedContainerColor = colorScheme.primary,
+                            selectedLabelColor = colorScheme.onPrimary,
+                            containerColor = colorScheme.surface,
+                            labelColor = colorScheme.onSurface
                         )
                     )
                 }
@@ -120,7 +123,7 @@ fun MaintenanceScreen(
 
             if (state.isLoading) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = Primary)
+                    CircularProgressIndicator(color = colorScheme.primary)
                 }
             } else {
                 LazyColumn(
@@ -174,10 +177,11 @@ fun MaintenanceScreen(
 
 @Composable
 private fun TicketCard(ticket: MaintenanceTicket, onStatusChange: (TicketStatus) -> Unit) {
+    val colorScheme = MaterialTheme.colorScheme
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = Surface),
+        colors = CardDefaults.cardColors(containerColor = colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
@@ -200,9 +204,14 @@ private fun TicketCard(ticket: MaintenanceTicket, onStatusChange: (TicketStatus)
                             )
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Hab. #${ticket.roomNumber}", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                    Text(
+                        "Hab. #${ticket.roomNumber}", 
+                        fontWeight = FontWeight.Bold, 
+                        fontSize = 18.sp,
+                        color = colorScheme.onSurface
+                    )
                 }
-                Text("Hoy", fontSize = 12.sp, color = OnSurfaceVariant)
+                Text("Hoy", fontSize = 12.sp, color = colorScheme.onSurfaceVariant)
             }
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -220,7 +229,7 @@ private fun TicketCard(ticket: MaintenanceTicket, onStatusChange: (TicketStatus)
                 )
             }
 
-            Text(ticket.title, fontWeight = FontWeight.Medium, color = OnSurface)
+            Text(ticket.title, fontWeight = FontWeight.Medium, color = colorScheme.onSurface)
             
             Spacer(modifier = Modifier.height(8.dp))
             Row(
@@ -240,18 +249,18 @@ private fun TicketCard(ticket: MaintenanceTicket, onStatusChange: (TicketStatus)
                         tint = ColorInProgress
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(ticket.status.displayName(), color = OnSurfaceVariant, fontSize = 14.sp)
+                    Text(ticket.status.displayName(), color = colorScheme.onSurfaceVariant, fontSize = 14.sp)
                 }
                 
                 Surface(
-                    color = Primary,
+                    color = colorScheme.primary,
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Text(
                         ticket.category.displayName(),
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
                         fontSize = 11.sp,
-                        color = Color.White
+                        color = colorScheme.onPrimary
                     )
                 }
             }
@@ -308,6 +317,7 @@ private fun CreateTicketDialog(
     var selectedPriority by remember { mutableStateOf("MEDIA") }
     var roomExpanded by remember { mutableStateOf(false) }
     var categoryExpanded by remember { mutableStateOf(false) }
+    val colorScheme = MaterialTheme.colorScheme
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -323,7 +333,7 @@ private fun CreateTicketDialog(
                     onClick = onOpenCamera,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = SurfaceVariant, contentColor = Primary)
+                    colors = ButtonDefaults.buttonColors(containerColor = colorScheme.surfaceVariant, contentColor = colorScheme.primary)
                 ) {
                     Icon(Icons.Default.CameraAlt, contentDescription = null)
                     Spacer(Modifier.width(8.dp))

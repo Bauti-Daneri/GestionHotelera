@@ -34,7 +34,6 @@ import com.hotelops.presentation.maintenance.MaintenanceScreen
 import com.hotelops.presentation.navigation.Screen
 import com.hotelops.presentation.profile.ProfileScreen
 import com.hotelops.presentation.roomservice.RoomServiceScreen
-import com.hotelops.presentation.theme.Primary
 
 sealed class BottomNavItem(
     val route: String,
@@ -43,26 +42,11 @@ sealed class BottomNavItem(
     val unselectedIcon: ImageVector,
     val roles: List<UserRole>
 ) {
-    object Admin : BottomNavItem(
-        "admin", "Admin", Icons.Filled.Shield, Icons.Outlined.Shield,
-        listOf(UserRole.ADMIN)
-    )
-    object Housekeeping : BottomNavItem(
-        "housekeeping", "Limpieza", Icons.Filled.Home, Icons.Outlined.Home,
-        listOf(UserRole.ADMIN, UserRole.HOUSEKEEPING)
-    )
-    object Maintenance : BottomNavItem(
-        "maintenance", "Mantenimiento", Icons.Filled.Build, Icons.Outlined.Build,
-        listOf(UserRole.ADMIN, UserRole.MAINTENANCE)
-    )
-    object RoomService : BottomNavItem(
-        "room_service", "Room Service", Icons.Filled.Restaurant, Icons.Outlined.Restaurant,
-        UserRole.entries
-    )
-    object Profile : BottomNavItem(
-        "profile", "Perfil", Icons.Filled.Person, Icons.Outlined.Person,
-        UserRole.entries
-    )
+    object Admin : BottomNavItem("admin", "Admin", Icons.Filled.Shield, Icons.Outlined.Shield, listOf(UserRole.ADMIN))
+    object Housekeeping : BottomNavItem("housekeeping", "Limpieza", Icons.Filled.Home, Icons.Outlined.Home, listOf(UserRole.ADMIN, UserRole.HOUSEKEEPING))
+    object Maintenance : BottomNavItem("maintenance", "Mantenimiento", Icons.Filled.Build, Icons.Outlined.Build, listOf(UserRole.ADMIN, UserRole.MAINTENANCE))
+    object RoomService : BottomNavItem("room_service", "Pedidos", Icons.Filled.Restaurant, Icons.Outlined.Restaurant, UserRole.entries)
+    object Profile : BottomNavItem("profile", "Perfil", Icons.Filled.Person, Icons.Outlined.Person, UserRole.entries)
 }
 
 val allItems = listOf(
@@ -82,6 +66,7 @@ fun MainScreen(
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+    val colorScheme = MaterialTheme.colorScheme
 
     LaunchedEffect(state.isLoggedOut) {
         if (state.isLoggedOut) {
@@ -96,7 +81,7 @@ fun MainScreen(
     Scaffold(
         bottomBar = {
             NavigationBar(
-                containerColor = MaterialTheme.colorScheme.surface,
+                containerColor = colorScheme.surface,
                 tonalElevation = 8.dp
             ) {
                 visibleItems.forEach { item ->
@@ -127,9 +112,11 @@ fun MainScreen(
                             }
                         },
                         colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = Primary,
-                            selectedTextColor = Primary,
-                            indicatorColor = MaterialTheme.colorScheme.primaryContainer
+                            selectedIconColor = colorScheme.primary,
+                            selectedTextColor = colorScheme.primary,
+                            unselectedIconColor = colorScheme.onSurfaceVariant,
+                            unselectedTextColor = colorScheme.onSurfaceVariant,
+                            indicatorColor = colorScheme.primaryContainer
                         )
                     )
                 }

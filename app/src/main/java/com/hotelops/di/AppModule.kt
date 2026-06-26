@@ -2,6 +2,7 @@ package com.hotelops.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.hotelops.presentation.theme.ThemePreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,4 +43,9 @@ object AppModule {
     @Singleton
     fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences =
         context.getSharedPreferences("hotelops_prefs", Context.MODE_PRIVATE)
+
+    @Provides
+    @Singleton
+    fun provideThemePreferences(@ApplicationContext context: Context): ThemePreferences =
+        ThemePreferences(context)
 }

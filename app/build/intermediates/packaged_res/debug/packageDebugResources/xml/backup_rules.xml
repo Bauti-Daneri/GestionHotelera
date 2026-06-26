@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<full-backup-content>
-    <!-- Exclude database files -->
-    <exclude domain="database" path="hotelops_db" />
-</full-backup-content>

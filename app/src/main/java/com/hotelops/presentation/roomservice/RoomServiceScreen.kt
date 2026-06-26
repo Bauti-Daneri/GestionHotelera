@@ -30,6 +30,7 @@ fun RoomServiceScreen(
     viewModel: RoomServiceViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val colorScheme = MaterialTheme.colorScheme
 
     LaunchedEffect(currentUser?.hotelId) {
         currentUser?.hotelId?.let { viewModel.loadData(it) }
@@ -49,13 +50,13 @@ fun RoomServiceScreen(
                         "Room Service", 
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontWeight = FontWeight.Bold,
-                            color = Primary
+                            color = colorScheme.headingColor
                         )
                     ) 
                 },
                 actions = {
                     Surface(
-                        color = SurfaceVariant,
+                        color = colorScheme.surfaceVariant,
                         shape = RoundedCornerShape(12.dp)
                     ) {
                         Text(
@@ -63,7 +64,7 @@ fun RoomServiceScreen(
                             modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
-                            color = OnSurfaceVariant
+                            color = colorScheme.onSurfaceVariant
                         )
                     }
                     Spacer(modifier = Modifier.width(16.dp))
@@ -73,8 +74,8 @@ fun RoomServiceScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { viewModel.showCreateDialog() },
-                containerColor = Primary,
-                contentColor = Color.White,
+                containerColor = colorScheme.primary,
+                contentColor = colorScheme.onPrimary,
                 shape = CircleShape
             ) {
                 Icon(Icons.Default.Restaurant, contentDescription = "Nuevo pedido")
@@ -85,13 +86,13 @@ fun RoomServiceScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .background(Background)
+                .background(colorScheme.background)
         ) {
             // Search Bar Placeholder
             OutlinedTextField(
                 value = "",
                 onValueChange = {},
-                placeholder = { Text("Buscar por habitación, huésped o plato...", fontSize = 14.sp) },
+                placeholder = { Text("Buscar...", fontSize = 14.sp) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
@@ -100,7 +101,7 @@ fun RoomServiceScreen(
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = Color.Transparent,
                     unfocusedBorderColor = Color.Transparent,
-                    containerColor = Surface
+                    containerColor = colorScheme.surface
                 )
             )
 
@@ -117,8 +118,10 @@ fun RoomServiceScreen(
                         label = { Text(label) },
                         shape = RoundedCornerShape(12.dp),
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = Primary,
-                            selectedLabelColor = Color.White
+                            selectedContainerColor = colorScheme.primary,
+                            selectedLabelColor = colorScheme.onPrimary,
+                            containerColor = colorScheme.surface,
+                            labelColor = colorScheme.onSurface
                         )
                     )
                 }
@@ -126,7 +129,7 @@ fun RoomServiceScreen(
 
             if (state.isLoading) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = Primary)
+                    CircularProgressIndicator(color = colorScheme.primary)
                 }
             } else {
                 LazyColumn(
@@ -163,10 +166,11 @@ fun RoomServiceScreen(
 
 @Composable
 private fun OrderCard(order: RoomServiceOrder, onStatusChange: (OrderStatus) -> Unit) {
+    val colorScheme = MaterialTheme.colorScheme
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = Surface),
+        colors = CardDefaults.cardColors(containerColor = colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
@@ -176,8 +180,13 @@ private fun OrderCard(order: RoomServiceOrder, onStatusChange: (OrderStatus) -> 
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
-                    Text("Hab. #${order.roomNumber}", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                    Text(order.guestName, color = OnSurfaceVariant, fontSize = 14.sp)
+                    Text(
+                        "Hab. #${order.roomNumber}", 
+                        fontWeight = FontWeight.Bold, 
+                        fontSize = 18.sp,
+                        color = colorScheme.onSurface
+                    )
+                    Text(order.guestName, color = colorScheme.onSurfaceVariant, fontSize = 14.sp)
                 }
                 Surface(
                     color = when(order.status) {
@@ -199,28 +208,28 @@ private fun OrderCard(order: RoomServiceOrder, onStatusChange: (OrderStatus) -> 
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            HorizontalDivider(color = SurfaceVariant)
+            HorizontalDivider(color = colorScheme.surfaceVariant)
             Spacer(modifier = Modifier.height(16.dp))
 
             order.items.forEach { item ->
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    Text("${item.quantity}x ${item.name}", fontSize = 14.sp, color = OnSurfaceVariant)
-                    Text("$${item.price * item.quantity}", fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                    Text("${item.quantity}x ${item.name}", fontSize = 14.sp, color = colorScheme.onSurfaceVariant)
+                    Text("$${item.price * item.quantity}", fontSize = 14.sp, fontWeight = FontWeight.Medium, color = colorScheme.onSurface)
                 }
                 Spacer(modifier = Modifier.height(4.dp))
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            HorizontalDivider(color = SurfaceVariant)
+            HorizontalDivider(color = colorScheme.surfaceVariant)
             Spacer(modifier = Modifier.height(16.dp))
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.AccessTime, contentDescription = null, modifier = Modifier.size(14.dp), tint = OnSurfaceVariant)
+                    Icon(Icons.Default.AccessTime, contentDescription = null, modifier = Modifier.size(14.dp), tint = colorScheme.onSurfaceVariant)
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text("Hoy", fontSize = 14.sp, color = OnSurfaceVariant)
+                    Text("Hoy", fontSize = 14.sp, color = colorScheme.onSurfaceVariant)
                 }
-                Text("$${order.totalAmount}", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Primary)
+                Text("$${order.totalAmount}", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = colorScheme.primary)
             }
 
             if (order.status != OrderStatus.DELIVERED) {
@@ -260,8 +269,8 @@ private fun CreateOrderDialog(
     var selectedRoom by remember { mutableStateOf(rooms.firstOrNull()) }
     var instructions by remember { mutableStateOf("") }
     var roomExpanded by remember { mutableStateOf(false) }
+    val colorScheme = MaterialTheme.colorScheme
 
-    // Mock Menu de Items
     val menuItems = listOf(
         OrderItem("Desayuno Continental", 1, 15.0),
         OrderItem("Café Espresso", 1, 5.0),
@@ -306,7 +315,7 @@ private fun CreateOrderDialog(
                 }
 
                 item {
-                    Text("Seleccionar Ítems", fontWeight = FontWeight.Bold, color = Primary, fontSize = 14.sp)
+                    Text("Seleccionar Ítems", fontWeight = FontWeight.Bold, color = colorScheme.headingColor, fontSize = 14.sp)
                 }
 
                 items(menuItems) { item ->
@@ -317,7 +326,7 @@ private fun CreateOrderDialog(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(8.dp))
-                            .background(if (isSelected) PrimaryContainer else Color.Transparent)
+                            .background(if (isSelected) colorScheme.primaryContainer else Color.Transparent)
                             .clickable {
                                 if (isSelected) selectedItems.remove(currentItem)
                                 else selectedItems.add(item.copy())
@@ -327,8 +336,8 @@ private fun CreateOrderDialog(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
-                            Text(item.name, fontSize = 14.sp, fontWeight = FontWeight.Medium)
-                            Text("$${item.price}", fontSize = 12.sp, color = OnSurfaceVariant)
+                            Text(item.name, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = if(isSelected) colorScheme.onPrimaryContainer else colorScheme.onSurface)
+                            Text("$${item.price}", fontSize = 12.sp, color = if(isSelected) colorScheme.onPrimaryContainer.copy(alpha = 0.7f) else colorScheme.onSurfaceVariant)
                         }
                         
                         if (isSelected) {
@@ -344,9 +353,9 @@ private fun CreateOrderDialog(
                                     },
                                     modifier = Modifier.size(24.dp)
                                 ) {
-                                    Icon(Icons.Default.Remove, contentDescription = null, tint = Primary)
+                                    Icon(Icons.Default.Remove, contentDescription = null, tint = colorScheme.primary)
                                 }
-                                Text("${currentItem!!.quantity}", modifier = Modifier.padding(horizontal = 8.dp))
+                                Text("${currentItem!!.quantity}", modifier = Modifier.padding(horizontal = 8.dp), color = colorScheme.onPrimaryContainer)
                                 IconButton(
                                     onClick = { 
                                         val index = selectedItems.indexOf(currentItem)
@@ -354,25 +363,25 @@ private fun CreateOrderDialog(
                                     },
                                     modifier = Modifier.size(24.dp)
                                 ) {
-                                    Icon(Icons.Default.Add, contentDescription = null, tint = Primary)
+                                    Icon(Icons.Default.Add, contentDescription = null, tint = colorScheme.primary)
                                 }
                             }
                         } else {
-                            Icon(Icons.Default.AddCircle, contentDescription = null, tint = Primary)
+                            Icon(Icons.Default.AddCircle, contentDescription = null, tint = colorScheme.primary)
                         }
                     }
                 }
 
                 item {
                     OutlinedTextField(value = instructions, onValueChange = { instructions = it },
-                        label = { Text("Instrucciones Especiales") }, modifier = Modifier.fillMaxWidth(), maxLines = 2)
+                        label = { Text("Instrucciones") }, modifier = Modifier.fillMaxWidth(), maxLines = 2)
                 }
                 
                 item {
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = colorScheme.outlineVariant)
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text("Total:", fontWeight = FontWeight.Bold)
-                        Text("$${totalAmount}", fontWeight = FontWeight.Bold, color = Primary, fontSize = 18.sp)
+                        Text("Total:", fontWeight = FontWeight.Bold, color = colorScheme.onSurface)
+                        Text("$${totalAmount}", fontWeight = FontWeight.Bold, color = colorScheme.primary, fontSize = 18.sp)
                     }
                 }
             }

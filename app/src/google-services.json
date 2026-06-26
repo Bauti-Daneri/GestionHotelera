@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "338354897708",
+    "project_id": "hotelops-jea",
+    "storage_bucket": "hotelops-jea.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:338354897708:android:27bdef670cde1e21276289",
+        "android_client_info": {
+          "package_name": "com.hotelops"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5iLrG4EDE3N712izT2Ysq11VkWObYOTM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

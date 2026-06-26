@@ -9,7 +9,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.Bed
-import androidx.compose.material.icons.filled.MeetingRoom
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -31,6 +30,7 @@ fun HousekeepingScreen(
     viewModel: HousekeepingViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val colorScheme = MaterialTheme.colorScheme
 
     LaunchedEffect(currentUser?.hotelId) {
         currentUser?.hotelId?.let { viewModel.loadRooms(it) }
@@ -50,7 +50,7 @@ fun HousekeepingScreen(
                         "Housekeeping", 
                         style = MaterialTheme.typography.headlineMedium.copy(
                             fontWeight = FontWeight.Bold,
-                            color = Primary
+                            color = colorScheme.headingColor
                         )
                     ) 
                 }
@@ -61,7 +61,7 @@ fun HousekeepingScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .background(Background)
+                .background(colorScheme.background)
         ) {
             // Stats Row
             Row(
@@ -103,8 +103,10 @@ fun HousekeepingScreen(
                         label = { Text(label) },
                         shape = RoundedCornerShape(12.dp),
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = Primary,
-                            selectedLabelColor = Color.White
+                            selectedContainerColor = colorScheme.primary,
+                            selectedLabelColor = colorScheme.onPrimary,
+                            containerColor = colorScheme.surface,
+                            labelColor = colorScheme.onSurface
                         )
                     )
                 }
@@ -112,7 +114,7 @@ fun HousekeepingScreen(
 
             if (state.isLoading) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator(color = Primary)
+                    CircularProgressIndicator(color = colorScheme.primary)
                 }
             } else {
                 LazyColumn(
@@ -133,10 +135,11 @@ fun HousekeepingScreen(
 
 @Composable
 private fun HousekeepingStatCard(modifier: Modifier, count: String, label: String, color: Color) {
+    val colorScheme = MaterialTheme.colorScheme
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = Surface),
+        colors = CardDefaults.cardColors(containerColor = colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
@@ -150,9 +153,9 @@ private fun HousekeepingStatCard(modifier: Modifier, count: String, label: Strin
                         .background(color, RoundedCornerShape(2.dp))
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(count, fontSize = 20.sp, fontWeight = FontWeight.Bold, color = OnSurface)
+                Text(count, fontSize = 20.sp, fontWeight = FontWeight.Bold, color = colorScheme.onSurface)
             }
-            Text(label, fontSize = 12.sp, color = OnSurfaceVariant)
+            Text(label, fontSize = 12.sp, color = colorScheme.onSurfaceVariant)
         }
     }
 }
@@ -160,11 +163,12 @@ private fun HousekeepingStatCard(modifier: Modifier, count: String, label: Strin
 @Composable
 private fun HousekeepingRoomCard(room: Room, onStatusChange: (RoomStatus) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
+    val colorScheme = MaterialTheme.colorScheme
     
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = Surface),
+        colors = CardDefaults.cardColors(containerColor = colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
@@ -176,17 +180,22 @@ private fun HousekeepingRoomCard(room: Room, onStatusChange: (RoomStatus) -> Uni
             Box(
                 modifier = Modifier
                     .size(48.dp)
-                    .background(SurfaceVariant, RoundedCornerShape(12.dp)),
+                    .background(colorScheme.surfaceVariant, RoundedCornerShape(12.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(Icons.Default.Bed, contentDescription = null, tint = Primary)
+                Icon(Icons.Default.Bed, contentDescription = null, tint = colorScheme.primary)
             }
             
             Spacer(modifier = Modifier.width(16.dp))
             
             Column(modifier = Modifier.weight(1f)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("#${room.roomNumber}", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    Text(
+                        "#${room.roomNumber}", 
+                        fontSize = 18.sp, 
+                        fontWeight = FontWeight.Bold,
+                        color = colorScheme.onSurface
+                    )
                     Spacer(modifier = Modifier.width(8.dp))
                     
                     val statusColor = when (room.status) {
@@ -194,7 +203,7 @@ private fun HousekeepingRoomCard(room: Room, onStatusChange: (RoomStatus) -> Uni
                         RoomStatus.CLEANING -> ColorInProgress
                         RoomStatus.CLEAN -> ColorClean
                         RoomStatus.AVAILABLE -> ColorAvailable
-                        else -> OnSurfaceVariant
+                        else -> colorScheme.onSurfaceVariant
                     }
                     
                     Surface(
@@ -213,21 +222,26 @@ private fun HousekeepingRoomCard(room: Room, onStatusChange: (RoomStatus) -> Uni
                 Text(
                     room.notes ?: "Desocupada",
                     fontSize = 14.sp,
-                    color = OnSurfaceVariant
+                    color = colorScheme.onSurfaceVariant
                 )
                 
                 room.lastCleanedAt?.let {
                     Text(
                         "Última limpieza: ${java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault()).format(it)}",
                         fontSize = 11.sp,
-                        color = OnSurfaceVariant.copy(alpha = 0.6f)
+                        color = colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                     )
                 }
             }
             
             Box {
                 IconButton(onClick = { expanded = true }) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowForwardIos, contentDescription = null, modifier = Modifier.size(16.dp), tint = OnSurfaceVariant)
+                    Icon(
+                        Icons.AutoMirrored.Filled.ArrowForwardIos, 
+                        contentDescription = null, 
+                        modifier = Modifier.size(16.dp), 
+                        tint = colorScheme.onSurfaceVariant
+                    )
                 }
                 DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                     RoomStatus.entries.forEach { status ->

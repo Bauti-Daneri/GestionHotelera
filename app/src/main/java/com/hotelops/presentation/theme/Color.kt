@@ -1,6 +1,12 @@
 package com.hotelops.presentation.theme
 
+import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
+
+/** Títulos de pantalla/sección: azul marino en light, texto claro en dark. */
+val ColorScheme.headingColor: Color
+    get() = if (background.luminance() < 0.5f) onSurface else primary
 
 // Light Theme Colors (Inspirados en las capturas - Azul oscuro profundo y cian suave)
 val Primary = Color(0xFF1E3A5F) // Azul marino de las capturas

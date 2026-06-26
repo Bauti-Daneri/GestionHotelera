@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import com.hotelops.presentation.theme.headingColor
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
@@ -44,7 +45,7 @@ fun LoginScreen(
             Text(
                 text = "HotelOps",
                 style = MaterialTheme.typography.displayMedium,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.headingColor
             )
 
             Text(

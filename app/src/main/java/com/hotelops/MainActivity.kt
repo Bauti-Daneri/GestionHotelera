@@ -16,15 +16,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.hotelops.presentation.main.MainViewModel
 import com.hotelops.presentation.navigation.HotelOpsNavigation
 import com.hotelops.presentation.navigation.Screen
 import com.hotelops.presentation.theme.HotelOpsTheme
+import com.hotelops.presentation.theme.ThemeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val viewModel: MainViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -41,22 +43,25 @@ class MainActivity : ComponentActivity() {
         checkCameraPermission()
 
         splashScreen.setKeepOnScreenCondition {
-            !viewModel.state.value.isReady
+            !mainViewModel.state.value.isReady
         }
 
         enableEdgeToEdge()
 
         setContent {
-            val state by viewModel.state.collectAsState()
+            val themeViewModel: ThemeViewModel = hiltViewModel()
+            val mainState by mainViewModel.state.collectAsState()
+            val isDarkMode by themeViewModel.darkMode.collectAsState()
 
-            HotelOpsTheme {
+            // Desactivamos dynamicColor para usar exactamente los colores definidos en Color.kt
+            HotelOpsTheme(darkTheme = isDarkMode, dynamicColor = false) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    if (state.isReady) {
+                    if (mainState.isReady) {
                         HotelOpsNavigation(
-                            startDestination = if (state.currentUser != null)
+                            startDestination = if (mainState.currentUser != null)
                                 Screen.Main.route else Screen.Login.route
                         )
                     }

@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import com.hotelops.presentation.theme.headingColor
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,7 +49,7 @@ fun RegisterHotelScreen(
         ) {
             // Hotel section
             Text("Datos del Hotel", style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary)
+                color = MaterialTheme.colorScheme.headingColor)
 
             OutlinedTextField(
                 value = state.hotelName,
@@ -99,7 +100,7 @@ fun RegisterHotelScreen(
 
             // Admin section
             Text("Cuenta Administrador", style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary)
+                color = MaterialTheme.colorScheme.headingColor)
 
             OutlinedTextField(
                 value = state.adminName,

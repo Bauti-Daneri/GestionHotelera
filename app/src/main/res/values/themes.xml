@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.HotelOps" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Main theme colors -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="android:statusBarColor">@color/purple_700</item>
+        <item name="colorPrimary">@color/hotel_primary</item>
+        <item name="android:statusBarColor">@color/hotel_background</item>
+        <item name="android:navigationBarColor">@color/hotel_background</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
 </resources>
