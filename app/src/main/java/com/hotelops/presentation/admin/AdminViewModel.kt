@@ -32,7 +32,8 @@ class AdminViewModel @Inject constructor(
     private val deleteRoomUseCase: DeleteRoomUseCase,
     private val updateRoomStatusUseCase: UpdateRoomStatusUseCase,
     private val deleteTicketUseCase: DeleteTicketUseCase,
-    private val deleteOrderUseCase: DeleteOrderUseCase
+    private val deleteOrderUseCase: DeleteOrderUseCase,
+    private val updateUserUseCase: UpdateUserUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(AdminState())
@@ -69,7 +70,8 @@ class AdminViewModel @Inject constructor(
 
     fun showAddUserDialog() { _state.value = _state.value.copy(showAddUserDialog = true) }
     fun showAddRoomDialog() { _state.value = _state.value.copy(showAddRoomDialog = true) }
-    fun hideDialogs() { _state.value = _state.value.copy(showAddUserDialog = false, showAddRoomDialog = false) }
+    fun showEditUserDialog(user: User) { _state.value = _state.value.copy(editingUser = user) }
+    fun hideDialogs() { _state.value = _state.value.copy(showAddUserDialog = false, showAddRoomDialog = false, editingUser = null) }
 
     fun addUser(name: String, email: String, password: String, role: UserRole) {
         val hotelId = currentHotelId ?: return
@@ -83,6 +85,21 @@ class AdminViewModel @Inject constructor(
             phone = null,
             employeeId = "EMP-${System.currentTimeMillis()}"
         ).onEach { result ->
+            if (result is Resource.Success) {
+                hideDialogs()
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    fun updateUser(name: String, email: String, role: UserRole) {
+        val user = _state.value.editingUser ?: return
+        val updatedUser = user.copy(
+            name = name,
+            email = email,
+            role = role,
+            department = role.toDisplayName()
+        )
+        updateUserUseCase(updatedUser).onEach { result ->
             if (result is Resource.Success) {
                 hideDialogs()
             }

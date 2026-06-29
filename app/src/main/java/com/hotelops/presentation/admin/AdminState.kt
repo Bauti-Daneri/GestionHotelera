@@ -13,5 +13,6 @@ data class AdminState(
     val isLoading: Boolean = false,
     val error: String? = null,
     val showAddUserDialog: Boolean = false,
-    val showAddRoomDialog: Boolean = false
+    val showAddRoomDialog: Boolean = false,
+    val editingUser: User? = null
 )

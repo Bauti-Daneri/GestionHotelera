@@ -72,13 +72,6 @@ fun AdminScreen(
                             )
                         }
                     }
-                    AssistChip(
-                        onClick = { },
-                        label = { Text("Admin", color = Primary) },
-                        leadingIcon = { Icon(Icons.Default.Settings, contentDescription = null, modifier = Modifier.size(16.dp)) },
-                        shape = RoundedCornerShape(16.dp),
-                        colors = AssistChipDefaults.assistChipColors(containerColor = SurfaceVariant)
-                    )
                     Spacer(modifier = Modifier.width(16.dp))
                 }
             )
@@ -92,16 +85,6 @@ fun AdminScreen(
         ) {
             // Hotel Header Card
             HotelHeaderCard(hotelName = "Hotel Plaza Central", hotelId = "HOTEL-DEMO-001")
-
-            // Stats Grid
-            AdminStatsGrid(
-                roomsCount = state.rooms.size,
-                employeesCount = state.users.size,
-                ticketsCount = state.tickets.count { it.status != com.hotelops.domain.model.TicketStatus.COMPLETED },
-                occupancy = if (state.rooms.isNotEmpty()) 
-                    ((state.rooms.count { it.status != RoomStatus.AVAILABLE && it.status != RoomStatus.CLEAN }.toFloat() / state.rooms.size) * 100).toInt()
-                    else 0
-            )
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -146,6 +129,7 @@ fun AdminScreen(
                     users = state.users,
                     isLoading = state.isLoading,
                     onAddClick = { viewModel.showAddUserDialog() },
+                    onEditClick = { viewModel.showEditUserDialog(it) },
                     onDeleteClick = { viewModel.deleteUser(it) }
                 )
             } else {
@@ -174,6 +158,16 @@ fun AdminScreen(
             onDismiss = { viewModel.hideDialogs() },
             onConfirm = { roomNumber, floor, type ->
                 viewModel.addRoom(roomNumber, floor, type)
+            }
+        )
+    }
+
+    state.editingUser?.let { user ->
+        EditUserDialog(
+            user = user,
+            onDismiss = { viewModel.hideDialogs() },
+            onConfirm = { name, email, role ->
+                viewModel.updateUser(name, email, role)
             }
         )
     }
@@ -211,55 +205,11 @@ fun HotelHeaderCard(hotelName: String, hotelId: String) {
 }
 
 @Composable
-fun AdminStatsGrid(roomsCount: Int, employeesCount: Int, ticketsCount: Int, occupancy: Int) {
-    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            StatItem(Modifier.weight(1f), roomsCount.toString(), "Habitaciones", Icons.Default.Apartment, ColorAdmin)
-            StatItem(Modifier.weight(1f), employeesCount.toString(), "Empleados", Icons.Default.Groups, ColorClean)
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            StatItem(Modifier.weight(1f), ticketsCount.toString(), "Tickets Abiertos", Icons.AutoMirrored.Filled.Assignment, ColorInProgress)
-            StatItem(Modifier.weight(1f), "$occupancy%", "Ocupación", Icons.Default.SensorDoor, ColorAvailable)
-        }
-    }
-}
-
-@Composable
-fun StatItem(modifier: Modifier, value: String, label: String, icon: ImageVector, iconColor: Color) {
-    Card(
-        modifier = modifier,
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = Surface),
-        border = CardDefaults.outlinedCardBorder()
-    ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(iconColor.copy(alpha = 0.1f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(icon, contentDescription = null, tint = iconColor, modifier = Modifier.size(20.dp))
-            }
-            Spacer(modifier = Modifier.width(12.dp))
-            Column {
-                Text(value, fontWeight = FontWeight.Bold, fontSize = 18.sp, color = OnSurface)
-                Text(label, fontSize = 11.sp, color = OnSurfaceVariant)
-            }
-        }
-    }
-}
-
-@Composable
 fun UsersTab(
     users: List<User>,
     isLoading: Boolean,
     onAddClick: () -> Unit,
+    onEditClick: (User) -> Unit,
     onDeleteClick: (User) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
@@ -293,7 +243,11 @@ fun UsersTab(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(users) { user ->
-                    UserCard(user = user, onDeleteClick = { onDeleteClick(user) })
+                    UserCard(
+                        user = user, 
+                        onEditClick = { onEditClick(user) },
+                        onDeleteClick = { onDeleteClick(user) }
+                    )
                 }
             }
         }
@@ -301,7 +255,7 @@ fun UsersTab(
 }
 
 @Composable
-fun UserCard(user: User, onDeleteClick: () -> Unit) {
+fun UserCard(user: User, onEditClick: () -> Unit, onDeleteClick: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -366,7 +320,7 @@ fun UserCard(user: User, onDeleteClick: () -> Unit) {
             }
 
             Row {
-                IconButton(onClick = { }) { Icon(Icons.Default.Edit, contentDescription = "Edit", tint = OnSurfaceVariant) }
+                IconButton(onClick = onEditClick) { Icon(Icons.Default.Edit, contentDescription = "Edit", tint = OnSurfaceVariant) }
                 IconButton(onClick = onDeleteClick) { Icon(Icons.Default.Delete, contentDescription = "Delete", tint = ColorDirty) }
             }
         }
@@ -532,6 +486,56 @@ private fun AddUserDialog(
         },
         confirmButton = {
             TextButton(onClick = { onConfirm(name, email, password, selectedRole) }) { Text("Agregar", fontWeight = FontWeight.Bold) }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text("Cancelar") }
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun EditUserDialog(
+    user: User,
+    onDismiss: () -> Unit,
+    onConfirm: (String, String, UserRole) -> Unit
+) {
+    var name by remember { mutableStateOf(user.name) }
+    var email by remember { mutableStateOf(user.email) }
+    var selectedRole by remember { mutableStateOf(user.role) }
+    var expanded by remember { mutableStateOf(false) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Editar Usuario", fontWeight = FontWeight.Bold) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedTextField(value = name, onValueChange = { name = it },
+                    label = { Text("Nombre") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
+                OutlinedTextField(value = email, onValueChange = { email = it },
+                    label = { Text("Email") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
+                ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = it }) {
+                    OutlinedTextField(
+                        value = selectedRole.toDisplayName(),
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("Rol") },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
+                        modifier = Modifier.menuAnchor().fillMaxWidth()
+                    )
+                    ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                        UserRole.entries.forEach { role ->
+                            DropdownMenuItem(
+                                text = { Text(role.toDisplayName()) },
+                                onClick = { selectedRole = role; expanded = false }
+                            )
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { onConfirm(name, email, selectedRole) }) { Text("Guardar", fontWeight = FontWeight.Bold) }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) { Text("Cancelar") }
