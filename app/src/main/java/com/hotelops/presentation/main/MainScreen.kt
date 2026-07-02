@@ -31,7 +31,6 @@ import com.hotelops.domain.model.UserRole
 import com.hotelops.presentation.admin.AdminScreen
 import com.hotelops.presentation.housekeeping.HousekeepingScreen
 import com.hotelops.presentation.maintenance.MaintenanceScreen
-import com.hotelops.presentation.navigation.Screen
 import com.hotelops.presentation.profile.ProfileScreen
 import com.hotelops.presentation.roomservice.RoomServiceScreen
 import com.hotelops.presentation.theme.Primary
@@ -136,16 +135,25 @@ fun MainScreen(
             }
         }
     ) { padding ->
-        NavHost(
-            navController = navController,
-            startDestination = if (state.currentUser?.role == UserRole.ADMIN) "admin" else "housekeeping",
-            modifier = Modifier.padding(padding)
-        ) {
-            composable("admin") { AdminScreen(state.currentUser) }
-            composable("housekeeping") { HousekeepingScreen(state.currentUser) }
-            composable("maintenance") { MaintenanceScreen(state.currentUser) }
-            composable("room_service") { RoomServiceScreen(state.currentUser) }
-            composable("profile") { ProfileScreen(state.currentUser, viewModel::logout) }
+        if (state.currentUser != null) {
+            val startDest = when (state.currentUser?.role) {
+                UserRole.ADMIN -> "admin"
+                UserRole.MAINTENANCE -> "maintenance"
+                UserRole.HOUSEKEEPING -> "housekeeping"
+                else -> "profile"
+            }
+
+            NavHost(
+                navController = navController,
+                startDestination = startDest,
+                modifier = Modifier.padding(padding)
+            ) {
+                composable("admin") { AdminScreen(state.currentUser) }
+                composable("housekeeping") { HousekeepingScreen(state.currentUser) }
+                composable("maintenance") { MaintenanceScreen(state.currentUser) }
+                composable("room_service") { RoomServiceScreen(state.currentUser) }
+                composable("profile") { ProfileScreen(state.currentUser, viewModel::logout) }
+            }
         }
     }
 }

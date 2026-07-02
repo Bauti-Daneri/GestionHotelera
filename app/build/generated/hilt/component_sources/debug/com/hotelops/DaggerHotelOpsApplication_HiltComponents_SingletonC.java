@@ -60,6 +60,7 @@ import com.hotelops.domain.usecase.roomservice.GetOrdersUseCase;
 import com.hotelops.domain.usecase.user.CreateUserUseCase;
 import com.hotelops.domain.usecase.user.DeleteUserUseCase;
 import com.hotelops.domain.usecase.user.GetUsersUseCase;
+import com.hotelops.domain.usecase.user.UpdateUserUseCase;
 import com.hotelops.presentation.admin.AdminViewModel;
 import com.hotelops.presentation.admin.AdminViewModel_HiltModules_KeyModule_ProvideFactory;
 import com.hotelops.presentation.housekeeping.HousekeepingViewModel;
@@ -525,6 +526,10 @@ public final class DaggerHotelOpsApplication_HiltComponents_SingletonC {
       return new DeleteOrderUseCase(singletonCImpl.bindRoomServiceRepositoryProvider.get());
     }
 
+    private UpdateUserUseCase updateUserUseCase() {
+      return new UpdateUserUseCase(singletonCImpl.bindUserRepositoryProvider.get());
+    }
+
     private LoginUseCase loginUseCase() {
       return new LoginUseCase(singletonCImpl.bindAuthRepositoryProvider.get());
     }
@@ -593,7 +598,7 @@ public final class DaggerHotelOpsApplication_HiltComponents_SingletonC {
       public T get() {
         switch (id) {
           case 0: // com.hotelops.presentation.admin.AdminViewModel 
-          return (T) new AdminViewModel(viewModelCImpl.getUsersUseCase(), viewModelCImpl.getRoomsUseCase(), viewModelCImpl.getTicketsUseCase(), viewModelCImpl.getOrdersUseCase(), viewModelCImpl.createUserUseCase(), viewModelCImpl.deleteUserUseCase(), viewModelCImpl.addRoomUseCase(), viewModelCImpl.deleteRoomUseCase(), viewModelCImpl.updateRoomStatusUseCase(), viewModelCImpl.deleteTicketUseCase(), viewModelCImpl.deleteOrderUseCase());
+          return (T) new AdminViewModel(viewModelCImpl.getUsersUseCase(), viewModelCImpl.getRoomsUseCase(), viewModelCImpl.getTicketsUseCase(), viewModelCImpl.getOrdersUseCase(), viewModelCImpl.createUserUseCase(), viewModelCImpl.deleteUserUseCase(), viewModelCImpl.addRoomUseCase(), viewModelCImpl.deleteRoomUseCase(), viewModelCImpl.updateRoomStatusUseCase(), viewModelCImpl.deleteTicketUseCase(), viewModelCImpl.deleteOrderUseCase(), viewModelCImpl.updateUserUseCase());
 
           case 1: // com.hotelops.presentation.housekeeping.HousekeepingViewModel 
           return (T) new HousekeepingViewModel(viewModelCImpl.getRoomsUseCase(), viewModelCImpl.updateRoomStatusUseCase());

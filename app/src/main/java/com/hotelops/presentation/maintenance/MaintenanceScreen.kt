@@ -2,6 +2,7 @@ package com.hotelops.presentation.maintenance
 
 import android.net.Uri
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -44,7 +45,6 @@ fun MaintenanceScreen(
         currentUser?.hotelId?.let { viewModel.loadData(it) }
     }
 
-    // Aplicar filtros de estado y categoría
     val filteredTickets = state.tickets.filter { ticket ->
         val matchesStatus = state.filterStatus == null || ticket.status == state.filterStatus
         val matchesCategory = state.filterCategory == null || ticket.category == state.filterCategory
@@ -99,7 +99,6 @@ fun MaintenanceScreen(
                 .padding(padding)
                 .background(Background)
         ) {
-            // Category Chips
             LazyRow(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -130,7 +129,8 @@ fun MaintenanceScreen(
                     items(filteredTickets, key = { it.id }) { ticket ->
                         TicketCard(
                             ticket = ticket, 
-                            onStatusChange = { viewModel.updateStatus(ticket.id, it) }
+                            onStatusChange = { viewModel.updateStatus(ticket.id, it) },
+                            onImageClick = { url -> viewModel.showImage(Uri.parse(url)) }
                         )
                     }
                 }
@@ -147,6 +147,33 @@ fun MaintenanceScreen(
                 onImageCaptured = { viewModel.onImageCaptured(it) },
                 onDismiss = { viewModel.hideCamera() }
             )
+        }
+    }
+
+    if (state.selectedImageUri != null) {
+        Dialog(
+            onDismissRequest = { viewModel.hideImage() },
+            properties = DialogProperties(usePlatformDefaultWidth = false)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black)
+                    .clickable { viewModel.hideImage() }
+            ) {
+                AsyncImage(
+                    model = state.selectedImageUri,
+                    contentDescription = "Full Image",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Fit
+                )
+                IconButton(
+                    onClick = { viewModel.hideImage() },
+                    modifier = Modifier.padding(16.dp).align(Alignment.TopEnd)
+                ) {
+                    Icon(Icons.Default.Close, contentDescription = "Cerrar", tint = Color.White)
+                }
+            }
         }
     }
 
@@ -173,7 +200,11 @@ fun MaintenanceScreen(
 }
 
 @Composable
-private fun TicketCard(ticket: MaintenanceTicket, onStatusChange: (TicketStatus) -> Unit) {
+private fun TicketCard(
+    ticket: MaintenanceTicket, 
+    onStatusChange: (TicketStatus) -> Unit,
+    onImageClick: (String) -> Unit
+) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
@@ -215,7 +246,8 @@ private fun TicketCard(ticket: MaintenanceTicket, onStatusChange: (TicketStatus)
                         .fillMaxWidth()
                         .height(150.dp)
                         .padding(bottom = 12.dp)
-                        .clip(RoundedCornerShape(12.dp)),
+                        .clip(RoundedCornerShape(12.dp))
+                        .clickable { onImageClick(ticket.imageUrl!!) },
                     contentScale = ContentScale.Crop
                 )
             }

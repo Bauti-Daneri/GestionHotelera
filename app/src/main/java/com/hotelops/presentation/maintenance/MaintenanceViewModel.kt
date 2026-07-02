@@ -1,8 +1,8 @@
 package com.hotelops.presentation.maintenance
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import android.net.Uri
 import com.hotelops.domain.model.*
 import com.hotelops.domain.usecase.maintenance.*
 import com.hotelops.domain.usecase.room.GetRoomsUseCase
@@ -23,6 +23,7 @@ data class MaintenanceState(
     val filterCategory: TicketCategory? = null,
     val showCreateDialog: Boolean = false,
     val showCamera: Boolean = false,
+    val selectedImageUri: Uri? = null,
     val capturedImageUri: Uri? = null,
     val error: String? = null
 )
@@ -66,6 +67,9 @@ class MaintenanceViewModel @Inject constructor(
     fun hideDialog() { _state.value = _state.value.copy(showCreateDialog = false) }
     fun showCamera() { _state.value = _state.value.copy(showCamera = true) }
     fun hideCamera() { _state.value = _state.value.copy(showCamera = false) }
+
+    fun showImage(uri: Uri?) { _state.value = _state.value.copy(selectedImageUri = uri) }
+    fun hideImage() { _state.value = _state.value.copy(selectedImageUri = null) }
 
     fun onImageCaptured(uri: Uri) {
         _state.value = _state.value.copy(capturedImageUri = uri, showCamera = false)
